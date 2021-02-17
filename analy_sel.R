@@ -6,21 +6,69 @@
 
 ###
 
-for(f in 8:16){
-  
+#prep_tabs----
 
+tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
+
+#prepare tables to collect flood characteristics
+flood_frac_max_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+sfrac_accu_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+melt_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_frac_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+melt_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_frac_mose_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+melt_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_frac_main_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+melt_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
+pliq_frac_neck_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+write.csv(flood_frac_max_all, paste0(tabs_dir, "flood_frac_max_all.csv"), quote = F, row.names = F)
+
+write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
+
+write.csv(melt_sum_base_all,  paste0(tabs_dir, "melt_sum_base_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_sum_base_all,  paste0(tabs_dir, "pliq_sum_base_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_frac_base_all, paste0(tabs_dir, "pliq_frac_base_all.csv"), quote = F, row.names = F)
+
+write.csv(melt_sum_mose_all,  paste0(tabs_dir, "melt_sum_mose_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_sum_mose_all,  paste0(tabs_dir, "pliq_sum_mose_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_frac_mose_all, paste0(tabs_dir, "pliq_frac_mose_all.csv"), quote = F, row.names = F)
+
+write.csv(melt_sum_main_all,  paste0(tabs_dir, "melt_sum_main_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_sum_main_all,  paste0(tabs_dir, "pliq_sum_main_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_frac_main_all, paste0(tabs_dir, "pliq_frac_main_all.csv"), quote = F, row.names = F)
+
+write.csv(melt_sum_neck_all,  paste0(tabs_dir, "melt_sum_neck_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_sum_neck_all,  paste0(tabs_dir, "pliq_sum_neck_all.csv"),  quote = F, row.names = F)
+write.csv(pliq_frac_neck_all, paste0(tabs_dir, "pliq_frac_neck_all.csv"), quote = F, row.names = F)
+
+
+
+#loop over GCM-RCP combinations
+for(f in 1:16){
+  
 #set_up----
 
 # devtools::install_github('ERottler/meltimr')
 pacman::p_load(parallel, doParallel, zoo, zyp, alptempr, emdbook, scales, ncdf4,
-               ncdf4.helpers, sp, raster, viridis, meltimr, POT, readr, hydroGOF,
-               animation)
+               ncdf4.helpers, sp, raster, viridis, meltimr, POT, readr, hydroGOF)
 
 bas_dir <- "U:/rhine_movie/R/"
 run_dir <- "D:/nrc_user/rottler/mhm_run/6435060/"
 grdc_dir <- "D:/nrc_user/rottler/GRDC_DAY/"
 
-# stopCluster(my_clust)
+if(exists("my_clust")){
+  stopCluster(my_clust)
+}
 
 n_cores <- 5 #number of cores used for parallel computing
 
@@ -48,8 +96,6 @@ if(ind_forc == 1){
 }
 
 #paths output files
-
-run_dir <- "D:/nrc_user/rottler/mhm_run/6435060/"
 
 nc_output_paths <- 
   c(paste0(run_dir, "output/EOBS/"),
@@ -92,22 +138,22 @@ nc_input_paths <-
 
 #paths export figures
 figs_export_paths <- 
-  c("U:/rhine_movie/figs/EOBS/",
-    "U:/rhine_movie/figs/GFDL-ESM2M/rcp2p6/",
-    "U:/rhine_movie/figs/HadGEM2-ES/rcp2p6/",
-    "U:/rhine_movie/figs/IPSL-CM5A-LR/rcp2p6/",
-    "U:/rhine_movie/figs/MIROC-ESM-CHEM/rcp2p6/",
-    "U:/rhine_movie/figs/NorESM1-M/rcp2p6/",
-    "U:/rhine_movie/figs/GFDL-ESM2M/rcp6p0/",
-    "U:/rhine_movie/figs/HadGEM2-ES/rcp6p0/",
-    "U:/rhine_movie/figs/IPSL-CM5A-LR/rcp6p0/",
-    "U:/rhine_movie/figs/MIROC-ESM-CHEM/rcp6p0/",
-    "U:/rhine_movie/figs/NorESM1-M/rcp6p0/",
-    "U:/rhine_movie/figs/GFDL-ESM2M/rcp8p5/",
-    "U:/rhine_movie/figs/HadGEM2-ES/rcp8p5/",
-    "U:/rhine_movie/figs/IPSL-CM5A-LR/rcp8p5/",
-    "U:/rhine_movie/figs/MIROC-ESM-CHEM/rcp8p5/",
-    "U:/rhine_movie/figs/NorESM1-M/rcp8p5/"
+  c("U:/rhine_genesis/R/figs/EOBS/",
+    "U:/rhine_genesis/R/figs/GFDL-ESM2M/rcp2p6/",
+    "U:/rhine_genesis/R/figs/HadGEM2-ES/rcp2p6/",
+    "U:/rhine_genesis/R/figs/IPSL-CM5A-LR/rcp2p6/",
+    "U:/rhine_genesis/R/figs/MIROC-ESM-CHEM/rcp2p6/",
+    "U:/rhine_genesis/R/figs/NorESM1-M/rcp2p6/",
+    "U:/rhine_genesis/R/figs/GFDL-ESM2M/rcp6p0/",
+    "U:/rhine_genesis/R/figs/HadGEM2-ES/rcp6p0/",
+    "U:/rhine_genesis/R/figs/IPSL-CM5A-LR/rcp6p0/",
+    "U:/rhine_genesis/R/figs/MIROC-ESM-CHEM/rcp6p0/",
+    "U:/rhine_genesis/R/figs/NorESM1-M/rcp6p0/",
+    "U:/rhine_genesis/R/figs/GFDL-ESM2M/rcp8p5/",
+    "U:/rhine_genesis/R/figs/HadGEM2-ES/rcp8p5/",
+    "U:/rhine_genesis/R/figs/IPSL-CM5A-LR/rcp8p5/",
+    "U:/rhine_genesis/R/figs/MIROC-ESM-CHEM/rcp8p5/",
+    "U:/rhine_genesis/R/figs/NorESM1-M/rcp8p5/"
   )
 
 #Fluxes and states
@@ -360,7 +406,7 @@ basin_neck <- spTransform(basin_neck_raw, CRS = crswgs84)
 #snommelt and snow accumulation
 snow_diff <- snow_cube
 for(i in 1:nrow(snow_cube)){
-  print(i)
+  # print(i)
   for(k in 1:ncol(snow_cube)){
     snow_diff[i, k, ] <- c(NA, diff(snow_cube[i, k, ]))
   }
@@ -369,7 +415,7 @@ for(i in 1:nrow(snow_cube)){
 #liquid precipitation
 prec_liqu <- precs_cube
 for(i in 1:nrow(precs_cube)){
-  print(i)
+  # print(i)
   for(k in 1:ncol(precs_cube)){
     
     temp_thresh <- 0.965483531537 #determined at calibration
@@ -382,7 +428,7 @@ for(i in 1:nrow(precs_cube)){
   }
 }
 
-#Melt fraction per basin
+#Snowmelt and liquid precipitation per sub-basin
 
 #spatial grid points from lat/lon
 grid_points_cube_84 <-  sp::SpatialPoints(data.frame(lon = c(lon), lat = c(lat)), proj4string =  crswgs84)
@@ -472,7 +518,48 @@ neck_sd_mea_dif[which(neck_sd_mea_dif > 0)] <- 0
 neck_me_mea <- neck_sd_mea_dif * -1 #melt positive values
 neck_lp_mea <- apply(pre_neck, 1, mea_na)
 
-#Quantile threshold routed discharge
+
+#discharge relative to long-term mean runoff
+nc_disc_file_obs <- paste0(run_dir, "output/EOBS/", "output/mRM_Fluxes_States.nc")
+nc_disc_obs <- nc_open(nc_disc_file_obs)
+
+lon <- ncdf4::ncvar_get(nc_disc_obs, varid = "lon")
+lat <- ncdf4::ncvar_get(nc_disc_obs, varid = "lat")
+date_disc <- as.Date(as.character(nc.get.time.series(nc_disc_obs, time.dim.name = "time")))
+
+sta_date_ind <- which(format(date_disc) == "1951-01-02")
+count_date <- length(date_disc) - sta_date_ind + 1
+
+disc_cube_obs <- ncvar_get(nc_disc_obs, start = c(1, 1, sta_date_ind), 
+                           count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
+
+simu_koel_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[2], cols_sel_gaugs[2], sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_kaub_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[4], cols_sel_gaugs[4], sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_worm_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[6], cols_sel_gaugs[6], sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_spey_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[8], cols_sel_gaugs[8], sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_base_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[9], cols_sel_gaugs[9], sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_mose_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_mose, col_sel_mose, sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_main_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_main, col_sel_main, sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_neck_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_neck, col_sel_neck, sta_date_ind), 
+                           count = c(1, 1, count_date), varid = "Qrouted")
+
+simu_base_rel <- simu_base / mea_na(simu_base_obs)
+simu_mose_rel <- simu_mose / mea_na(simu_mose_obs)
+simu_main_rel <- simu_main / mea_na(simu_main_obs)
+simu_neck_rel <- simu_neck / mea_na(simu_neck_obs)
+simu_koel_rel <- simu_koel / mea_na(simu_koel_obs)
+simu_kaub_rel <- simu_kaub / mea_na(simu_kaub_obs)
+simu_spey_rel <- simu_spey / mea_na(simu_spey_obs)
+simu_worm_rel <- simu_worm / mea_na(simu_worm_obs)
+
+#Quantile threshold routed discharge with EOBS forcing
 
 f_qthres <- function(data_in){
   
@@ -482,20 +569,9 @@ f_qthres <- function(data_in){
   
 }
 
-disc_qua <- apply(disc_cube, c(1,2), f_qthres)
+disc_qua <- apply(disc_cube_obs, c(1,2), f_qthres)
 
-#discharge relative to long-term mean runoff
-simu_base_rel <- simu_base / mea_na(simu_base)
-simu_mose_rel <- simu_mose / mea_na(simu_mose)
-simu_main_rel <- simu_main / mea_na(simu_main)
-simu_neck_rel <- simu_neck / mea_na(simu_neck)
-simu_koel_rel <- simu_koel / mea_na(simu_koel)
-simu_kaub_rel <- simu_kaub / mea_na(simu_kaub)
-simu_spey_rel <- simu_spey / mea_na(simu_spey)
-simu_worm_rel <- simu_worm / mea_na(simu_worm)
-
-
-#data_vis----
+#data_calc_vis----
 
 #select runoff peaks gauge Cologne
 date_sel <- date_flux[which(format(date_flux) == date_start):length(date_flux)]
@@ -509,27 +585,41 @@ pot_peaks_koel <- clust(data = pot_data_koel, u = pot_thre_koel, tim.cond = 21, 
 
 pot_peaks_koel_ord <- pot_peaks_koel[order(pot_peaks_koel[, 2], decreasing = T), ]
 
-peaks_ind <- pot_peaks_koel_ord[1:15, 3]
+peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen largest peaks
 
-#Export figures
+#Get accumulative values and export figures for discharge peaks
 for(p in 1:length(peaks_ind)){
   
+  print(paste("Streamflow peak", p, Sys.time()))
+        
   #creat directory
   dir.create(paste0(figs_export_paths[ind_forc], "flood_", p), showWarnings = T)
   
-  peak_ind <- peaks_ind[p]
-  ind_sel <- (peak_ind-10):peak_ind
+  peak_ind <- peaks_ind[p] #index of peak
+  ind_sel <- (peak_ind-10):peak_ind #10 days before
   
-  #define object for cummulative analysis
-  disc_base_cum <- 0 ; disc_mose_cum <- 0 ; disc_neck_cum <- 0 ; disc_main_cum <- 0
+  #define objects for cummulative analysis
+  disc_base_cum <- 0
+  disc_mose_cum <- 0 
+  disc_neck_cum <- 0 
+  disc_main_cum <- 0
   prec_sel <- rep(0, length(c(prec_liqu[ , , 1])))
   snow_sel <- rep(0, length(c(snow_diff[ , , 1])))
   qtot_sel <- rep(0, length(c(qto_cube[ , , 1])))
   disc_sel <- rep(0, length(c(disc_cube[ , , 1])))
-  pliq_sum_base <- 0 ; pliq_sum_mose <- 0 ; pliq_sum_main <- 0 ; pliq_sum_neck <- 0
-  melt_sum_base <- 0 ; melt_sum_mose <- 0 ; melt_sum_main <- 0 ; melt_sum_neck <- 0
+  pliq_sum_base <- 0 
+  pliq_sum_mose <- 0 
+  pliq_sum_main <- 0 
+  pliq_sum_neck <- 0
+  melt_sum_base <- 0 
+  melt_sum_mose <- 0 
+  melt_sum_main <- 0 
+  melt_sum_neck <- 0
   
-  #data ranges
+  #dummy to get max flood fraction
+  flood_frac_max <- 0
+  
+  #get ranges for plots
   prec_sum <- rep(0, length(c(prec_liqu[ , , 1])))
   snow_sum <- rep(0, length(c(snow_diff[ , , 1])))
   qtot_sum <- rep(0, length(c(qto_cube[ , , 1])))
@@ -554,8 +644,9 @@ for(p in 1:length(peaks_ind)){
     
     counter = counter+1
     
-    print(paste(i, Sys.time()))
+    print(paste("Graph", counter))
     
+    #cumulative maps
     prec_sel <- prec_sel + c(prec_liqu[ , , i])
     snow_sel <- snow_sel + c(snow_diff[ , , i])
     qtot_sel <- qtot_sel + c(qto_cube[ , , i])
@@ -563,6 +654,7 @@ for(p in 1:length(peaks_ind)){
     quan_exc <- rep(0, length(c(disc_cube[ , , i])))
     quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- 1
     
+    #define colors for maps
     cols_spat_pre <- foreach(t = 1:length(prec_sel), .combine = 'c') %dopar% {
       
       val2col(val_in = prec_sel[t],
@@ -593,7 +685,7 @@ for(p in 1:length(peaks_ind)){
       
     }
     
-    
+    #cumulative snowmelt and liquid precip. for sub-basins
     melt_sum_base <- melt_sum_base + base_me_mea[i]
     pliq_sum_base <- pliq_sum_base + base_lp_mea[i]
     pliq_frac_base <- pliq_sum_base / (pliq_sum_base + melt_sum_base)
@@ -607,13 +699,20 @@ for(p in 1:length(peaks_ind)){
     pliq_sum_neck <- pliq_sum_neck + neck_lp_mea[i]
     pliq_frac_neck <- pliq_sum_neck / (pliq_sum_neck + melt_sum_neck)
     
+    #calculate flood fraction
+    na_length <- length(which(is.na(disc_cube[ , , i])))
+    flood_frac <- round((length(which(quan_exc > 0)) / (length(quan_exc) - na_length) * 100), 2)
+    
+    #get date
     date_exp <- format(date_sel[i], "%Y%m%d")
+    
+    if(T){#export plot
     
     png(paste0(figs_export_paths[ind_forc], "flood_", p, "/rhine_", date_exp, ".png"), width = 16, height = 8,
         units = "in", res = 300)
     
-    par(family = "serif")
-    par(bg = 'grey10')
+    # par(family = "serif")
+    par(bg = 'grey20')
     cex_pch <- 0.7
     lwd_disc <- 1.4
     col_koel <- "darkblue"
@@ -775,11 +874,20 @@ for(p in 1:length(peaks_ind)){
            col = c(col_mose, col_base, col_main, col_neck), box.col = "white", text.col = "white")
     box(col = "white", lwd = 0.7)
     
-    #Cumulative discharge
-    disc_base_cum <- disc_base_cum + (simu_base[i]-mea_na(simu_base))
-    disc_mose_cum <- disc_mose_cum + (simu_mose[i]-mea_na(simu_mose))
-    disc_neck_cum <- disc_neck_cum + (simu_neck[i]-mea_na(simu_neck))
-    disc_main_cum <- disc_main_cum + (simu_main[i]-mea_na(simu_main))
+    #Cumulative excess discharge
+    disc_exc_base <- simu_base[i]-mea_na(simu_base_obs)
+    disc_exc_mose <- simu_mose[i]-mea_na(simu_mose_obs)
+    disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs)
+    disc_exc_main <- simu_main[i]-mea_na(simu_main_obs)
+    if(disc_exc_base < 0){disc_exc_base <- 0}
+    if(disc_exc_mose < 0){disc_exc_base <- 0}
+    if(disc_exc_neck < 0){disc_exc_base <- 0}
+    if(disc_exc_main < 0){disc_exc_base <- 0}
+    
+    disc_base_cum <- disc_base_cum + disc_exc_base
+    disc_mose_cum <- disc_mose_cum + disc_exc_mose
+    disc_neck_cum <- disc_neck_cum + disc_exc_neck
+    disc_main_cum <- disc_main_cum + disc_exc_main
     
     ylims_cum <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base))), 
                                sum_na((simu_main[ind_sel]-mea_na(simu_main))), 
@@ -820,8 +928,8 @@ for(p in 1:length(peaks_ind)){
     cols_spat_flo <- rep(col_no, length(quan_exc))
     cols_spat_flo[which(quan_exc > 0)] <- col_ye
     cols_spat_flo[which(is.na(disc_cube[ , , i]))] <- NA
-    na_length <- length(which(is.na(disc_cube[ , , i])))
-    flood_frac <- round((length(which(quan_exc > 0)) / (length(quan_exc) - na_length) * 100), 2)
+    # na_length <- length(which(is.na(disc_cube[ , , i])))
+    # flood_frac <- round((length(which(quan_exc > 0)) / (length(quan_exc) - na_length) * 100), 2)
     
     par(mar = c(2.0, 1.0, 3.5, 0.0))
     plot(c(lon), c(lat), pch = 15, col = cols_spat_flo, cex = cex_pch,
@@ -948,17 +1056,73 @@ for(p in 1:length(peaks_ind)){
     
     dev.off()
     
+    }#if export plot
+    
+    #save maximum flood extend
+    if(flood_frac_max < flood_frac){
+      
+      flood_frac_max <- flood_frac
+      
+    }
+    
   }
   
+  #save variables flood genesis
+  
+  #Maximum flood extend
+  flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all.csv"), sep = ",", header = T)
+  flood_frac_max_all[p, f] <-  flood_frac_max
+  write.csv(flood_frac_max_all, paste0(tabs_dir,"flood_frac_max_all.csv"), quote = F, row.names = F)
+  
+  #snowmelt sub-basins
+  melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all.csv"), sep = ",", header = T)
+  melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all.csv"), sep = ",", header = T)
+  melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all.csv"), sep = ",", header = T)
+  melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all.csv"), sep = ",", header = T)
+  melt_sum_base_all[p, f] <- melt_sum_base
+  melt_sum_mose_all[p, f] <- melt_sum_mose
+  melt_sum_main_all[p, f] <- melt_sum_main
+  melt_sum_neck_all[p, f] <- melt_sum_neck
+  write.csv(melt_sum_base_all,  paste0(tabs_dir, "melt_sum_base_all.csv"),  quote = F, row.names = F)
+  write.csv(melt_sum_mose_all,  paste0(tabs_dir, "melt_sum_mose_all.csv"),  quote = F, row.names = F)
+  write.csv(melt_sum_main_all,  paste0(tabs_dir, "melt_sum_main_all.csv"),  quote = F, row.names = F)
+  write.csv(melt_sum_neck_all,  paste0(tabs_dir, "melt_sum_neck_all.csv"),  quote = F, row.names = F)
+  
+  #liquid precipitation sub-basins
+  pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all.csv"), sep = ",", header = T)
+  pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all.csv"), sep = ",", header = T)
+  pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all.csv"), sep = ",", header = T)
+  pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all.csv"), sep = ",", header = T)
+  pliq_sum_base_all[p, f] <- pliq_sum_base
+  pliq_sum_mose_all[p, f] <- pliq_sum_mose
+  pliq_sum_main_all[p, f] <- pliq_sum_main
+  pliq_sum_neck_all[p, f] <- pliq_sum_neck
+  write.csv(pliq_sum_base_all,  paste0(tabs_dir, "pliq_sum_base_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_sum_mose_all,  paste0(tabs_dir, "pliq_sum_mose_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_sum_main_all,  paste0(tabs_dir, "pliq_sum_main_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_sum_neck_all,  paste0(tabs_dir, "pliq_sum_neck_all.csv"),  quote = F, row.names = F)
+  
+  #fraction liquid precipitiation
+  pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all.csv"), sep = ",", header = T)
+  pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all.csv"), sep = ",", header = T)
+  pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all.csv"), sep = ",", header = T)
+  pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all.csv"), sep = ",", header = T)
+  pliq_frac_base_all[p, f] <- pliq_frac_base
+  pliq_frac_mose_all[p, f] <- pliq_frac_mose
+  pliq_frac_main_all[p, f] <- pliq_frac_main
+  pliq_frac_neck_all[p, f] <- pliq_frac_neck
+  write.csv(pliq_frac_base_all,  paste0(tabs_dir, "pliq_frac_base_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_frac_mose_all,  paste0(tabs_dir, "pliq_frac_mose_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_frac_main_all,  paste0(tabs_dir, "pliq_frac_main_all.csv"),  quote = F, row.names = F)
+  write.csv(pliq_frac_neck_all,  paste0(tabs_dir, "pliq_frac_neck_all.csv"),  quote = F, row.names = F)
+  
+  #areal fraction snow accumulation
+  sfrac_accu <- length(which(c(snow_sel) > 0)) / length(c(snow_sel))
+  sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
+  sfrac_accu_all[p, f] <- sfrac_accu 
+  write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
+  
 }
-
-
-# 
-# imgs <- list.files("U:/rhine_movie/figs/", pattern = ".png", full.names = T)
-# 
-# av::av_encode_video(imgs, "U:/rhine_movie/movies/rhine_movie.mp4", framerate = 1)
-
-
 
 
 #clear_all----
@@ -970,6 +1134,6 @@ rm(list = ls())
 
 # .rs.restartR()
 
-#looop----
+#loop----
 
 }
