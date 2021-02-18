@@ -15,6 +15,11 @@ flood_frac_max_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
 sfrac_accu_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
+peak_mag_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+peak_doy_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
+warm_lev_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+
 melt_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_frac_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
@@ -35,6 +40,11 @@ write.csv(flood_frac_max_all, paste0(tabs_dir, "flood_frac_max_all.csv"), quote 
 
 write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
 
+write.csv(peak_mag_all, paste0(tabs_dir, "peak_mag_all.csv"), quote = F, row.names = F)
+write.csv(peak_doy_all, paste0(tabs_dir, "peak_doy_all.csv"), quote = F, row.names = F)
+
+write.csv(warm_lev_all, paste0(tabs_dir, "warm_lev_all.csv"), quote = F, row.names = F)
+
 write.csv(melt_sum_base_all,  paste0(tabs_dir, "melt_sum_base_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_sum_base_all,  paste0(tabs_dir, "pliq_sum_base_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_frac_base_all, paste0(tabs_dir, "pliq_frac_base_all.csv"), quote = F, row.names = F)
@@ -54,7 +64,7 @@ write.csv(pliq_frac_neck_all, paste0(tabs_dir, "pliq_frac_neck_all.csv"), quote 
 
 
 #loop over GCM-RCP combinations
-for(f in 1:16){
+for(f in 2:16){
   
 #set_up----
 
@@ -65,6 +75,7 @@ pacman::p_load(parallel, doParallel, zoo, zyp, alptempr, emdbook, scales, ncdf4,
 bas_dir <- "U:/rhine_movie/R/"
 run_dir <- "D:/nrc_user/rottler/mhm_run/6435060/"
 grdc_dir <- "D:/nrc_user/rottler/GRDC_DAY/"
+tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 
 if(exists("my_clust")){
   stopCluster(my_clust)
@@ -587,13 +598,14 @@ pot_peaks_koel_ord <- pot_peaks_koel[order(pot_peaks_koel[, 2], decreasing = T),
 
 peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen largest peaks
 
+
 #Get accumulative values and export figures for discharge peaks
 for(p in 1:length(peaks_ind)){
   
   print(paste("Streamflow peak", p, Sys.time()))
         
   #creat directory
-  dir.create(paste0(figs_export_paths[ind_forc], "flood_", p), showWarnings = T)
+  dir.create(paste0(figs_export_paths[ind_forc], "flood_", p), showWarnings = F)
   
   peak_ind <- peaks_ind[p] #index of peak
   ind_sel <- (peak_ind-10):peak_ind #10 days before
@@ -889,10 +901,10 @@ for(p in 1:length(peaks_ind)){
     disc_neck_cum <- disc_neck_cum + disc_exc_neck
     disc_main_cum <- disc_main_cum + disc_exc_main
     
-    ylims_cum <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base))), 
-                               sum_na((simu_main[ind_sel]-mea_na(simu_main))), 
-                               sum_na((simu_neck[ind_sel]-mea_na(simu_base))), 
-                               sum_na((simu_mose[ind_sel]-mea_na(simu_mose)))))*1.05)
+    ylims_cum <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))), 
+                               sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))), 
+                               sum_na((simu_neck[ind_sel]-mea_na(simu_base_obs))), 
+                               sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs)))))*1.05)
     lwd_bar <- 25
     col_snow <- "darkred"
     col_rain <- "steelblue4"
@@ -1068,6 +1080,31 @@ for(p in 1:length(peaks_ind)){
   }
   
   #save variables flood genesis
+  
+  #Peak magnitude and data
+  peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all.csv"), sep = ",", header = T)
+  peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all.csv"), sep = ",", header = T)
+  
+  peak_mag_all[p, f] <- simu_koel[peak_ind]
+  peak_doy_all[p, f] <- strftime(date_sel[peak_ind], format = "%j")
+  
+  write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all.csv"), quote = F, row.names = F)
+  write.csv(peak_doy_all, paste0(tabs_dir,"peak_doy_all.csv"), quote = F, row.names = F)
+  
+  if(f > 1){
+  
+    #warming level
+    warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all.csv"), sep = ",", header = T)
+    temps_ma_all <- read.table(paste0(tabs_dir,"temps_ma_all.csv"), sep = ",", header = T)
+  
+    year_sel <- as.numeric(strftime(date_sel[peak_ind], format = "%Y"))
+    year_sel_in <- which(2020:2099 == year_sel)  
+    
+    warm_lev_all[p, f] <- temps_ma_all[year_sel_in, f-1]
+    
+    write.csv(warm_lev_all, paste0(tabs_dir,"warm_lev_all.csv"), quote = F, row.names = F)
+    
+  }
   
   #Maximum flood extend
   flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all.csv"), sep = ",", header = T)
