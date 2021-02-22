@@ -23,18 +23,22 @@ warm_lev_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 melt_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_frac_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+disc_exce_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
 melt_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_frac_mose_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+disc_exce_mose_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
 melt_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_frac_main_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+disc_exce_main_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
 melt_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
 pliq_frac_neck_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+disc_exce_neck_all <- matrix(data = NA, nrow = 15,  ncol = 16)
 
 write.csv(flood_frac_max_all, paste0(tabs_dir, "flood_frac_max_all.csv"), quote = F, row.names = F)
 
@@ -48,23 +52,26 @@ write.csv(warm_lev_all, paste0(tabs_dir, "warm_lev_all.csv"), quote = F, row.nam
 write.csv(melt_sum_base_all,  paste0(tabs_dir, "melt_sum_base_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_sum_base_all,  paste0(tabs_dir, "pliq_sum_base_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_frac_base_all, paste0(tabs_dir, "pliq_frac_base_all.csv"), quote = F, row.names = F)
+write.csv(disc_exce_base_all, paste0(tabs_dir, "disc_exce_base_all.csv"), quote = F, row.names = F)
 
 write.csv(melt_sum_mose_all,  paste0(tabs_dir, "melt_sum_mose_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_sum_mose_all,  paste0(tabs_dir, "pliq_sum_mose_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_frac_mose_all, paste0(tabs_dir, "pliq_frac_mose_all.csv"), quote = F, row.names = F)
+write.csv(disc_exce_mose_all, paste0(tabs_dir, "disc_exce_mose_all.csv"), quote = F, row.names = F)
 
 write.csv(melt_sum_main_all,  paste0(tabs_dir, "melt_sum_main_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_sum_main_all,  paste0(tabs_dir, "pliq_sum_main_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_frac_main_all, paste0(tabs_dir, "pliq_frac_main_all.csv"), quote = F, row.names = F)
+write.csv(disc_exce_main_all, paste0(tabs_dir, "disc_exce_main_all.csv"), quote = F, row.names = F)
 
 write.csv(melt_sum_neck_all,  paste0(tabs_dir, "melt_sum_neck_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_sum_neck_all,  paste0(tabs_dir, "pliq_sum_neck_all.csv"),  quote = F, row.names = F)
 write.csv(pliq_frac_neck_all, paste0(tabs_dir, "pliq_frac_neck_all.csv"), quote = F, row.names = F)
-
+write.csv(disc_exce_neck_all, paste0(tabs_dir, "disc_exce_neck_all.csv"), quote = F, row.names = F)
 
 
 #loop over GCM-RCP combinations
-for(f in 2:16){
+for(f in 1:16){
   
 #set_up----
 
@@ -596,7 +603,12 @@ pot_peaks_koel <- clust(data = pot_data_koel, u = pot_thre_koel, tim.cond = 21, 
 
 pot_peaks_koel_ord <- pot_peaks_koel[order(pot_peaks_koel[, 2], decreasing = T), ]
 
-peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen largest peaks
+if(f == 1){
+  peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen historical peaks
+}else{
+  peaks_ind <- pot_peaks_koel_ord[1:10, 3] #ten peaks from GCM-RCP combinations
+  
+}
 
 
 #Get accumulative values and export figures for discharge peaks
@@ -650,6 +662,8 @@ for(p in 1:length(peaks_ind)){
   range_qto <- c(0, max_na(qtot_sum))
   range_dis <- range(disc_sum, na.rm = T)
   
+  quan_exc <- rep(0, length(c(disc_cube[ , , i]))) #flood extend map
+  
   #Plot Rhine flood
   counter <- 0
   for(i in ind_sel){
@@ -663,7 +677,6 @@ for(p in 1:length(peaks_ind)){
     snow_sel <- snow_sel + c(snow_diff[ , , i])
     qtot_sel <- qtot_sel + c(qto_cube[ , , i])
     disc_sel <- disc_sel + c(disc_cube[ , , i])
-    quan_exc <- rep(0, length(c(disc_cube[ , , i])))
     quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- 1
     
     #define colors for maps
@@ -739,7 +752,7 @@ for(p in 1:length(peaks_ind)){
     layout(matrix(c(rep(13, 32),
                     rep(9, 9), rep(10, 9), rep(11, 7), rep(12, 7),
                     rep(1, 7), 2, rep(3, 7), 4, rep(5, 7), 6, rep(7, 7), 8),
-                  3, 32, byrow = T), widths=c(), heights=c(0.25, 1, 1))
+                  3, 32, byrow = T), widths=c(), heights=c(0.22, 1.1, 1))
     
     #Plot Precipitation
     par(mar = c(0.0, 0.0, 2.0, 0.0))
@@ -846,7 +859,7 @@ for(p in 1:length(peaks_ind)){
          col.axis = "white", col = "white", lwd = 0.7)
     axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.30, 0), tck = -0.01, 
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
-    mtext(expression(paste("Q"[t], " / ", "Q"[mean])), side = 2, line = 2, 
+    mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
     mtext("Streamflow Rhine River", side = 3, line = 0.3, cex = 1.2, col = "white")
     legend("topleft", c("Cologne", "Kaub", "Worms", "Speyer"), pch = 19, cex = 1.5, bty = "n",
@@ -879,7 +892,7 @@ for(p in 1:length(peaks_ind)){
          col.axis = "white", col = "white", lwd = 0.7)
     axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.30, 0), tck = -0.01, 
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
-    mtext(expression(paste("Q"[t], " / ", "Q"[mean])), side = 2, line = 2, 
+    mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
     mtext("Streamflow sub-basins", side = 3, line = 0.3, cex = 1.2, col = "white")
     legend("topleft", c("Moselle", "High Rhine", "Main", "Neckar"), pch = 19, cex = 1.5, bty = "n",
@@ -901,38 +914,85 @@ for(p in 1:length(peaks_ind)){
     disc_neck_cum <- disc_neck_cum + disc_exc_neck
     disc_main_cum <- disc_main_cum + disc_exc_main
     
-    ylims_cum <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))), 
-                               sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))), 
-                               sum_na((simu_neck[ind_sel]-mea_na(simu_base_obs))), 
-                               sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs)))))*1.05)
-    lwd_bar <- 25
+    disc_cum_base_rou <- round(disc_base_cum, digits = 0)
+    disc_cum_mose_rou <- round(disc_mose_cum, digits = 0)
+    disc_cum_main_rou <- round(disc_neck_cum, digits = 0)
+    disc_cum_neck_rou <- round(disc_main_cum, digits = 0)
+    
+    tri_gap <- 250
     col_snow <- "darkred"
-    col_rain <- "steelblue4"
+    col_prec <- "grey55"
     
-    par(mar = c(3.5, 5.5, 3.5, 0.5))
+    par(mar = c(3.5, 2.5, 3.5, 0.5))
     
-    plot(1:10, 1:10, type = "n", ylim = ylims_cum, xlim = c(0, 5), axes = F,
-         xlab = "", ylab = "", xaxs = "i", yaxs = "i")
-    lines(1, disc_mose_cum, type = "h", col = col_snow, lwd = lwd_bar, lend = 1)
-    lines(1, disc_mose_cum*pliq_frac_mose, type = "h", col = col_rain, lwd = lwd_bar, lend = 1)
-    lines(2, disc_base_cum, type = "h", col = col_snow, lwd = lwd_bar, lend = 1)
-    lines(2, disc_base_cum*pliq_frac_base, type = "h", col = col_rain, lwd = lwd_bar, lend = 1)
-    lines(3, disc_main_cum, type = "h", col = col_snow, lwd = lwd_bar, lend = 1)
-    lines(3, disc_main_cum*pliq_frac_main, type = "h", col = col_rain, lwd = lwd_bar, lend = 1)
-    lines(4, disc_neck_cum, type = "h", col = col_snow, lwd = lwd_bar, lend = 1)
-    lines(4, disc_neck_cum*pliq_frac_neck, type = "h", col = col_rain, lwd = lwd_bar, lend = 1)
-    axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
-         col.axis = "white", col = "white", lwd = 0.7)
-    axis(1, labels = c("Moselle", "Main"), at = c(1, 3), mgp=c(3, 0.25, 0), lwd = 0.7, cex = 1.3,
-         tck = -0.00, cex.axis = 1.2, col.ticks = "white", col.axis = "white", col = "white")
-    axis(1, labels = c("High Rh.", "Neckar"), at = c(2, 4), mgp=c(3, 0.25, 0), lwd = 0.7, cex = 1.3,
-         tck = -0.00, cex.axis = 1.2, col.ticks = "white", col.axis = "white", col = "white")
-    mtext(expression(paste("sum(Q"[t], " - ", "Q"[mean], ")")), side = 2, line = 2, 
-          cex = 1.3, col = "white")
-    mtext("Cummulative excess runoff", side = 3, line = 0.3, cex = 1.2, col = "white")
-    legend("topright", c("Snow", "Rain"), pch = 19, cex = 1.5, bty = "n",
-           col = c(col_snow, col_rain), box.col = "white", text.col = "white")
+    ylims <- c(-max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)), 
+                max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))
+    xlims <- ylims
+    
+    plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+    abline(v = 0, col = "white", lwd = 0.5)
+    abline(h = 0, col = "white", lwd = 0.5)
+    polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
+    polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
+    polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
+    polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
+    
+    polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+    polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
+    polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
+    polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
+    
+    if(disc_neck_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+      legend("bottomright", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    }
+    
+    if(disc_main_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+      legend("topright", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    }
+      
+    if(disc_mose_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+      legend("topleft", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    }
+    
+    if(disc_base_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+      legend("bottomleft", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    }
+    
     box(col = "white", lwd = 0.7)
+    mtext("Cumulative excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
+    mtext(expression(paste("[m"^"3", "s"^"-1","]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
+    
+    cex_gauge <- 1.6
+    cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    cex_min <- 0.8
+    if(cex_base < cex_min){cex_base <- cex_min}
+    if(cex_mose < cex_min){cex_mose <- cex_min}
+    if(cex_main < cex_min){cex_main <- cex_min}
+    if(cex_neck < cex_min){cex_neck <- cex_min}
+    
+    pos_frac_lab <- 1.3
+    text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
+    text(labels = "Moselle",    x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
+    text(labels = "Main",       x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
+    text(labels = "Neckar",     x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    
+    pos_frac_num <- 1.60
+    text(labels = round(disc_base_cum, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, 
+         col = "white", srt = 135, cex = cex_base)
+    text(labels = round(disc_mose_cum, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, 
+         col = "white", srt = 45, cex = cex_mose)
+    text(labels = round(disc_main_cum, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, 
+         col = "white", srt = 315, cex = cex_main)
+    text(labels = round(disc_neck_cum, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, 
+         col = "white", srt = 225, cex = cex_neck)
+    
     
     #Plot Flood extent
     col_ye <- "darkred"
@@ -956,7 +1016,7 @@ for(p in 1:length(peaks_ind)){
     mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.8, adj = 0.97, col = "white", cex = 2.5)
     segments(x0 = 0, y0 = 5, x1 = 100, y1 = 5, lwd = 5, col = "white")
     dates_at <- c(2, 11, 20, 29, 38, 47, 56, 65, 74, 83, 100)
-    dates_line <- 5.5
+    dates_line <- 5.0
     mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "white", cex = 1.2)
     mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "white", cex = 1.2)
     mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "white", cex = 1.2)
@@ -1158,6 +1218,21 @@ for(p in 1:length(peaks_ind)){
   sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
   sfrac_accu_all[p, f] <- sfrac_accu 
   write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
+  
+  #cummulative excess runoff
+  disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all.csv"), sep = ",", header = T)
+  disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all.csv"), sep = ",", header = T)
+  disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all.csv"), sep = ",", header = T)
+  disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all.csv"), sep = ",", header = T)
+  disc_exce_base_all[p, f] <- disc_base_cum
+  disc_exce_mose_all[p, f] <- disc_mose_cum
+  disc_exce_main_all[p, f] <- disc_main_cum
+  disc_exce_neck_all[p, f] <- disc_neck_cum
+  
+  write.csv(disc_exce_base_all, paste0(tabs_dir, "disc_exce_base_all.csv"), quote = F, row.names = F)
+  write.csv(disc_exce_mose_all, paste0(tabs_dir, "disc_exce_mose_all.csv"), quote = F, row.names = F)
+  write.csv(disc_exce_main_all, paste0(tabs_dir, "disc_exce_main_all.csv"), quote = F, row.names = F)
+  write.csv(disc_exce_neck_all, paste0(tabs_dir, "disc_exce_neck_all.csv"), quote = F, row.names = F)
   
 }
 
