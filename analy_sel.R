@@ -11,34 +11,34 @@
 tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 
 #prepare tables to collect flood characteristics
-flood_frac_max_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+flood_frac_max_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-sfrac_accu_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+sfrac_accu_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-peak_mag_all <- matrix(data = NA, nrow = 15,  ncol = 16)
-peak_doy_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+peak_mag_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+peak_doy_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-warm_lev_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+warm_lev_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-melt_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_frac_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
-disc_exce_base_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+melt_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_sum_base_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_frac_base_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+disc_exce_base_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-melt_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_frac_mose_all <- matrix(data = NA, nrow = 15,  ncol = 16)
-disc_exce_mose_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+melt_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_sum_mose_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_frac_mose_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+disc_exce_mose_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-melt_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_frac_main_all <- matrix(data = NA, nrow = 15,  ncol = 16)
-disc_exce_main_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+melt_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_sum_main_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_frac_main_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+disc_exce_main_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
-melt_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 16)
-pliq_frac_neck_all <- matrix(data = NA, nrow = 15,  ncol = 16)
-disc_exce_neck_all <- matrix(data = NA, nrow = 15,  ncol = 16)
+melt_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_sum_neck_all  <- matrix(data = NA, nrow = 15,  ncol = 21)
+pliq_frac_neck_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+disc_exce_neck_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
 write.csv(flood_frac_max_all, paste0(tabs_dir, "flood_frac_max_all.csv"), quote = F, row.names = F)
 
@@ -71,13 +71,13 @@ write.csv(disc_exce_neck_all, paste0(tabs_dir, "disc_exce_neck_all.csv"), quote 
 
 
 #loop over GCM-RCP combinations
-for(f in 1:16){
+for(f in 1:21){
   
 #set_up----
 
 # devtools::install_github('ERottler/meltimr')
 pacman::p_load(parallel, doParallel, zoo, zyp, alptempr, emdbook, scales, ncdf4,
-               ncdf4.helpers, sp, raster, viridis, meltimr, POT, readr, hydroGOF)
+               ncdf4.helpers, sp, raster, viridis, meltimr, POT, readr, hydroGOF, RColorBrewer)
 
 bas_dir <- "U:/rhine_movie/R/"
 run_dir <- "D:/nrc_user/rottler/mhm_run/6435060/"
@@ -107,8 +107,8 @@ ind_forc <- f
 
 #get_data----
 
-if(ind_forc == 1){
-  date_start <- "1951-01-02" # EOBS
+if(ind_forc <= 6){
+  date_start <- "1951-01-02" # historical
 }else{
   date_start <- "2020-01-01" # GCM-RCP-based simulations
 }
@@ -117,6 +117,11 @@ if(ind_forc == 1){
 
 nc_output_paths <- 
   c(paste0(run_dir, "output/EOBS/"),
+    paste0(run_dir, "output/GFDL-ESM2M/historical/"),
+    paste0(run_dir, "output/HadGEM2-ES/historical/"),
+    paste0(run_dir, "output/IPSL-CM5A-LR/historical/"),
+    paste0(run_dir, "output/MIROC-ESM-CHEM/historical/"),
+    paste0(run_dir, "output/NorESM1-M/historical/"),
     paste0(run_dir, "output/GFDL-ESM2M/rcp2p6/"),
     paste0(run_dir, "output/HadGEM2-ES/rcp2p6/"),
     paste0(run_dir, "output/IPSL-CM5A-LR/rcp2p6/"),
@@ -137,6 +142,11 @@ nc_output_paths <-
 #paths input files
 nc_input_paths <- 
   c(paste0(run_dir, "input/meteo/EOBS/"),
+    paste0(run_dir, "input/meteo/GFDL-ESM2M/historical/"),
+    paste0(run_dir, "input/meteo/HadGEM2-ES/historical/"),
+    paste0(run_dir, "input/meteo/IPSL-CM5A-LR/historical/"),
+    paste0(run_dir, "input/meteo/MIROC-ESM-CHEM/historical/"),
+    paste0(run_dir, "input/meteo/NorESM1-M/historical/"),
     paste0(run_dir, "input/meteo/GFDL-ESM2M/rcp2p6/"),
     paste0(run_dir, "input/meteo/HadGEM2-ES/rcp2p6/"),
     paste0(run_dir, "input/meteo/IPSL-CM5A-LR/rcp2p6/"),
@@ -157,6 +167,11 @@ nc_input_paths <-
 #paths export figures
 figs_export_paths <- 
   c("U:/rhine_genesis/R/figs/EOBS/",
+    "U:/rhine_genesis/R/figs/GFDL-ESM2M/historical/",
+    "U:/rhine_genesis/R/figs/HadGEM2-ES/historical/",
+    "U:/rhine_genesis/R/figs/IPSL-CM5A-LR/historical/",
+    "U:/rhine_genesis/R/figs/MIROC-ESM-CHEM/historical/",
+    "U:/rhine_genesis/R/figs/NorESM1-M/historical/",
     "U:/rhine_genesis/R/figs/GFDL-ESM2M/rcp2p6/",
     "U:/rhine_genesis/R/figs/HadGEM2-ES/rcp2p6/",
     "U:/rhine_genesis/R/figs/IPSL-CM5A-LR/rcp2p6/",
@@ -537,7 +552,7 @@ neck_me_mea <- neck_sd_mea_dif * -1 #melt positive values
 neck_lp_mea <- apply(pre_neck, 1, mea_na)
 
 
-#discharge relative to long-term mean runoff
+#discharge relative to long-term mean runoff simulated with EOBS
 nc_disc_file_obs <- paste0(run_dir, "output/EOBS/", "output/mRM_Fluxes_States.nc")
 nc_disc_obs <- nc_open(nc_disc_file_obs)
 
@@ -604,7 +619,7 @@ pot_peaks_koel <- clust(data = pot_data_koel, u = pot_thre_koel, tim.cond = 21, 
 pot_peaks_koel_ord <- pot_peaks_koel[order(pot_peaks_koel[, 2], decreasing = T), ]
 
 if(f == 1){
-  peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen historical peaks
+  peaks_ind <- pot_peaks_koel_ord[1:15, 3] #fifteen peaks EOBS-based simulations
 }else{
   peaks_ind <- pot_peaks_koel_ord[1:10, 3] #ten peaks from GCM-RCP combinations
   
@@ -737,17 +752,9 @@ for(p in 1:length(peaks_ind)){
         units = "in", res = 300)
     
     # par(family = "serif")
-    par(bg = 'grey20')
+    par(bg = 'grey15')
     cex_pch <- 0.7
     lwd_disc <- 1.4
-    col_koel <- "darkblue"
-    col_kaub <- "deepskyblue4"
-    col_worm <- "skyblue3"
-    col_spey <- "lightblue"
-    col_base <- "darkred"
-    col_neck <- "darkorchid4"
-    col_main <- "darkorange3"
-    col_mose <- "gold2"
     
     layout(matrix(c(rep(13, 32),
                     rep(9, 9), rep(10, 9), rep(11, 7), rep(12, 7),
@@ -758,7 +765,7 @@ for(p in 1:length(peaks_ind)){
     par(mar = c(0.0, 0.0, 2.0, 0.0))
     plot(c(lon), c(lat), pch = 15, col = cols_spat_pre, cex = cex_pch,
          axes = F, ylab = "", xlab = "")
-    mtext("Liquid precipitation", side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext("e) Liquid precipitation", side = 3, line = 0.3, cex = 1.2, col = "white")
     
     par(mar = c(1.0, 0.2, 3.0, 2.9))
     my_col <- colorRampPalette(c("white", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1,1,1)]))(200)
@@ -773,7 +780,7 @@ for(p in 1:length(peaks_ind)){
     par(mar = c(0.0, 0.0, 2.0, 0.0))
     plot(c(lon), c(lat), pch = 15, col = cols_spat_sno, cex = cex_pch,
          axes = F, ylab = "", xlab = "")
-    mtext("Snow cover changes", side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext("f) Snow cover changes", side = 3, line = 0.3, cex = 1.2, col = "white")
     
     par(mar = c(1.0, 0.2, 3.0, 2.9))
     my_col <- c(colorRampPalette(c(viridis::viridis(9, direction = 1)[c(1,1,2,3,4)], "lightcyan3", "white"))(100),
@@ -789,7 +796,7 @@ for(p in 1:length(peaks_ind)){
     par(mar = c(0.0, 0.0, 2.0, 0.0))
     plot(c(lon), c(lat), pch = 15, col = cols_spat_qto, cex = cex_pch, 
          axes = F, ylab = "", xlab = "")
-    mtext("Discharge generated", side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext("g) Discharge generated", side = 3, line = 0.3, cex = 1.2, col = "white")
     
     par(mar = c(1.0, 0.2, 3.0, 2.9))
     my_col <- colorRampPalette(c("white", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1,1,1)]))(200)
@@ -805,18 +812,18 @@ for(p in 1:length(peaks_ind)){
     plot(c(lon), c(lat), pch = 15, col = cols_spat_dis, cex = cex_pch,
          axes = F, ylab = "", xlab = "")
     points(coords_sel_gaugs[c(2, 4, 6, 8), 2], coords_sel_gaugs[c(2, 4, 6, 8), 1], pch = 25, 
-           col = "red", bg = "red", cex = 1.0)
+           col = "darkred", bg = "darkred", cex = 1.1)
     points(c(coords_sel_gaugs[c(9), 2], 8.415706, 8.591144, 7.491285), 
            c(coords_sel_gaugs[c(9), 1], 50.000229, 49.474691, 50.317333), pch = 25, 
-           col = "white", bg = "white", cex = 1.0)
+           col = "white", bg = "white", cex = 1.1)
     text(rep(9.9, 4),
          c(51.8, 51.5, 51.2, 50.8),
-         labels = c("Cologne", "Kaub", "Worms", "Speyer"), col = "red", cex = 1.2)
+         labels = c("Cologne", "Kaub", "Worms", "Speyer"), col = "darkred", cex = 1.2)
     text(rep(11.2, 4),
          c(51.8, 51.5, 51.2, 50.8),
          labels = c("Moselle", "Main", "Neckar", "High Rhine"), col = "white", cex = 1.2)
     
-    mtext("Discharge routed", side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext("h) Discharge routed", side = 3, line = 0.3, cex = 1.2, col = "white")
     
     par(mar = c(1.0, 0.2, 3.0, 2.9))
     my_col <- c(colorRampPalette(c(rep(viridis::viridis(20, direction = -1)[1], 8),
@@ -833,6 +840,10 @@ for(p in 1:length(peaks_ind)){
     days_before <- 20
     days_after <- 21
     cex_disc_points <- 1.7
+    col_koel <- brewer.pal(n = 9, name = "Blues")[9]
+    col_kaub <- brewer.pal(n = 9, name = "Blues")[7]
+    col_worm <- brewer.pal(n = 9, name = "Blues")[4]
+    col_spey <- brewer.pal(n = 9, name = "Blues")[1]
     
     ylims <- range(c(simu_spey_rel[(i-days_before):(i+days_after)], simu_worm_rel[(i-days_before):(i+days_after)], 
                      simu_kaub_rel[(i-days_before):(i+days_after)], simu_koel_rel[(i-days_before):(i+days_after)]), na.rm = T)
@@ -846,10 +857,10 @@ for(p in 1:length(peaks_ind)){
     lines(simu_worm_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
     lines(simu_kaub_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
     lines(simu_koel_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
-    lines(simu_spey_rel[(i-days_before):(i+days_after)], col = alpha(col_spey, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_worm_rel[(i-days_before):(i+days_after)], col = alpha(col_worm, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_kaub_rel[(i-days_before):(i+days_after)], col = alpha(col_kaub, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_koel_rel[(i-days_before):(i+days_after)], col = alpha(col_koel, alpha = 0.7), lwd = lwd_disc, lty = "solid")
+    lines(simu_spey_rel[(i-days_before):(i+days_after)], col = alpha(col_spey, alpha = 0.8), lwd = lwd_disc, lty = "solid")
+    lines(simu_worm_rel[(i-days_before):(i+days_after)], col = alpha(col_worm, alpha = 0.8), lwd = lwd_disc, lty = "solid")
+    lines(simu_kaub_rel[(i-days_before):(i+days_after)], col = alpha(col_kaub, alpha = 0.8), lwd = lwd_disc, lty = "solid")
+    lines(simu_koel_rel[(i-days_before):(i+days_after)], col = alpha(col_koel, alpha = 0.8), lwd = lwd_disc, lty = "solid")
     points(days_before+1, simu_spey_rel[i], pch = 19, col = col_spey, cex = cex_disc_points)
     points(days_before+1, simu_worm_rel[i], pch = 19, col = col_worm, cex = cex_disc_points)
     points(days_before+1, simu_kaub_rel[i], pch = 19, col = col_kaub, cex = cex_disc_points)
@@ -861,7 +872,7 @@ for(p in 1:length(peaks_ind)){
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
     mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
-    mtext("Streamflow Rhine River", side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext("a) Streamflow Rhine River", side = 3, line = 0.3, cex = 1.2, col = "white", adj = 0.0)
     legend("topleft", c("Cologne", "Kaub", "Worms", "Speyer"), pch = 19, cex = 1.5, bty = "n",
            col = c(col_koel, col_kaub, col_worm, col_spey), box.col = "white", text.col = "white")
     box(col = "white", lwd = 0.7)
@@ -869,6 +880,11 @@ for(p in 1:length(peaks_ind)){
     #Plot discharge simulated tributaries
     ylims <- range(c(simu_neck_rel[(i-days_before):(i+days_after)], simu_main_rel[(i-days_before):(i+days_after)], 
                      simu_mose_rel[(i-days_before):(i+days_after)], simu_base_rel[(i-days_before):(i+days_after)]), na.rm = T)
+    
+    col_base <- brewer.pal(n = 9, name = "Reds")[9]
+    col_neck <- brewer.pal(n = 9, name = "Reds")[7]
+    col_mose <- brewer.pal(n = 9, name = "Reds")[4]
+    col_main <- brewer.pal(n = 9, name = "Reds")[1]
     
     par(mar = c(3.5, 5.5, 3.5, 0.5))
     
@@ -879,10 +895,10 @@ for(p in 1:length(peaks_ind)){
     lines(simu_neck_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
     lines(simu_main_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
     lines(simu_mose_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_disc)
-    lines(simu_base_rel[(i-days_before):(i+days_after)], col = alpha(col_base, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_neck_rel[(i-days_before):(i+days_after)], col = alpha(col_neck, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_main_rel[(i-days_before):(i+days_after)], col = alpha(col_main, alpha = 0.7), lwd = lwd_disc, lty = "solid")
-    lines(simu_mose_rel[(i-days_before):(i+days_after)], col = alpha(col_mose, alpha = 0.7), lwd = lwd_disc, lty = "solid")
+    lines(simu_base_rel[(i-days_before):(i+days_after)], col = alpha(col_base, alpha = 0.8), lwd = lwd_disc, lty = "solid")
+    lines(simu_neck_rel[(i-days_before):(i+days_after)], col = alpha(col_neck, alpha = 0.9), lwd = lwd_disc, lty = "solid")
+    lines(simu_main_rel[(i-days_before):(i+days_after)], col = alpha(col_main, alpha = 0.8), lwd = lwd_disc, lty = "solid")
+    lines(simu_mose_rel[(i-days_before):(i+days_after)], col = alpha(col_mose, alpha = 0.8), lwd = lwd_disc, lty = "solid")
     points(days_before+1, simu_base_rel[i], pch = 19, col = col_base, cex = cex_disc_points)
     points(days_before+1, simu_neck_rel[i], pch = 19, col = col_neck, cex = cex_disc_points)
     points(days_before+1, simu_main_rel[i], pch = 19, col = col_main, cex = cex_disc_points)
@@ -894,9 +910,9 @@ for(p in 1:length(peaks_ind)){
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
     mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
-    mtext("Streamflow sub-basins", side = 3, line = 0.3, cex = 1.2, col = "white")
-    legend("topleft", c("Moselle", "High Rhine", "Main", "Neckar"), pch = 19, cex = 1.5, bty = "n",
-           col = c(col_mose, col_base, col_main, col_neck), box.col = "white", text.col = "white")
+    mtext("b) Streamflow sub-basins", side = 3, line = 0.3, cex = 1.2, col = "white", adj = 0.0)
+    legend("topleft", c("Main", "Moselle", "Neckar", "High Rhine"), pch = 19, cex = 1.5, bty = "n",
+           col = c(col_main, col_mose, col_neck, col_base), box.col = "white", text.col = "white")
     box(col = "white", lwd = 0.7)
     
     #Cumulative excess discharge
@@ -905,9 +921,9 @@ for(p in 1:length(peaks_ind)){
     disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs)
     disc_exc_main <- simu_main[i]-mea_na(simu_main_obs)
     if(disc_exc_base < 0){disc_exc_base <- 0}
-    if(disc_exc_mose < 0){disc_exc_base <- 0}
-    if(disc_exc_neck < 0){disc_exc_base <- 0}
-    if(disc_exc_main < 0){disc_exc_base <- 0}
+    if(disc_exc_mose < 0){disc_exc_mose <- 0}
+    if(disc_exc_neck < 0){disc_exc_neck <- 0}
+    if(disc_exc_main < 0){disc_exc_main <- 0}
     
     disc_base_cum <- disc_base_cum + disc_exc_base
     disc_mose_cum <- disc_mose_cum + disc_exc_mose
@@ -919,84 +935,141 @@ for(p in 1:length(peaks_ind)){
     disc_cum_main_rou <- round(disc_neck_cum, digits = 0)
     disc_cum_neck_rou <- round(disc_main_cum, digits = 0)
     
-    tri_gap <- 250
-    col_snow <- "darkred"
-    col_prec <- "grey55"
+    #get x/y lims
+    tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                               sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                               sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                               sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+    col_snow <- "grey65"
+    col_prec <- "deepskyblue4"
     
     par(mar = c(3.5, 2.5, 3.5, 0.5))
     
-    ylims <- c(-max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)), 
-                max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))
+    ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                         sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                         sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                         sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
+               max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                        sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                        sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                        sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+               )
     xlims <- ylims
     
     plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
     abline(v = 0, col = "white", lwd = 0.5)
     abline(h = 0, col = "white", lwd = 0.5)
-    polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
-    polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
-    polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
-    polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
-    
-    polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
-    polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
-    polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
-    polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
-    
-    if(disc_neck_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
-      legend("bottomright", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
-             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    if(disc_base_cum > tri_gap){
+      polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
+      polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
     }
     
-    if(disc_main_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
-      legend("topright", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
-             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
-    }
-      
-    if(disc_mose_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
-      legend("topleft", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
-             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    if(disc_mose_cum > tri_gap){
+      polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
+      polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
     }
     
-    if(disc_base_cum == min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
-      legend("bottomleft", c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
-             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    if(disc_main_cum > tri_gap){
+      polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
+      polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
     }
+    
+    if(disc_neck_cum > tri_gap){
+      polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
+      polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
+    }
+    
+    legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
+                               min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
+    legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
+    
+    legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+             col = c(col_snow, col_prec), box.col = "white", text.col = "white")
     
     box(col = "white", lwd = 0.7)
-    mtext("Cumulative excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
+    mtext("c) Cumulative excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
     mtext(expression(paste("[m"^"3", "s"^"-1","]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
     
-    cex_gauge <- 1.6
-    cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    cex_min <- 0.8
+    cex_gauge <- 1.4
+    cex_min <- 0.9
+    
+    if(disc_base_cum > 0){
+      cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    }else{cex_base <- cex_min}
+    
+    if(disc_mose_cum > 0){
+      cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    }else{cex_mose <- cex_min}
+    
+    if(disc_main_cum > 0){
+      cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    }else{cex_main <- cex_min}
+    
+    if(disc_neck_cum > 0){
+      cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    }else{cex_neck <- cex_min}
+    
+    
     if(cex_base < cex_min){cex_base <- cex_min}
     if(cex_mose < cex_min){cex_mose <- cex_min}
     if(cex_main < cex_min){cex_main <- cex_min}
     if(cex_neck < cex_min){cex_neck <- cex_min}
     
-    pos_frac_lab <- 1.3
-    text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
-    text(labels = "Moselle",    x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
-    text(labels = "Main",       x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
-    text(labels = "Neckar",     x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    pos_frac_lab <- 1.35
+    if(disc_base_cum > 0.5*max_na(ylims)){
+      text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
+    }else{
+      text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
+    }
     
-    pos_frac_num <- 1.60
-    text(labels = round(disc_base_cum, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, 
-         col = "white", srt = 135, cex = cex_base)
-    text(labels = round(disc_mose_cum, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, 
-         col = "white", srt = 45, cex = cex_mose)
-    text(labels = round(disc_main_cum, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, 
-         col = "white", srt = 315, cex = cex_main)
-    text(labels = round(disc_neck_cum, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, 
-         col = "white", srt = 225, cex = cex_neck)
+    if(disc_mose_cum > 0.5*max_na(ylims)){
+      text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
+    }else{
+      text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
+    }
+    
+    if(disc_main_cum > 0.5*max_na(ylims)){
+      text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
+    }else{
+      text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
+    }
+    
+    if(disc_neck_cum > 0.5*max_na(ylims)){
+      text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    }else{
+      text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    }
+    
+  
+    pos_frac_num <- 1.65
+    if(disc_base_cum > 0.5*max_na(ylims)){
+      text(labels = round(disc_base_cum, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+    }else{
+      text(labels = round(disc_base_cum, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+    }
+    
+    if(disc_mose_cum > 0.5*max_na(ylims)){
+      text(labels = round(disc_mose_cum, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+    }else{
+      text(labels = round(disc_mose_cum, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+    }
+    
+    if(disc_main_cum > 0.5*max_na(ylims)){
+      text(labels = round(disc_main_cum, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+    }else{
+      text(labels = round(disc_main_cum, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+    }
+    
+    if(disc_neck_cum > 0.5*max_na(ylims)){
+      text(labels = round(disc_neck_cum, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+    }else{
+      text(labels = round(disc_neck_cum, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+    }
     
     
     #Plot Flood extent
-    col_ye <- "darkred"
-    col_no <- "grey92"
+    col_ye <- "steelblue4"
+    col_no <- "grey55"
     cols_spat_flo <- rep(col_no, length(quan_exc))
     cols_spat_flo[which(quan_exc > 0)] <- col_ye
     cols_spat_flo[which(is.na(disc_cube[ , , i]))] <- NA
@@ -1006,123 +1079,126 @@ for(p in 1:length(peaks_ind)){
     par(mar = c(2.0, 1.0, 3.5, 0.0))
     plot(c(lon), c(lat), pch = 15, col = cols_spat_flo, cex = cex_pch,
          axes = F, ylab = "", xlab = "")
-    mtext(paste0("Flood extent: ", flood_frac, " %"), side = 3, line = 0.3, cex = 1.2, col = "white")
+    mtext(paste0("d) Flood extent: ", flood_frac, " %"), side = 3, line = 0.3, cex = 1.2, col = "white")
     
     
     #Header of plot
+    col_header <- "white"
+    col_back <- "grey45"
+    seg_pos <- 9
     par(mar = c(0, 0, 0, 0))
     plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "")
     # mtext("RHINE FLOOD GENESIS", side = 3, adj = 0.03, line = -3.3, col = "white", cex = 2.5)
-    mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.8, adj = 0.97, col = "white", cex = 2.5)
-    segments(x0 = 0, y0 = 5, x1 = 100, y1 = 5, lwd = 5, col = "white")
+    mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.3, adj = 0.97, col = col_back, cex = 2.5)
+    segments(x0 = 0, y0 = seg_pos, x1 = 100, y1 = seg_pos, lwd = 5, col = col_back)
     dates_at <- c(2, 11, 20, 29, 38, 47, 56, 65, 74, 83, 100)
-    dates_line <- 5.0
-    mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = "white", cex = 1.2)
-    mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = "white", cex = 1.2)
-    segments(x0 = 0, y0 = 5, x1 = dates_at[counter], y1 = 5, lwd = 5, col = "steelblue4")
+    dates_line <- 4.5
+    mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_back, cex = 1.2)
+    mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_back, cex = 1.2)
+    segments(x0 = 0, y0 = seg_pos, x1 = dates_at[counter], y1 = seg_pos, lwd = 5, col = col_header)
     if(counter == 1){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
       
     }
     if(counter == 2){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
     }
     if(counter == 3){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
     }
     if(counter == 4){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
       
     }
     if(counter == 5){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
       
     }
     if(counter == 6){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
       
     }
     if(counter == 7){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
       
     }
     if(counter == 8){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
       
     }
     if(counter == 9){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
       
     }
     if(counter == 10){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = "steelblue4", cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_header, cex = 1.2)
       
     }
     if(counter == 11){
-      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = "steelblue4", cex = 1.2)
-      mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.8, adj = 0.97, col = "steelblue4", cex = 2.5)
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_header, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.3, adj = 0.97, col = col_header, cex = 2.5)
       
     }
     
@@ -1151,7 +1227,7 @@ for(p in 1:length(peaks_ind)){
   write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all.csv"), quote = F, row.names = F)
   write.csv(peak_doy_all, paste0(tabs_dir,"peak_doy_all.csv"), quote = F, row.names = F)
   
-  if(f > 1){
+  if(f > 6){
   
     #warming level
     warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all.csv"), sep = ",", header = T)
