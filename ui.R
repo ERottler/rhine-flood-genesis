@@ -16,9 +16,88 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                     h3("Summary")),
            
            tabPanel("Plot description",
-                    h3("Plot description.")),
+                    
+                    fluidRow(
+               
+                      column(3,
+                             tags$h3("Panel a"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "Simulated Rhine River runoff at the four locations Speyer (before the confluence of the Neckar River), Worms (after/before the confluence of the Neckar/Main River), Kaub (after/before the confluence of Neckar/Moselle River) and Cologne (after the confluence with all major tributaries). Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing.")
+                             ),
+                      column(3,
+                             tags$h3("Panel b"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "Simulated Rhine River runoff for the four sub-basins of the High Rhine, Neckar, Main and Moselle. The High Rhine catchment is until the city/gauge of Basel. The simulated runoff for the tributaries Neckar, Main and Moselle is taken just before their confluence with the Rhine River and does not reflect an actual excisting river gauge. Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing.")
+                      ),
+                      column(3,
+                             tags$h3("Panel c"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative excess runoff above the long-term mea simulated for the time frame 1951-2013 using EOBS-based meteorological forcing data. Rainfall and snowmmelt contributions are estimated based on the total liquid rainfall and snowmelt in the sub-basins.")
+                      ),
+                      column(3,
+                             tags$h3("Panel d"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "Flood extent estimated based on the fraction of grid cells that genrated runoff above the long-term 99 % quantile (estimated based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day period before the flood peak.")
+                      )
+                    ),
+                    
+                    fluidRow(
+                      
+                      column(9,
+                             img(src='rhine_19950128.png', align = "center", width = '100%')
+                      ),
+                      column(3,
+                             tags$h3("Timeline"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "Day of the flood peak in Cologne (date top right) and the ten days prior to the event.")
+                      )
+                    ),
+                    
+                    fluidRow(
+                      
+                      column(3,
+                             tags$h3("Panel e"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                      ),
+                      column(3,
+                             tags$h3("Panel f"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                      ),
+                      column(3,
+                             tags$h3("Panel g"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                      ),
+                      column(3,
+                             tags$h3("Panel h"),
+                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                      )
+                    )
+                      
+                      
+                      
+                      
+                    
+                      
+                    ),
+                    
            
            tabPanel("Historic floods",
+                    
+                    tags$head(
+                      tags$style(
+                        HTML(
+                          "
+                          .form-control {
+                              border-radius: 6px 6px 6px 6px;
+                          }
+
+                          #text_hist {
+                          font-family:  sans-serif;
+                          font-size: 16px;
+                          max-width: 96%;
+                          padding: 12px 95px; 
+                          text-align: justify;
+                          }
+
+                          "
+                          )
+                        )
+                      ),
                     
                     sidebarLayout(
                       
@@ -26,10 +105,10 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                                    
                                    
                                    selectInput("peak_hist", "Historic flood peaks:", 
-                                               choices = c("Flood - Jan 1995" = "jan1995", 
-                                                           "Flood - Dec 1993" = "dec1993", 
-                                                           "Flood - Jan 2011" = "jan2011", 
-                                                           "Flood - Mar 1988" = "mar1988"), 
+                                               choices = c("Jan 1995" = "jan1995", 
+                                                           "Dec 1993" = "dec1993", 
+                                                           "Jan 2011" = "jan2011", 
+                                                           "Mar 1988" = "mar1988"), 
                                                width = '100%'),
                                    
                                    sliderInput("day_hist", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T)
@@ -38,8 +117,12 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                       
                       mainPanel(width = 10,
                                 fluidRow(
+                                         
                                   imageOutput("plot_hist", height="50%", width="99%"),
-                                  textOutput("text_hist")
+                                  
+                                  tags$h4(textOutput("text_hist"))
+                                  
+                                  
                                   )
                                 )
                       )
@@ -47,6 +130,27 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
            ),
            
            tabPanel("Future floods",
+                    
+                    tags$head(
+                      tags$style(
+                        HTML(
+                          "
+                          .form-control {
+                              border-radius: 6px 6px 6px 6px;
+                          }
+
+                          #text_future {
+                          font-family:  sans-serif;
+                          font-size: 16px;
+                          max-width: 96%;
+                          padding: 12px 95px; 
+                          text-align: justify;
+                          }
+
+                          "
+                        )
+                      )
+                    ),
                     
                     sidebarLayout(
                       
@@ -158,12 +262,19 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
            tabPanel("Contact",
                     h3("Feedback"),
                     p("Should you have any comments, questions or suggestions, please do not hesitate to contact us: rottler(at)uni-potsdam.de"),
+                    
                     h3("Funding"),
-                    p("This research was funded by Deutsche Forschungsgemeinschaft (DFG) within the graduate research training group NatRiskChange (GRK 2043/1) at the University of Potsdam:"),
-                    tags$a(href="https://www.uni-potsdam.de/en/natriskchange", "RTG NatRiskChange",
-                           style="color:CadetBlue;
+                    p("This research was funded by Deutsche Forschungsgemeinschaft (DFG) within the graduate research training group",
+                      tags$a(href="https://www.uni-potsdam.de/en/natriskchange", "RTG NatRiskChange",
+                             style="color:CadetBlue;
                          font-weight: bold;
-                         font-style: italic")
+                         font-style: italic"),
+                      "at",
+                      tags$a(href="https://www.uni-potsdam.de", "University of Potsdam",
+                             style="color:CadetBlue;
+                         font-weight: bold;
+                         font-style: italic"), ".")
+                    
            )
            
            )

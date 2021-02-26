@@ -52,28 +52,25 @@ function(input, output, session) {
   })
   
 
-    
-
-    
-
   output$text_hist <- renderText({
+    
     
     if(input$peak_hist == "jan1995"){
       flood_text <- 
-      "The flood event in January 1995 was one of worst floods ever recorded in the city of Cologne.
+      "The flood event in January 1995 went along with one of highest water levels ever recorded at gauge Cologne.
        The ten-day period prior to the peak flow was caracterised by excessive rainfall, particularly in the Moselle catchment.
-       In some areas of the Moselle catchment, the three rainfall peaks accumulated up to 200 mm of precipitation and caused several flood surges.
+       In large parts of the Moselle catchment, three rainfall peaks accumulated up to 200 mm of precipitation and caused several flood surges.
        Snowmelt occured in the Vosges mountains, the Black forest and parts of the Swiss Plateau, however, only played a minor role during flood genesis. 
        Over the Alpine rigde, precipitation was solid and accumulated in temporary snow packs."
     }
     
     if(input$peak_hist == "dec1993"){
       flood_text <- 
-      "Only thirteen months before the flood from 1995, in December 1993, the Rhine River overspilled temporary flood protection walls at Cologne.
+      "In December 1993, the Rhine River overspilled temporary flood protection walls at Cologne.
        The Christmas flood from 1993 was caused by excessive rainfall over large parts of the Rhine Basin. 
        Almost the entire Moselle catchment received precipitation amounts around 150 mm.
        The Moselle River contributed most of the water causing the flood in Cologne.
-       Further hotspots of runoff generation were the Balck Forest and the northern par to the Neckar catchment.
+       Further hotspots of runoff generation were the Black Forest and the northern part to the Neckar catchment.
        Snowmelt did not play any, runoff from the High Rhine Basin only a minor role.
        In the southern part of the Rhine Basin, precipitation was less intense and partly stored in temporary snow packs.
        The High and Upper Rhine were not suject to flooding. Water levels became critical only downstream the confluence of the Neckar River.
@@ -122,14 +119,7 @@ function(input, output, session) {
     if(input$peak_hist == "mar1988"){
       imgs <- list.files(paste0(img_dir, "EOBS/flood_2"), pattern = ".png", full.names = T)
     }
-    
-    if(input$peak_future == "jan2097"){
-      imgs <- list.files(paste0(img_dir, "NorESM1-M/rcp8p5/flood_1"), pattern = ".png", full.names = T)
-    }
-    
-
-
-    
+ 
     img_index <- input$day_hist + 11
     
     filename <- imgs[img_index]
