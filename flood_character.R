@@ -9,7 +9,7 @@ pacman::p_load(alptempr, meltimr)
 
 tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 
-#Read tables
+#read_tables----
 
 peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all.csv"), sep = ",", header = T)
 peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all.csv"), sep = ",", header = T)
@@ -20,6 +20,10 @@ warm_lev_all <- warm_lev_all + 0.46  #historic period warmer by 0.46 °C already
 flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all.csv"), sep = ",", header = T)
 
 sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
+sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all.csv"), sep = ",", header = T)
+sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all.csv"), sep = ",", header = T)
+sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all.csv"), sep = ",", header = T)
+sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all.csv"), sep = ",", header = T)
 
 melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all.csv"), sep = ",", header = T)
 melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all.csv"), sep = ",", header = T)
@@ -425,3 +429,12 @@ for(i in 1:3){
   
   
 }
+
+#acc_frac----
+
+boxplot(unlist(sfrac_accu_base_all[7:21, 1:20]))
+boxplot(unlist(sfrac_accu_mose_all[7:21, 1:20]))
+boxplot(unlist(sfrac_accu_neck_all[7:21, 1:20]))
+boxplot(unlist(sfrac_accu_main_all[7:21, 1:20]))
+
+plot(unlist(warm_lev_all[7:21, 1:20]), unlist(sfrac_accu_base_all[7:21, 1:20]))

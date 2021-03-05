@@ -14,6 +14,10 @@ tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 flood_frac_max_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
 sfrac_accu_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+sfrac_accu_base_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+sfrac_accu_mose_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+sfrac_accu_neck_all <- matrix(data = NA, nrow = 15,  ncol = 21)
+sfrac_accu_main_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 
 peak_mag_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 peak_doy_all <- matrix(data = NA, nrow = 15,  ncol = 21)
@@ -43,6 +47,10 @@ disc_exce_neck_all <- matrix(data = NA, nrow = 15,  ncol = 21)
 write.csv(flood_frac_max_all, paste0(tabs_dir, "flood_frac_max_all.csv"), quote = F, row.names = F)
 
 write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
+write.csv(sfrac_accu_base_all, paste0(tabs_dir, "sfrac_accu_base_all.csv"), quote = F, row.names = F)
+write.csv(sfrac_accu_mose_all, paste0(tabs_dir, "sfrac_accu_mose_all.csv"), quote = F, row.names = F)
+write.csv(sfrac_accu_neck_all, paste0(tabs_dir, "sfrac_accu_neck_all.csv"), quote = F, row.names = F)
+write.csv(sfrac_accu_main_all, paste0(tabs_dir, "sfrac_accu_main_all.csv"), quote = F, row.names = F)
 
 write.csv(peak_mag_all, paste0(tabs_dir, "peak_mag_all.csv"), quote = F, row.names = F)
 write.csv(peak_doy_all, paste0(tabs_dir, "peak_doy_all.csv"), quote = F, row.names = F)
@@ -881,10 +889,10 @@ for(p in 1:length(peaks_ind)){
     ylims <- range(c(simu_neck_rel[(i-days_before):(i+days_after)], simu_main_rel[(i-days_before):(i+days_after)], 
                      simu_mose_rel[(i-days_before):(i+days_after)], simu_base_rel[(i-days_before):(i+days_after)]), na.rm = T)
     
-    col_base <- brewer.pal(n = 9, name = "Reds")[9]
-    col_neck <- brewer.pal(n = 9, name = "Reds")[7]
-    col_mose <- brewer.pal(n = 9, name = "Reds")[4]
-    col_main <- brewer.pal(n = 9, name = "Reds")[1]
+    col_base <- viridis::viridis(20)[3]
+    col_neck <- viridis::viridis(20)[5]
+    col_mose <- viridis::viridis(20)[10]
+    col_main <- viridis::viridis(20)[17]
     
     par(mar = c(3.5, 5.5, 3.5, 0.5))
     
@@ -1236,7 +1244,7 @@ for(p in 1:length(peaks_ind)){
     year_sel <- as.numeric(strftime(date_sel[peak_ind], format = "%Y"))
     year_sel_in <- which(2020:2099 == year_sel)  
     
-    warm_lev_all[p, f] <- temps_ma_all[year_sel_in, f-1]
+    warm_lev_all[p, f] <- temps_ma_all[year_sel_in, f-6] #Minus 6 as first six forcings no warming calculated
     
     write.csv(warm_lev_all, paste0(tabs_dir,"warm_lev_all.csv"), quote = F, row.names = F)
     
@@ -1290,10 +1298,30 @@ for(p in 1:length(peaks_ind)){
   write.csv(pliq_frac_neck_all,  paste0(tabs_dir, "pliq_frac_neck_all.csv"),  quote = F, row.names = F)
   
   #areal fraction snow accumulation
-  sfrac_accu <- length(which(c(snow_sel) > 0)) / length(c(snow_sel))
+  #accumulation above 2 mm
+  sfrac_accu <- length(which(c(snow_sel) > 2)) / length(c(snow_sel))
+  sfrac_accu_base <- length(which(c(snow_sel)[inside_base] > 2)) / length(c(snow_sel)[inside_base])
+  sfrac_accu_mose <- length(which(c(snow_sel)[inside_mose] > 2)) / length(c(snow_sel)[inside_mose])
+  sfrac_accu_neck <- length(which(c(snow_sel)[inside_neck] > 2)) / length(c(snow_sel)[inside_neck])
+  sfrac_accu_main <- length(which(c(snow_sel)[inside_main] > 2)) / length(c(snow_sel)[inside_main])
+  
   sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
+  sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all.csv"), sep = ",", header = T)
+  sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all.csv"), sep = ",", header = T)
+  sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all.csv"), sep = ",", header = T)
+  sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all.csv"), sep = ",", header = T)
+  
   sfrac_accu_all[p, f] <- sfrac_accu 
+  sfrac_accu_base_all[p, f] <- sfrac_accu_base 
+  sfrac_accu_mose_all[p, f] <- sfrac_accu_mose 
+  sfrac_accu_neck_all[p, f] <- sfrac_accu_neck 
+  sfrac_accu_main_all[p, f] <- sfrac_accu_main 
+  
   write.csv(sfrac_accu_all, paste0(tabs_dir, "sfrac_accu_all.csv"), quote = F, row.names = F)
+  write.csv(sfrac_accu_base_all, paste0(tabs_dir, "sfrac_accu_base_all.csv"), quote = F, row.names = F)
+  write.csv(sfrac_accu_mose_all, paste0(tabs_dir, "sfrac_accu_mose_all.csv"), quote = F, row.names = F)
+  write.csv(sfrac_accu_neck_all, paste0(tabs_dir, "sfrac_accu_neck_all.csv"), quote = F, row.names = F)
+  write.csv(sfrac_accu_main_all, paste0(tabs_dir, "sfrac_accu_main_all.csv"), quote = F, row.names = F)
   
   #cummulative excess runoff
   disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all.csv"), sep = ",", header = T)
