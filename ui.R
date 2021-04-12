@@ -9,11 +9,13 @@
 library(shiny)
 library(shinythemes)
 library(shinydashboard)
+library(plotly)
 
-navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Historic floods",
+navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Overview",
            
            tabPanel("Overview",
-                    h3("Summary")),
+                    h3("Summary"),
+                    plotlyOutput("plotly_doy_mag", width="100%"), height = "1000px"),
            
            tabPanel("Plot description",
                     
@@ -29,11 +31,11 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                       ),
                       column(3,
                              tags$h3("Panel c"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative excess runoff above the long-term mea simulated for the time frame 1951-2013 using EOBS-based meteorological forcing data. Rainfall and snowmmelt contributions are estimated based on the total liquid rainfall and snowmelt in the sub-basins.")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative excess runoff above the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing data. Rainfall and snowmmelt contributions are estimated based on the total liquid rainfall and snowmelt in the sub-basins.")
                       ),
                       column(3,
                              tags$h3("Panel d"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "Flood extent estimated based on the fraction of grid cells that genrated runoff above the long-term 99 % quantile (estimated based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day period before the flood peak.")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Flood extent estimated based on the fraction of grid cells that generated runoff above the long-term 99 % quantile (estimated based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day period before the flood peak.")
                       )
                     ),
                     
@@ -52,19 +54,19 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                       
                       column(3,
                              tags$h3("Panel e"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative liquid precipitation starting ten days before the flood peak at Cologne. Liquid and solid precipitation are differentiated based on the temperature threshold determined during model calibration.")
                       ),
                       column(3,
                              tags$h3("Panel f"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative snow cover changes (snow accumulation and snowmelt) per cell starting ten days before the flood peak at Cologne.")
                       ),
                       column(3,
                              tags$h3("Panel g"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative discharge generated per cell starting ten days before the flood peak at Cologne.")
                       ),
                       column(3,
                              tags$h3("Panel h"),
-                             tags$p(style="text-align: justify; font-size: 16px;", "text")
+                             tags$p(style="text-align: justify; font-size: 16px;", "Cumulative routed discharge per cell starting ten days before the flood peak at Cologne.")
                       )
                     )
                       
@@ -185,19 +187,19 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                                    selectInput("force", "Select forcing data:", 
                                                choices = c("EOBS (historic)", 
                                                            "GFDL-ESM2M - RCP2.6",
-                                                           "HadGEM2-ES - RCP2.6",
-                                                           "IPSL-CM5A-LR - RCP2.6", 
-                                                           "MIROC-ESM-CHEM - RCP2.6",
-                                                           "NorESM1-M - RCP2.6", 
                                                            "GFDL-ESM2M - RCP6.0",
-                                                           "HadGEM2-ES - RCP6.0",
-                                                           "IPSL-CM5A-LR - RCP6.0", 
-                                                           "MIROC-ESM-CHEM - RCP6.0",
-                                                           "NorESM1-M - RCP6.0", 
                                                            "GFDL-ESM2M - RCP8.5",
+                                                           "HadGEM2-ES - RCP2.6",
+                                                           "HadGEM2-ES - RCP6.0",
                                                            "HadGEM2-ES - RCP8.5",
+                                                           "IPSL-CM5A-LR - RCP2.6", 
+                                                           "IPSL-CM5A-LR - RCP6.0",
                                                            "IPSL-CM5A-LR - RCP8.5", 
+                                                           "MIROC-ESM-CHEM - RCP2.6",
+                                                           "MIROC-ESM-CHEM - RCP6.0",
                                                            "MIROC-ESM-CHEM - RCP8.5",
+                                                           "NorESM1-M - RCP2.6", 
+                                                           "NorESM1-M - RCP6.0", 
                                                            "NorESM1-M - RCP8.5" 
                                                ), width = '100%'),
                                    

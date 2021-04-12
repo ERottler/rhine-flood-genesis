@@ -78,7 +78,12 @@ function(input, output, session) {
     }
     
     if(input$peak_hist == "jan2011"){
-      flood_text <- "January 2011."
+      flood_text <- 
+      "In January 2011, rain on snow caused the melting of snow covers in several major river basins in Cetral Europe including the Rhine River Basin.
+       Water levels in the Rhine River reach critical values after the confluence of the Main River. 
+       In the Moselle, Neckar as well as the Main Basin, the amounts of snowmelt are particularly high. 
+       Contributions of the High Rhine are small. In the Alpine part of the basin precipitation is solid and accumulated in temporary snow packs.
+      "
     }
     
     if(input$peak_hist == "mar1988"){
@@ -149,7 +154,7 @@ function(input, output, session) {
   
   output$plot <- renderImage({
     
-    img_dir <- "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs//"
+    img_dir <- "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/"
     
     
     
@@ -227,5 +232,139 @@ function(input, output, session) {
     list(src = filename,
          width = '100%')
   }, deleteFile = FALSE)
+  
+  output$plotly_doy_mag <- renderPlotly({
+
+    tabs_dir = "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
+    
+    #read_tables----
+    
+    peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all.csv"), sep = ",", header = T)
+    peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all.csv"), sep = ",", header = T)
+    
+    warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all.csv"), sep = ",", header = T)
+    warm_lev_all <- warm_lev_all + 0.46  #historic period warmer by 0.46 °C already
+    
+    flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all.csv"), sep = ",", header = T)
+    
+    sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
+    sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all.csv"), sep = ",", header = T)
+    sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all.csv"), sep = ",", header = T)
+    sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all.csv"), sep = ",", header = T)
+    sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all.csv"), sep = ",", header = T)
+    
+    melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all.csv"), sep = ",", header = T)
+    melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all.csv"), sep = ",", header = T)
+    melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all.csv"), sep = ",", header = T)
+    melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all.csv"), sep = ",", header = T)
+    
+    pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all.csv"), sep = ",", header = T)
+    pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all.csv"), sep = ",", header = T)
+    pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all.csv"), sep = ",", header = T)
+    pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all.csv"), sep = ",", header = T)
+    
+    pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all.csv"), sep = ",", header = T)
+    pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all.csv"), sep = ",", header = T)
+    pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all.csv"), sep = ",", header = T)
+    pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all.csv"), sep = ",", header = T)
+    
+    disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all.csv"), sep = ",", header = T)
+    disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all.csv"), sep = ",", header = T)
+    disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all.csv"), sep = ",", header = T)
+    disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all.csv"), sep = ",", header = T)
+    
+    #cobine into data frame
+    
+    peak_mag_sel <- unlist(peak_mag_all[1:10, ])
+    peak_doy_sel <- unlist(peak_doy_all[1:10, ])
+    
+    gcm <- c(rep("EOBS", 10), 
+             rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
+    )
+    rcp <- c(rep("observed", 10),
+             rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
+    )
+    
+    peak <- c(rep((1:10), 21))
+    
+    flood_df <- data.frame(peak_mag = round(peak_mag_sel, digits = 0),
+                           peak_doy = peak_doy_sel, 
+                           gcm = gcm,
+                           rcp = rcp, 
+                           peak = peak)
+    
+    
+    ply_doy_mag <- plot_ly(flood_df, x = ~peak_doy, 
+                           y = ~round(peak_mag_sel, digits = 0), 
+                           type = 'scatter', xlim = c(0, 365),
+                           # text = ~paste("GCM: ", gcm, '<br>', 
+                           #               "RCP:", rcp, '<br>',
+                           #               "Flood peak:", peak, '<br>',
+                           #               "Date"), 
+                           # text = ~gcm,
+                           hovertemplate = paste(
+                             gcm, '<br>',
+                             rcp, '<br>',
+                             "Flood peak", peak, '<br>',
+                             "Magnitude: %{y:.0f} [m³/s]<br>",
+                             "Date: ", gcm,
+                             "<extra></extra>"
+                           ),
+                           color = ~gcm,
+                           marker = list(size = 14)
+    )
+    
+    title_font <- list(
+      size = 18,
+      color = "white"
+    )
+    
+    tick_font <- list(
+      size = 14,
+      color = "white"
+    )
+    
+    y_axis <- list(
+      title = "Streamflow magnitude [m³/s]",
+      showticklabels = TRUE,
+      exponentformat = "e",
+      tickangle = 270,
+      titlefont = title_font,
+      tickfont = tick_font,
+      showline = FALSE,
+      zeroline = TRUE
+      
+    )
+    
+    x_axis <- list(
+      title = "Day of the year [DOY]",
+      showticklabels = TRUE,
+      titlefont = title_font,
+      tickfont = tick_font,
+      showline = FALSE,
+      zeroline = TRUE
+    )
+    
+    legend_font <- list(
+      font = list(
+        size = 14,
+        color = "white"))
+    
+    ply_doy_mag <- ply_doy_mag %>% 
+      layout(title = '', 
+             yaxis = y_axis, 
+             xaxis = x_axis,
+             legend = legend_font,
+             plot_bgcolor='transparent',
+             paper_bgcolor='transparent') 
+      
+    
+    
+    
+    ply_doy_mag
+    
+    
+    
+  })
   
 }

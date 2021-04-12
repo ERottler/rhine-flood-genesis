@@ -1,4 +1,9 @@
-\figs
+# Figures
+\www
+
+#Report files
+*.pdf
+*.bib
 
 # History files
 .Rhistory
