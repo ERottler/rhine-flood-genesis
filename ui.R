@@ -1,6 +1,6 @@
 ###
 
-#Shiny Web App Rhine River flood stories
+#Shiny Dashboard Rhine River flood stories
 #User Interface
 #Erwin Rottler, University of Potsdam
 
@@ -11,11 +11,85 @@ library(shinythemes)
 library(shinydashboard)
 library(plotly)
 
-navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Overview",
+navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Synthesis",
            
-           tabPanel("Overview",
-                    h3("Summary"),
-                    plotlyOutput("plotly_doy_mag", width="100%"), height = "1000px"),
+           tabPanel("Summary",
+                    h3("Summary")
+                    ),
+           
+           tabPanel("Synthesis",
+                    
+                    h2("Peak timing | Peak magnitude"),
+                    plotlyOutput("plotly_doy_mag", width="100%"),
+                    
+                    HTML("<br><br><br><br><br>"), 
+                    
+                    h2("Peak magnitude | Flood extent"),
+                    plotlyOutput("plotly_mag_fra", width="100%"),
+                    
+                    HTML("<br><br><br><br><br>"), 
+                    
+                    h2("Peak timing | Snowmelt High Rhine"),
+                    plotlyOutput("plotly_doy_sno", width="100%"),
+                    
+                    HTML("<br><br><br><br><br>"), 
+                    
+                    h2("Peak magnitude | Peak timing | Fraction snow accumulation"),
+                    plotlyOutput("plotly_mag_doy_acc", width="100%")
+        
+                    ),
+           
+           tabPanel("Flood story",
+                    
+                    sidebarLayout(
+                      
+                      sidebarPanel(width = 2,
+                                   
+                                   selectInput("force", "Select forcing data:", 
+                                               choices = c("EOBS (historic)", 
+                                                           "GFDL-ESM2M - historical",
+                                                           "GFDL-ESM2M - RCP2.6",
+                                                           "GFDL-ESM2M - RCP6.0",
+                                                           "GFDL-ESM2M - RCP8.5",
+                                                           "HadGEM2-ES - historical",
+                                                           "HadGEM2-ES - RCP2.6",
+                                                           "HadGEM2-ES - RCP6.0",
+                                                           "HadGEM2-ES - RCP8.5",
+                                                           "IPSL-CM5A-LR - historical",
+                                                           "IPSL-CM5A-LR - RCP2.6",
+                                                           "IPSL-CM5A-LR - RCP6.0",
+                                                           "IPSL-CM5A-LR - RCP8.5", 
+                                                           "MIROC-ESM-CHEM - historical",
+                                                           "MIROC-ESM-CHEM - RCP2.6",
+                                                           "MIROC-ESM-CHEM - RCP6.0",
+                                                           "MIROC-ESM-CHEM - RCP8.5",
+                                                           "NorESM1-M - historical",
+                                                           "NorESM1-M - RCP2.6",
+                                                           "NorESM1-M - RCP6.0", 
+                                                           "NorESM1-M - RCP8.5" 
+                                               ), width = '100%'),
+                                   
+                                   selectInput("flood", "Select flood event:", 
+                                               choices = c("Flood peak 1" = "1", "Flood peak 2" = "2", 
+                                                           "Flood peak 3" = "3", "Flood peak 4" = "4", 
+                                                           "Flood peak 5" = "5", "Flood peak 6" = "6", 
+                                                           "Flood peak 7" = "7", "Flood peak 8" = "8", 
+                                                           "Flood peak 9" = "9", "Flood peak 10" = "10"), 
+                                               width = '100%'),
+                                   
+                                   sliderInput("day", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T)
+                                   
+                      ),
+                      
+                      mainPanel(width = 10,
+                                fluidRow(
+                                  imageOutput("plot", height="50%", width="99%")
+                                )
+                      )
+                      
+                    )
+                    
+           ),
            
            tabPanel("Plot description",
                     
@@ -77,153 +151,6 @@ navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selecte
                       
                     ),
                     
-           
-           tabPanel("Historic floods",
-                    
-                    tags$head(
-                      tags$style(
-                        HTML(
-                          "
-                          .form-control {
-                              border-radius: 6px 6px 6px 6px;
-                          }
-
-                          #text_hist {
-                          font-family:  sans-serif;
-                          font-size: 16px;
-                          max-width: 96%;
-                          padding: 12px 95px; 
-                          text-align: justify;
-                          }
-
-                          "
-                          )
-                        )
-                      ),
-                    
-                    sidebarLayout(
-                      
-                      sidebarPanel(width = 2,
-                                   
-                                   
-                                   selectInput("peak_hist", "Historic flood peaks:", 
-                                               choices = c("Jan 1995" = "jan1995", 
-                                                           "Dec 1993" = "dec1993", 
-                                                           "Jan 2011" = "jan2011", 
-                                                           "Mar 1988" = "mar1988"), 
-                                               width = '100%'),
-                                   
-                                   sliderInput("day_hist", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T)
-                                   
-                      ),
-                      
-                      mainPanel(width = 10,
-                                fluidRow(
-                                         
-                                  imageOutput("plot_hist", height="50%", width="99%"),
-                                  
-                                  tags$h4(textOutput("text_hist"))
-                                  
-                                  
-                                  )
-                                )
-                      )
-                    
-           ),
-           
-           tabPanel("Future floods",
-                    
-                    tags$head(
-                      tags$style(
-                        HTML(
-                          "
-                          .form-control {
-                              border-radius: 6px 6px 6px 6px;
-                          }
-
-                          #text_future {
-                          font-family:  sans-serif;
-                          font-size: 16px;
-                          max-width: 96%;
-                          padding: 12px 95px; 
-                          text-align: justify;
-                          }
-
-                          "
-                        )
-                      )
-                    ),
-                    
-                    sidebarLayout(
-                      
-                      sidebarPanel(width = 2,
-                                   
-                                   
-                                   selectInput("peak_future", "Future flood peaks:", 
-                                               choices = c("Flood - Jan 2097" = "jan2097", 
-                                                           "Flood - Dec 1993" = "jan"), 
-                                               width = '100%'),
-                                   
-                                   sliderInput("day_future", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T)
-                                   
-                      ),
-                      
-                      mainPanel(width = 10,
-                                fluidRow(
-                                  imageOutput("plot_future", height="50%", width="99%"),
-                                  textOutput("text_future")
-                                )
-                      )
-                    )
-                    
-           ),
-           
-           tabPanel("All floods",
-                    
-                    sidebarLayout(
-                      
-                      sidebarPanel(width = 2,
-                                   
-                                   selectInput("force", "Select forcing data:", 
-                                               choices = c("EOBS (historic)", 
-                                                           "GFDL-ESM2M - RCP2.6",
-                                                           "GFDL-ESM2M - RCP6.0",
-                                                           "GFDL-ESM2M - RCP8.5",
-                                                           "HadGEM2-ES - RCP2.6",
-                                                           "HadGEM2-ES - RCP6.0",
-                                                           "HadGEM2-ES - RCP8.5",
-                                                           "IPSL-CM5A-LR - RCP2.6", 
-                                                           "IPSL-CM5A-LR - RCP6.0",
-                                                           "IPSL-CM5A-LR - RCP8.5", 
-                                                           "MIROC-ESM-CHEM - RCP2.6",
-                                                           "MIROC-ESM-CHEM - RCP6.0",
-                                                           "MIROC-ESM-CHEM - RCP8.5",
-                                                           "NorESM1-M - RCP2.6", 
-                                                           "NorESM1-M - RCP6.0", 
-                                                           "NorESM1-M - RCP8.5" 
-                                               ), width = '100%'),
-                                   
-                                   selectInput("flood", "Select flood event:", 
-                                               choices = c("Flood peak 1" = "1", "Flood peak 2" = "2", 
-                                                           "Flood peak 3" = "3", "Flood peak 4" = "4", 
-                                                           "Flood peak 5" = "5", "Flood peak 6" = "6", 
-                                                           "Flood peak 7" = "7", "Flood peak 8" = "8", 
-                                                           "Flood peak 9" = "9", "Flood peak 10" = "10"), 
-                                               width = '100%'),
-                                   
-                                   sliderInput("day", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T)
-                                   
-                      ),
-                      
-                      mainPanel(width = 10,
-                                fluidRow(
-                                  imageOutput("plot", height="50%", width="99%")
-                                )
-                      )
-                      
-                    )
-                    
-           ),
            
            tabPanel("Data & Code",
                     
