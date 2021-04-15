@@ -10,36 +10,53 @@ library(shiny)
 library(shinythemes)
 library(shinydashboard)
 library(plotly)
+library(DT)
 
-navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Synthesis",
+navbarPage("Rhine flood genesis", id="nav", theme = shinytheme("slate"), selected = "Peak selection",
            
-           tabPanel("Summary",
+           tabPanel("Overview",
                     h3("Summary")
                     ),
            
-           tabPanel("Synthesis",
+           tabPanel("Peak selection",
                     
-                    h2("Peak timing | Peak magnitude"),
+                    h2("Overview figures"),
+                    p("In the following, a selection of overview figures. We analyse streamflow peaks from 21 different simulation runs."),
+                    
+                    HTML("<br><br><br><br><br>"),
+                    
+                    p("Table caption."),
+                    
+                    tableOutput('over_table'),
+                    tags$head(tags$style("#over_table table {background-color: #333333; 
+                                                             color: white; 
+                                                             text-align: center;}", 
+                                         media="screen", type="text/css")),
+                    
+                    h2("Streamflow peak timing | Streamflow peak magnitude"),
+                    
+                    p("Text. Text"),
+                    
                     plotlyOutput("plotly_doy_mag", width="100%"),
                     
                     HTML("<br><br><br><br><br>"), 
                     
-                    h2("Peak magnitude | Flood extent"),
+                    h2("Streamflow peak magnitude | Flood extent"),
                     plotlyOutput("plotly_mag_fra", width="100%"),
                     
                     HTML("<br><br><br><br><br>"), 
                     
-                    h2("Peak timing | Snowmelt High Rhine"),
+                    h2("Streamflow peak timing | Snowmelt sum High Rhine"),
                     plotlyOutput("plotly_doy_sno", width="100%"),
                     
                     HTML("<br><br><br><br><br>"), 
                     
-                    h2("Peak magnitude | Peak timing | Fraction snow accumulation"),
+                    h2("Streamflow peak magnitude | Streamflow peak timing | Areal fraction snow accumulation"),
                     plotlyOutput("plotly_mag_doy_acc", width="100%")
         
                     ),
            
-           tabPanel("Flood story",
+           tabPanel("Peak genesis",
                     
                     sidebarLayout(
                       

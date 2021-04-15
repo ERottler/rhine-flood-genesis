@@ -195,8 +195,9 @@ function(input, output, session) {
     ply_doy_mag <- plot_ly(flood_df, 
                            x = ~peak_doy, 
                            y = ~round(peak_mag_sel, digits = 0), 
-                           type = 'scatter', 
-                           xlim = c(0, 365),
+                           type = 'scatter',
+                           mode = "markers",
+                           # xlim = c(0, 365),
                            hovertemplate = paste(
                              gcm, '<br>',
                              rcp, '<br>',
@@ -330,7 +331,8 @@ function(input, output, session) {
     ply_doy_mag <- plot_ly(flood_df, 
                            y = ~peak_fra, 
                            x = ~round(peak_mag_sel, digits = 0), 
-                           type = 'scatter', 
+                           type = 'scatter',
+                           mode = "markers",
                            hovertemplate = paste(
                              gcm, '<br>',
                              rcp, '<br>',
@@ -453,7 +455,8 @@ function(input, output, session) {
     ply_doy_sno <- plot_ly(flood_df, 
                            y = ~peak_sno, 
                            x = ~peak_doy, 
-                           type = 'scatter', 
+                           type = 'scatter',
+                           mode = "markers",
                            hovertemplate = paste(
                              gcm, '<br>',
                              rcp, '<br>',
@@ -583,6 +586,8 @@ function(input, output, session) {
     
     
     ply_mag_acc <- plot_ly(flood_df, 
+                           type = "scatter3d",
+                           mode = "markers",
                            x = ~peak_doy,
                            y = ~round(peak_mag_sel, digits = 0),
                            z = ~peak_acc*100, 
@@ -662,4 +667,29 @@ function(input, output, session) {
   
     
   })
+  
+  #Overview table
+  
+  gcm <- c("EOBS", rep(c("GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "NorESM1-M"), 4))
+  
+  rcp <- c("observed", rep("historic", 5), rep("RCP 2.6", 5), rep("RCP 6.0", 5), rep("RCP 8.5", 5))
+  
+  time_frame <- c(rep("2020-2099", 21))
+  
+  tab_over <- data.frame(Meteorological_Forcing = paste(gcm, "-", rcp),
+                         Time_Frame = time_frame,
+                         Peak_1 = as.character(date_peak_all[1, ]),
+                         Peak_2 = rep("01-01-1990", 21),
+                         Peak_3 = rep("01-01-1990", 21),
+                         Peak_4 = rep("01-01-1990", 21),
+                         Peak_5 = rep("01-01-1990", 21),
+                         Peak_6 = rep("01-01-1990", 21),
+                         Peak_7 = rep("01-01-1990", 21),
+                         Peak_8 = rep("01-01-1990", 21),
+                         Peak_9 = rep("01-01-1990", 21),
+                         Peak_10 = rep("01-01-1990", 21))
+  
+  output$over_table <- renderTable(tab_over, rownames = F, align = 'c', colnames = T, width = '90%')
+  
+  
 }
