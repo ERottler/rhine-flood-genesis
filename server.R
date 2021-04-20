@@ -6,8 +6,10 @@
 
 ###
 
+base_dir <- "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+
 #load data tables for synthesis plots
-load("/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/synt_tables.RData")
+load(paste0(base_dir, "www/exp_tabs/synt_tables.RData"))
 
 function(input, output, session) {
   
@@ -28,66 +30,33 @@ function(input, output, session) {
   # })
   # 
   
-  observe({
-    
-    if(input$force == "EOBS (historic)"){
-      
-      updateSelectInput(session, "flood", "Select flood event:",
-                        choices = c("Jan 1955" = "4",
-                                    "Feb 1970" = "7",
-                                    "Feb 1980" = "9",
-                                    "Mar 1981" = "13",
-                                    "Jan 1982" = "12",
-                                    "Dec 1982" = "15",
-                                    "Apr 1983" = "11",
-                                    "May 1983" = "5",
-                                    "Mar 1988" = "2",
-                                    "Dec 1993" = "3",
-                                    "Jan 1995" = "1",
-                                    "Nov 1998" = "6",
-                                    "Mar 2001" = "10",
-                                    "Jan 2003" = "8",
-                                    "Jan 2011" = "14"),
-                        selected = "Jan 1995")
-      
-    }else{
-      
-      updateSelectInput(session, "flood", "Select flood event:", 
-                        choices = c("Flood peak 1" = "1", "Flood peak 2" = "2", 
-                                    "Flood peak 3" = "3", "Flood peak 4" = "4", 
-                                    "Flood peak 5" = "5", "Flood peak 6" = "6", 
-                                    "Flood peak 7" = "7", "Flood peak 8" = "8", 
-                                    "Flood peak 9" = "9", "Flood peak 10" = "10"))
-    }
-    
-  })
-  
   output$plot <- renderImage({
     
-    img_dir <- "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/"
+    #Define path base on gauge selection
+    if(input$gauge == "Cologne"){img_dir <- paste0(base_dir, "www/figs/cologne/")}
+    if(input$gauge == "Kaub")   {img_dir <- paste0(base_dir, "www/figs/kaub/")}
+    if(input$gauge == "Worms")  {img_dir <- paste0(base_dir, "www/figs/worms/")}
+    if(input$gauge == "Speyer") {img_dir <- paste0(base_dir, "www/figs/speayer/")}
     
-    
-    
+    #Select figures bases on selected meteorological forcing
     if(input$force == "EOBS (historic)"){
-      
-      imgs <- list.files(paste0(img_dir, "EOBS/", "flood_", input$flood), pattern = ".png", full.names = T)
-      
+      imgs <- list.files(paste0(img_dir, "EOBS/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "GFDL-ESM2M - historical"){
-      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/historical/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/historical/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "HadGEM2-ES - historical"){
-      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/historical/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/historical/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "IPSL-CM5A-LR - historical"){
-      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/historical/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/historical/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "MIROC-ESM-CHEM - historical"){
-      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/historical/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/historical/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "NorESM1-M - historical"){
@@ -95,43 +64,43 @@ function(input, output, session) {
     }
     
     if(input$force == "GFDL-ESM2M - RCP2.6"){
-      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/rcp2p6/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/rcp2p6/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "HadGEM2-ES - RCP2.6"){
-      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp2p6/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp2p6/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "IPSL-CM5A-LR - RCP2.6"){
-      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp2p6/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp2p6/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "MIROC-ESM-CHEM - RCP2.6"){
-      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp2p6/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp2p6/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "NorESM1-M - RCP2.6"){
-      imgs <- list.files(paste0(img_dir, "NorESM1-M/rcp2p6/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "NorESM1-M/rcp2p6/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "GFDL-ESM2M - RCP6.0"){
-      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/rcp6p0/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "GFDL-ESM2M/rcp6p0/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "HadGEM2-ES - RCP6.0"){
-      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp6p0/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp6p0/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "IPSL-CM5A-LR - RCP6.0"){
-      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp6p0/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp6p0/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "MIROC-ESM-CHEM - RCP6.0"){
-      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp6p0/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp6p0/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "NorESM1-M - RCP6.0"){
-      imgs <- list.files(paste0(img_dir, "NorESM1-M/rcp6p0/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "NorESM1-M/rcp6p0/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "GFDL-ESM2M - RCP8.5"){
@@ -139,15 +108,15 @@ function(input, output, session) {
     }
     
     if(input$force == "HadGEM2-ES - RCP8.5"){
-      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp8p5/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "HadGEM2-ES/rcp8p5/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "IPSL-CM5A-LR - RCP8.5"){
-      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp8p5/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "IPSL-CM5A-LR/rcp8p5/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "MIROC-ESM-CHEM - RCP8.5"){
-      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp8p5/", "flood_", input$flood), pattern = ".png", full.names = T)
+      imgs <- list.files(paste0(img_dir, "MIROC-ESM-CHEM/rcp8p5/flood_", input$flood), pattern = ".png", full.names = T)
     }
     
     if(input$force == "NorESM1-M - RCP8.5"){
@@ -158,10 +127,112 @@ function(input, output, session) {
     
     filename <- imgs[img_index]
     print(filename)
+    
     # Return a list containing the filename
     list(src = filename,
          width = '100%')
   }, deleteFile = FALSE)
+  
+  output$plotly_tem_yea <- renderPlotly({
+    
+    gcm <- c("EOBS", rep( c("GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "NorESM1-M"), 4))
+    
+    rcp <- c("observed", rep("historic", 5), rep("RCP 2.6", 5),  rep("RCP 6.0", 5), rep("RCP 8.5", 5))
+    
+    
+    # temp_yea_mea$year <- NULL
+    
+    cols_temp_yea <- c(    'rgb( 74, 112, 139)',
+                       rep('rgb( 74, 112, 139)', 5),
+                       rep('rgb(108, 166, 205)', 5),
+                       rep('rgb(205, 205,   0)', 5),
+                       rep('rgb(238,  44,  44)', 5)
+                       )
+    
+    ply_temp_yea <- plot_ly(x = temp_yea_mea$year, 
+                            y = temp_yea_mea$t1,
+                            name = paste0(gcm[1], " (", rcp[1], ")"),
+                            type = 'scatter',
+                            mode = "lines",
+                            height = '600',
+                            # legendgroup = "EOBS",
+                            text = gcm[1],
+                            hoverinfo = 'text',
+                            line = list(color = cols_temp_yea[1],
+                                        width = 2)
+    )
+    
+    
+    ## Add the traces one at a time
+    for(i in 2:21){
+      
+      ply_temp_yea <- ply_temp_yea %>% 
+        add_trace(x = 1950:2099, 
+                  y = temp_yea_mea[, i+1], 
+                  name = paste0(gcm[i], " (", rcp[i], ")"),
+                  type = 'scatter',
+                  mode = 'lines',
+                  # legendgroup = rcp[i],
+                  text = paste0(gcm[i], " (", rcp[i], ")"),
+                  line = list(color = cols_temp_yea[i],
+                              width = 2))
+      
+    }
+    
+    title_font <- list(
+      size = 18,
+      color = "white"
+    )
+    
+    tick_font <- list(
+      size = 14,
+      color = "white",
+      ticks = "inside"
+    )
+    
+    y_axis <- list(
+      title = "Temperature [°C]",
+      showticklabels = TRUE,
+      exponentformat = "none",
+      tickangle = 270,
+      titlefont = title_font,
+      tickfont = tick_font,
+      showline = F,
+      zeroline = F,
+      showgrid = T
+    )
+    
+    x_axis <- list(
+      title = "Year",
+      showticklabels = TRUE,
+      exponentformat = "none",
+      titlefont = title_font,
+      tickfont = tick_font,
+      showline = F,
+      zeroline = F,
+      showgrid = T
+    )
+    
+    legend_font <- list(
+      font = list(
+        size = 14,
+        color = "white"))
+    
+    ply_temp_yea <- ply_temp_yea %>% 
+      layout(title = '', 
+             yaxis = y_axis, 
+             xaxis = x_axis,
+             legend = legend_font,
+             plot_bgcolor='transparent',
+             paper_bgcolor='transparent',
+             margin = list(
+               r = 350,
+               t = 10,
+               b = 10,
+               l = 200)
+      ) 
+    
+  })
   
   output$plotly_doy_mag <- renderPlotly({
 
