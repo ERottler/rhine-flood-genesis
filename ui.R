@@ -12,24 +12,31 @@ library(shinydashboard)
 library(plotly)
 library(DT)
 
-navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selected = "Overview",
+navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selected = "Overview", position = "fixed-top",
+           
+           tags$style(type="text/css", "body {padding-top: 70px;}"),
            
            tabPanel("Overview",
-                    
+                   
                     h2("Summary"),
+                    
+                    p("Hydroogical simulations to help us understand catchment processes;
+                      In a large basin as of Rhine River historic streamflow peaks and processes in the future;
+                      mix of snowmelt and precipitation; importance changes along the cource of the river"),
                     
                     h2("Overview figures"),
                     p("In the following, a selection of overview figures. We analyse streamflow peaks from 21 different simulation runs."),
+                    p("What are Plotly figures? And how to operate with them..."),
                     
                     HTML("<br><br><br><br><br>"),
                     
-                    p("Table caption."),
-                    
-                    tableOutput('over_table'),
-                    tags$head(tags$style("#over_table table {background-color: #333333; 
-                                                             color: white; 
-                                                             text-align: center;}", 
-                                         media="screen", type="text/css")),
+                    # p("Table caption."),
+                    # 
+                    # tableOutput('over_table'),
+                    # tags$head(tags$style("#over_table table {background-color: #333333; 
+                    #                                          color: white; 
+                    #                                          text-align: center;}", 
+                    #                      media="screen", type="text/css")),
                     
                     h2("Climate scenarios: Annual temperature"),
                     
@@ -39,28 +46,65 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
+                    h2("Streamflow peak timing | Streamflow peak mangitude"),
+                    
                     p("Text. Text"),
+                    
+                    selectInput("gauge_plotly_doy_mag", "Select river gauge:",
+                                choices = c("Cologne",
+                                            "Kaub",
+                                            "Worms",
+                                            "Speyer")),
                     
                     plotlyOutput("plotly_doy_mag", width="100%"),
                     
-                    HTML("<br><br><br><br><br>"), 
+                    HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
                     h2("Streamflow peak magnitude | Flood extent"),
+                    
+                    p("Text. Text"),
+                    
+                    selectInput("gauge_plotly_mag_fra", "Select river gauge:",
+                                choices = c("Cologne",
+                                            "Kaub",
+                                            "Worms",
+                                            "Speyer")),
+                    
                     plotlyOutput("plotly_mag_fra", width="100%"),
                     
-                    HTML("<br><br><br><br><br>"), 
+                    HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
                     h2("Streamflow peak timing | Total snowmelt High Rhine"),
+                    
+                    p("Text. Text"),
+                    
+                    selectInput("gauge_plotly_doy_sno", "Select river gauge:",
+                                choices = c("Cologne",
+                                            "Kaub",
+                                            "Worms",
+                                            "Speyer")),
+                    
                     plotlyOutput("plotly_doy_sno", width="100%"),
                     
-                    HTML("<br><br><br><br><br>"), 
+                    HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
                     h2("Streamflow peak magnitude | Streamflow peak timing | Areal fraction snow accumulation"),
-                    plotlyOutput("plotly_mag_doy_acc", width="100%")
+                    
+                    p("Text. Text"),
+                    
+                    selectInput("gauge_plotly_mag_doy_acc", "Select river gauge:",
+                                choices = c("Cologne",
+                                            "Kaub",
+                                            "Worms",
+                                            "Speyer")),
+                    
+                    plotlyOutput("plotly_mag_doy_acc", width="100%"),
+                    
+                    HTML("<br><br><br><br><br><br><br><br><br><br>")
         
                     ),
            
-           tabPanel("Streamflow peaks",
+           tabPanel("Peak genesis",
                     
                     sidebarLayout(
                       
@@ -116,31 +160,31 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                                   HTML("<br><br><br><br>"),
                                     
                                   tags$h3("Timeline"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "The timeline on top of the panel shows the date of the selected streamflow peak (date top right) and the ten days prior to the event. Depending on the selected day during peak formation, dates are highlighted white."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "The timeline on top of the panel shows the date of the selected streamflow peak (date top right) and the ten days prior to the event. Depending on the selected day during peak formation, dates are highlighted white."),
                                   
                                   tags$h3("Panel a"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Simulated Rhine River runoff at the four locations Speyer (before the confluence of the Neckar River), Worms (after the confluence of the Neckar River and before the confluence of the Main River), Kaub (after the confluence of the Main River and before the confluence of the Moselle River) and Cologne (after the confluence with all major tributaries). Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Simulated Rhine River runoff at the four locations Speyer (before the confluence of the Neckar River), Worms (after the confluence of the Neckar River and before the confluence of the Main River), Kaub (after the confluence of the Main River and before the confluence of the Moselle River) and Cologne (after the confluence with all major tributaries). Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing."),
            
                                   tags$h3("Panel b"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Simulated Rhine River runoff for the four sub-basins of the High Rhine, Neckar, Main and Moselle. The High Rhine catchment is until the city/gauge of Basel. The simulated runoff for the tributaries Neckar, Main and Moselle is taken just before their confluence with the Rhine River and does not reflect an actual excisting river gauge. Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Simulated Rhine River runoff for the four sub-basins of the High Rhine, Neckar, Main and Moselle. The High Rhine catchment is until the city/gauge of Basel. The simulated runoff for the tributaries Neckar, Main and Moselle is taken just before their confluence with the Rhine River and does not reflect an actual excisting river gauge. Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing."),
 
                                   tags$h3("Panel c"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Cumulative excess runoff, i.e. runoff above the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing data. The importance of rainfall and snowmmelt is estimated based on the amount liquid rainfall and snowmelt in the sub-basins during peak genesis."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative excess runoff, i.e. runoff above the long-term mean simulated for the time frame 1951-2013 using EOBS-based meteorological forcing data. The importance of rainfall and snowmmelt is estimated based on the amount liquid rainfall and snowmelt in the sub-basins during peak genesis."),
 
                                   tags$h3("Panel d"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Flood extent estimated based on the fraction of grid cells that generated runoff above their long-term 99 % quantile (estimated based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day during the peak genesis. The flood fraction is calculated and displayed for areas upstream of gauges Cologne, Kaub, Worms and Speyer."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Flood extent estimated based on the fraction of grid cells that generated runoff above their long-term 99 % quantile (estimated based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day during the peak genesis. The flood fraction is calculated and displayed for areas upstream of gauges Cologne, Kaub, Worms and Speyer."),
 
                                   tags$h3("Panel e"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Cumulative liquid precipitation starting ten days before the selected streamflow peak. Liquid and solid precipitation are differentiated based on the temperature threshold determined during model calibration."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative liquid precipitation starting ten days before the selected streamflow peak. Liquid and solid precipitation are differentiated based on the temperature threshold determined during model calibration."),
 
                                   tags$h3("Panel f"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Cumulative snow cover changes (snow accumulation and snowmelt) per cell starting ten days before the selected streamflow peak at Cologne."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative snow cover changes (snow accumulation and snowmelt) per cell starting ten days before the selected streamflow peak at Cologne."),
 
                                   tags$h3("Panel g"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Cumulative discharge generated per cell starting ten days before the selected streamflow peak."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative discharge generated per cell starting ten days before the selected streamflow peak."),
 
                                   tags$h3("Panel h"),
-                                  tags$p(style="text-align: justify; font-size: 16px;", "Cumulative routed discharge per cell starting ten days before the selected streamflow peak.")
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative routed discharge per cell starting ten days before the selected streamflow peak.")
                                   
                                 )
                       )
@@ -163,15 +207,13 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     ),
            
-           tabPanel("Authors and Contact",
+           tabPanel("Authors & Contact",
                     
                     h2("Authors"),
                     
                     p("This analysis was conducted by",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/rottler-erwin", "Erwin Rottler",
-                             style="color:#6699CC;
-                         font-weight: bold;
-                         font-style: italic"),
+                             style="color:#6699CC; font-weight: bold"),
                       "(member of the working group Hydrology & Climatology, University of Potsdam) in the framework of investigations focusing on future changes Rhine River flood seasonality. 
                       The analysis was supervised by",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/bronstert-axel", "Axel Bronstert",

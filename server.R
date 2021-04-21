@@ -6,7 +6,7 @@
 
 ###
 
-base_dir <- "/home/erwin/ownCloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
 
 #load data tables for synthesis plots
 load(paste0(base_dir, "www/exp_tabs/synt_tables.RData"))
@@ -36,7 +36,7 @@ function(input, output, session) {
     if(input$gauge == "Cologne"){img_dir <- paste0(base_dir, "www/figs/cologne/")}
     if(input$gauge == "Kaub")   {img_dir <- paste0(base_dir, "www/figs/kaub/")}
     if(input$gauge == "Worms")  {img_dir <- paste0(base_dir, "www/figs/worms/")}
-    if(input$gauge == "Speyer") {img_dir <- paste0(base_dir, "www/figs/speayer/")}
+    if(input$gauge == "Speyer") {img_dir <- paste0(base_dir, "www/figs/speyer/")}
     
     #Select figures bases on selected meteorological forcing
     if(input$force == "EOBS (historic)"){
@@ -126,7 +126,10 @@ function(input, output, session) {
     img_index <- input$day + 11
     
     filename <- imgs[img_index]
-    print(filename)
+    # print(filename)
+    # print(img_dir)
+    # print(input$flood)
+    # print(input$force)
     
     # Return a list containing the filename
     list(src = filename,
@@ -154,7 +157,8 @@ function(input, output, session) {
                             name = paste0(gcm[1], " (", rcp[1], ")"),
                             type = 'scatter',
                             mode = "lines",
-                            height = '600',
+                            height = '580',
+                            opacity = 0.7,
                             # legendgroup = "EOBS",
                             text = gcm[1],
                             hoverinfo = 'text',
@@ -172,6 +176,7 @@ function(input, output, session) {
                   name = paste0(gcm[i], " (", rcp[i], ")"),
                   type = 'scatter',
                   mode = 'lines',
+                  opacity = 0.7,
                   # legendgroup = rcp[i],
                   text = paste0(gcm[i], " (", rcp[i], ")"),
                   line = list(color = cols_temp_yea[i],
@@ -236,11 +241,27 @@ function(input, output, session) {
   
   output$plotly_doy_mag <- renderPlotly({
 
-    #combine into data frame
-    
-    peak_mag_sel <- unlist(peak_mag_all[1:10, ])
-    peak_doy_sel <- unlist(peak_doy_all[1:10, ])
-    date_pea_sel <- unlist(date_peak_all[1:10, ])
+    #Define data depending on gauge selection
+    if(input$gauge_plotly_doy_mag == "Cologne"){
+      peak_mag_sel <- unlist(peak_mag_all_col)
+      peak_doy_sel <- unlist(peak_doy_all_col)
+      date_pea_sel <- unlist(date_peak_all_col)
+    }
+    if(input$gauge_plotly_doy_mag == "Kaub")   {
+      peak_mag_sel <- unlist(peak_mag_all_kau)
+      peak_doy_sel <- unlist(peak_doy_all_kau)
+      date_pea_sel <- unlist(date_peak_all_kau)
+    }
+    if(input$gauge_plotly_doy_mag == "Worms")  {
+      peak_mag_sel <- unlist(peak_mag_all_wor)
+      peak_doy_sel <- unlist(peak_doy_all_wor)
+      date_pea_sel <- unlist(date_peak_all_wor)
+    }
+    if(input$gauge_plotly_doy_mag == "Speyer") {
+      peak_mag_sel <- unlist(peak_mag_all_spe)
+      peak_doy_sel <- unlist(peak_doy_all_spe)
+      date_pea_sel <- unlist(date_peak_all_spe)
+    }
     
     date_peak_axis_raw <- as.Date(date_pea_sel, "%Y-%m-%d")
     date_peak_axis <- format(date_peak_axis_raw, "%m-%d")
@@ -260,6 +281,7 @@ function(input, output, session) {
                            peak_m_d = date_peak_axis,
                            gcm = gcm,
                            rcp = rcp, 
+                           forcing = paste0(gcm, " (", rcp, ")"),
                            peak = peak)
     
     
@@ -268,6 +290,7 @@ function(input, output, session) {
                            y = ~round(peak_mag_sel, digits = 0), 
                            type = 'scatter',
                            mode = "markers",
+                           opacity = 0.7,
                            # xlim = c(0, 365),
                            hovertemplate = paste(
                              gcm, '<br>',
@@ -277,9 +300,18 @@ function(input, output, session) {
                              "Magnitude: %{y:.0f} m³/s",
                              "<extra></extra>"
                            ),
-                           color = ~gcm,
+                           color = ~forcing,
+                           colors = c("grey80",
+                                      rep("cadetblue3", 5),
+                                      rep("chocolate2", 5),
+                                      rep("palegreen3", 5),
+                                      rep("yellow2", 5),
+                                      rep("royalblue3", 5)
+                                      ),
                            marker = list(size = 15),
-                           height = '500'
+                           symbol = ~forcing,
+                           symbols = c("circle", rep(c('circle', 'square', 'x-dot', 'triangle-up'), 5)),
+                           height = '580'
     )
     
     title_font <- list(
@@ -331,7 +363,9 @@ function(input, output, session) {
     legend_font <- list(
       font = list(
         size = 14,
-        color = "white"))
+        color = "white"),
+      orientation = 'v'
+      )
     
     vline <- function(x = 0, color = "white") {
       list(
@@ -371,37 +405,55 @@ function(input, output, session) {
   })
   
   output$plotly_mag_fra <- renderPlotly({
+
+    #Define data depending on gauge selection
+    if(input$gauge_plotly_mag_fra == "Cologne"){
+      peak_mag_sel <- unlist(peak_mag_all_col)
+      frac_flo_sel <- unlist(flood_frac_max_all_col)
+      date_pea_sel <- unlist(date_peak_all_col)
+    }
+    if(input$gauge_plotly_mag_fra == "Kaub")   {
+      peak_mag_sel <- unlist(peak_mag_all_kau)
+      frac_flo_sel <- unlist(flood_frac_max_all_kau)
+      date_pea_sel <- unlist(date_peak_all_kau)
+    }
+    if(input$gauge_plotly_mag_fra == "Worms")  {
+      peak_mag_sel <- unlist(peak_mag_all_wor)
+      frac_flo_sel <- unlist(flood_frac_max_all_wor)
+      date_pea_sel <- unlist(date_peak_all_wor)
+    }
+    if(input$gauge_plotly_mag_fra == "Speyer") {
+      peak_mag_sel <- unlist(peak_mag_all_spe)
+      frac_flo_sel <- unlist(flood_frac_max_all_spe)
+      date_pea_sel <- unlist(date_peak_all_spe)
+    }
     
-    #combine into data frame
-    
-    peak_mag_sel <- unlist(peak_mag_all[1:10, ])
-    frac_flo_sel <- unlist(flood_frac_max_all[1:10, ])
-    date_pea_sel <- unlist(date_peak_all[1:10, ])
-    
+
     date_peak_axis_raw <- as.Date(date_pea_sel, "%Y-%m-%d")
     date_peak_axis <- format(date_peak_axis_raw, "%m-%d")
-    
-    gcm <- c(rep("EOBS", 10), 
+
+    gcm <- c(rep("EOBS", 10),
              rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
     )
     rcp <- c(rep("observed", 10),
              rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
     )
-    
+
     peak <- c(rep((1:10), 21))
-    
+
     flood_df <- data.frame(peak_mag = round(peak_mag_sel, digits = 0),
-                           peak_fra = frac_flo_sel, 
+                           peak_fra = frac_flo_sel,
                            peak_dat = date_pea_sel,
                            peak_m_d = date_peak_axis,
                            gcm = gcm,
-                           rcp = rcp, 
+                           rcp = rcp,
+                           forcing = paste0(gcm, " (", rcp, ")"),
                            peak = peak)
-    
-    
-    ply_doy_mag <- plot_ly(flood_df, 
-                           y = ~peak_fra, 
-                           x = ~round(peak_mag_sel, digits = 0), 
+
+
+    ply_doy_mag <- plot_ly(flood_df,
+                           y = ~peak_fra,
+                           x = ~round(peak_mag_sel, digits = 0),
                            type = 'scatter',
                            mode = "markers",
                            hovertemplate = paste(
@@ -413,22 +465,31 @@ function(input, output, session) {
                              "Magnitude: %{x:.0f} m³/s",
                              "<extra></extra>"
                            ),
-                           color = ~gcm,
+                           color = ~forcing,
+                           colors = c("grey80",
+                                      rep("cadetblue3", 5),
+                                      rep("chocolate2", 5),
+                                      rep("palegreen3", 5),
+                                      rep("yellow2", 5),
+                                      rep("royalblue3", 5)
+                           ),
                            marker = list(size = 15),
-                           height = '500'
+                           symbol = ~forcing,
+                           symbols = c("circle", rep(c('circle', 'square', 'x-dot', 'triangle-up'), 5)),
+                           height = '580'
     )
-    
+
     title_font <- list(
       size = 18,
       color = "white"
     )
-    
+
     tick_font <- list(
       size = 14,
       color = "white",
       ticks = "inside"
     )
-    
+
     y_axis <- list(
       title = "Flood extent [%]",
       showticklabels = TRUE,
@@ -440,7 +501,7 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     x_axis <- list(
       title = "Streamflow magnitude [m³/s]",
       showticklabels = TRUE,
@@ -451,81 +512,94 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     legend_font <- list(
       font = list(
         size = 14,
         color = "white"))
-    
+
     vline <- function(x = 0, color = "white") {
       list(
-        type = "line", 
-        y0 = 0, 
-        y1 = 1, 
+        type = "line",
+        y0 = 0,
+        y1 = 1,
         yref = "paper",
-        x0 = x, 
-        x1 = x, 
+        x0 = x,
+        x1 = x,
         line = list(color = color)
       )
     }
-    
-    ply_doy_mag <- ply_doy_mag %>% 
-      layout(title = '', 
-             yaxis = y_axis, 
+
+    ply_doy_mag <- ply_doy_mag %>%
+      layout(title = '',
+             yaxis = y_axis,
              xaxis = x_axis,
              legend = legend_font,
              plot_bgcolor='transparent',
              paper_bgcolor='transparent',
              margin = list(
-               r = 350, 
-               t = 10, 
-               b = 10, 
+               r = 350,
+               t = 10,
+               b = 10,
                l = 200)
-      ) 
-    
-    
-    
-    
-    
-    
-    
-    
+      )
   })
   
   output$plotly_doy_sno <- renderPlotly({
-    
-    #combine into data frame
-    
-    peak_mag_sel <- unlist(peak_mag_all[1:10, ])
-    peak_doy_sel <- unlist(peak_doy_all[1:10, ])
-    melt_sno_sel <- unlist(melt_sum_base_all[1:10, ])
-    date_pea_sel <- unlist(date_peak_all[1:10, ])
-    
+
+    #Define data depending on gauge selection
+    if(input$gauge_plotly_doy_sno == "Cologne"){
+      peak_mag_sel <- unlist(peak_mag_all_col)
+      peak_doy_sel <- unlist(peak_doy_all_col)
+      date_pea_sel <- unlist(date_peak_all_col)
+      melt_sno_sel <- unlist(melt_sum_base_all_col)
+    }
+    if(input$gauge_plotly_doy_sno == "Kaub")   {
+      peak_mag_sel <- unlist(peak_mag_all_kau)
+      peak_doy_sel <- unlist(peak_doy_all_kau)
+      date_pea_sel <- unlist(date_peak_all_kau)
+      melt_sno_sel <- unlist(melt_sum_base_all_kau)
+    }
+    if(input$gauge_plotly_doy_sno == "Worms")  {
+      peak_mag_sel <- unlist(peak_mag_all_wor)
+      peak_doy_sel <- unlist(peak_doy_all_wor)
+      date_pea_sel <- unlist(date_peak_all_wor)
+      melt_sno_sel <- unlist(melt_sum_base_all_wor)
+    }
+    if(input$gauge_plotly_doy_sno == "Speyer") {
+      peak_mag_sel <- unlist(peak_mag_all_spe)
+      peak_doy_sel <- unlist(peak_doy_all_spe)
+      date_pea_sel <- unlist(date_peak_all_spe)
+      melt_sno_sel <- unlist(melt_sum_base_all_spe)
+    }
+
+
     date_peak_axis_raw <- as.Date(date_pea_sel, "%Y-%m-%d")
     date_peak_axis <- format(date_peak_axis_raw, "%m-%d")
-    
-    gcm <- c(rep("EOBS", 10), 
+
+    gcm <- c(rep("EOBS", 10),
              rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
     )
     rcp <- c(rep("observed", 10),
              rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
     )
-    
+
     peak <- c(rep((1:10), 21))
-    
+
     flood_df <- data.frame(peak_doy = round(peak_doy_sel, digits = 0),
                            peak_mag = round(peak_mag_sel, digits = 0),
-                           peak_sno = melt_sno_sel, 
+                           peak_sno = melt_sno_sel,
                            peak_dat = date_pea_sel,
                            peak_m_d = date_peak_axis,
                            gcm = gcm,
-                           rcp = rcp, 
+                           rcp = rcp,
+                           forcing = paste0(gcm, " (", rcp, ")"),
                            peak = peak)
-    
-    
-    ply_doy_sno <- plot_ly(flood_df, 
-                           y = ~peak_sno, 
-                           x = ~peak_doy, 
+
+
+    ply_doy_sno <- plot_ly(flood_df,
+                           y = ~peak_sno,
+                           x = ~peak_doy,
                            type = 'scatter',
                            mode = "markers",
                            hovertemplate = paste(
@@ -537,22 +611,31 @@ function(input, output, session) {
                              "Peak magnitude:", round(peak_mag_sel, digits = 0), "m³/s",
                              "<extra></extra>"
                            ),
-                           color = ~gcm,
+                           color = ~forcing,
+                           colors = c("grey80",
+                                      rep("cadetblue3", 5),
+                                      rep("chocolate2", 5),
+                                      rep("palegreen3", 5),
+                                      rep("yellow2", 5),
+                                      rep("royalblue3", 5)
+                           ),
                            marker = list(size = 15),
-                           height = '500'
+                           symbol = ~forcing,
+                           symbols = c("circle", rep(c('circle', 'square', 'x-dot', 'triangle-up'), 5)),
+                           height = '580'
     )
-    
+
     title_font <- list(
       size = 18,
       color = "white"
     )
-    
+
     tick_font <- list(
       size = 14,
       color = "white",
       ticks = "inside"
     )
-    
+
     y_axis <- list(
       title = "Snowmelt High Rhine [mm]",
       showticklabels = TRUE,
@@ -564,7 +647,7 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     x_axis <- list(
       title = "",
       showticklabels = TRUE,
@@ -574,11 +657,11 @@ function(input, output, session) {
       zeroline = FALSE,
       showgrid = FALSE,
       tickvals = list(16,46,74,105,135,166,196,227,258,288,319,349),
-      ticktext = list("January", 
-                      "February", 
-                      "March", 
+      ticktext = list("January",
+                      "February",
+                      "March",
                       "April",
-                      "May", 
+                      "May",
                       "June",
                       "July",
                       "August",
@@ -587,81 +670,101 @@ function(input, output, session) {
                       "November",
                       "December")
     )
-    
+
     legend_font <- list(
       font = list(
         size = 14,
         color = "white"))
-    
+
     vline <- function(x = 0, color = "white") {
       list(
-        type = "line", 
-        y0 = 0, 
-        y1 = 1, 
+        type = "line",
+        y0 = 0,
+        y1 = 1,
         yref = "paper",
-        x0 = x, 
-        x1 = x, 
+        x0 = x,
+        x1 = x,
         line = list(color = color)
       )
     }
-    
-    ply_doy_sno <- ply_doy_sno %>% 
-      layout(title = '', 
-             yaxis = y_axis, 
+
+    ply_doy_sno <- ply_doy_sno %>%
+      layout(title = '',
+             yaxis = y_axis,
              xaxis = x_axis,
              legend = legend_font,
              plot_bgcolor='transparent',
              paper_bgcolor='transparent',
              margin = list(
-               r = 350, 
-               t = 10, 
-               b = 10, 
+               r = 350,
+               t = 10,
+               b = 10,
                l = 200),
              shapes = list(vline(1), vline(32), vline(60), vline(91), vline(121), vline(152), vline(182),
                            vline(213), vline(244), vline(274), vline(305), vline(335), vline(366))
-      ) 
-    
+      )
 
-  
+
+
   })
-  
+
   output$plotly_mag_doy_acc <- renderPlotly({
-    
-    #combine into data frame
-    
-    peak_mag_sel <- unlist(peak_mag_all[1:10, ])
-    peak_doy_sel <- unlist(peak_doy_all[1:10, ])
-    frac_acc_sel <- unlist(sfrac_accu_all[1:10, ])
-    date_pea_sel <- unlist(date_peak_all[1:10, ])
-    
+
+    #Define data depending on gauge selection
+    if(input$gauge_plotly_mag_doy_acc == "Cologne"){
+      peak_mag_sel <- unlist(peak_mag_all_col)
+      peak_doy_sel <- unlist(peak_doy_all_col)
+      date_pea_sel <- unlist(date_peak_all_col)
+      frac_acc_sel <- unlist(sfrac_accu_koel_all_col)
+    }
+    if(input$gauge_plotly_mag_doy_acc == "Kaub")   {
+      peak_mag_sel <- unlist(peak_mag_all_kau)
+      peak_doy_sel <- unlist(peak_doy_all_kau)
+      date_pea_sel <- unlist(date_peak_all_kau)
+      frac_acc_sel <- unlist(sfrac_accu_kaub_all_kau)
+    }
+    if(input$gauge_plotly_mag_doy_acc == "Worms")  {
+      peak_mag_sel <- unlist(peak_mag_all_wor)
+      peak_doy_sel <- unlist(peak_doy_all_wor)
+      date_pea_sel <- unlist(date_peak_all_wor)
+      frac_acc_sel <- unlist(sfrac_accu_worm_all_wor)
+    }
+    if(input$gauge_plotly_mag_doy_acc == "Speyer") {
+      peak_mag_sel <- unlist(peak_mag_all_spe)
+      peak_doy_sel <- unlist(peak_doy_all_spe)
+      date_pea_sel <- unlist(date_peak_all_spe)
+      frac_acc_sel <- unlist(sfrac_accu_spey_all_spe)
+    }
+
     date_peak_axis_raw <- as.Date(date_pea_sel, "%Y-%m-%d")
     date_peak_axis <- format(date_peak_axis_raw, "%m-%d")
-    
-    gcm <- c(rep("EOBS", 10), 
+
+    gcm <- c(rep("EOBS", 10),
              rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
     )
     rcp <- c(rep("observed", 10),
              rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
     )
-    
+
     peak <- c(rep((1:10), 21))
-    
+
     flood_df <- data.frame(peak_mag = round(peak_mag_sel, digits = 0),
                            peak_doy = peak_doy_sel,
-                           peak_acc = frac_acc_sel, 
+                           peak_acc = frac_acc_sel,
                            peak_dat = date_pea_sel,
                            peak_m_d = date_peak_axis,
                            gcm = gcm,
-                           rcp = rcp, 
+                           rcp = rcp,
+                           forcing = paste0(gcm, " (", rcp, ")"),
                            peak = peak)
-    
-    
-    ply_mag_acc <- plot_ly(flood_df, 
+
+
+    ply_mag_acc <- plot_ly(flood_df,
                            type = "scatter3d",
                            mode = "markers",
                            x = ~peak_doy,
                            y = ~round(peak_mag_sel, digits = 0),
-                           z = ~peak_acc*100, 
+                           z = ~peak_acc*100,
                            hovertemplate = paste(
                              gcm, '<br>',
                              rcp, '<br>',
@@ -671,22 +774,31 @@ function(input, output, session) {
                              "Magnitude: %{y:.0f} m³/s",
                              "<extra></extra>"
                            ),
-                           color = ~gcm,
-                           marker = list(size = 5),
+                           color = ~forcing,
+                           colors = c("grey80",
+                                      rep("cadetblue3", 5),
+                                      rep("chocolate2", 5),
+                                      rep("palegreen3", 5),
+                                      rep("yellow2", 5),
+                                      rep("royalblue3", 5)
+                           ),
+                           marker = list(size = 8),
+                           symbol = ~forcing,
+                           symbols = c("circle", rep(c('circle', 'square', 'cross', 'diamond'), 5)),
                            height = '1000'
     )
-    
+
     title_font <- list(
       size = 18,
       color = "white"
     )
-    
+
     tick_font <- list(
       size = 14,
       color = "white",
       ticks = "inside"
     )
-    
+
     x_axis <- list(
       title = "Doy of the year [DOY]",
       showticklabels = TRUE,
@@ -697,7 +809,7 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     y_axis <- list(
       title = "Streamflow magnitude [m³/s]",
       showticklabels = TRUE,
@@ -708,7 +820,7 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     z_axis <- list(
       title = "Snow accumulation fraction [%]",
       showticklabels = TRUE,
@@ -719,48 +831,48 @@ function(input, output, session) {
       zeroline = F,
       showgrid = T
     )
-    
+
     legend_font <- list(
       font = list(
         size = 16,
         color = "white"))
-    
-    ply_mag_acc <- ply_mag_acc %>% 
-      layout(scene = list(title = '', 
+
+    ply_mag_acc <- ply_mag_acc %>%
+      layout(scene = list(title = '',
                           xaxis = x_axis,
              yaxis = y_axis,
              zaxis = z_axis),
              plot_bgcolor='transparent',
              paper_bgcolor='transparent',
              legend = legend_font
-             
-      ) 
-  
-    
+
+      )
+
+
   })
   
   #Overview table
   
-  gcm <- c("EOBS", rep(c("GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "NorESM1-M"), 4))
-  
-  rcp <- c("observed", rep("historic", 5), rep("RCP 2.6", 5), rep("RCP 6.0", 5), rep("RCP 8.5", 5))
-  
-  time_frame <- c(rep("2020-2099", 21))
-  
-  tab_over <- data.frame(Meteorological_Forcing = paste(gcm, "-", rcp),
-                         Time_Frame = time_frame,
-                         Peak_1 = as.character(date_peak_all[1, ]),
-                         Peak_2 = rep("01-01-1990", 21),
-                         Peak_3 = rep("01-01-1990", 21),
-                         Peak_4 = rep("01-01-1990", 21),
-                         Peak_5 = rep("01-01-1990", 21),
-                         Peak_6 = rep("01-01-1990", 21),
-                         Peak_7 = rep("01-01-1990", 21),
-                         Peak_8 = rep("01-01-1990", 21),
-                         Peak_9 = rep("01-01-1990", 21),
-                         Peak_10 = rep("01-01-1990", 21))
-  
-  output$over_table <- renderTable(tab_over, rownames = F, align = 'c', colnames = T, width = '90%')
+  # gcm <- c("EOBS", rep(c("GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "NorESM1-M"), 4))
+  # 
+  # rcp <- c("observed", rep("historic", 5), rep("RCP 2.6", 5), rep("RCP 6.0", 5), rep("RCP 8.5", 5))
+  # 
+  # time_frame <- c(rep("2020-2099", 21))
+  # 
+  # tab_over <- data.frame(Meteorological_Forcing = paste(gcm, "-", rcp),
+  #                        Time_Frame = time_frame,
+  #                        Peak_1 = as.character(date_peak_all[1, ]),
+  #                        Peak_2 = rep("01-01-1990", 21),
+  #                        Peak_3 = rep("01-01-1990", 21),
+  #                        Peak_4 = rep("01-01-1990", 21),
+  #                        Peak_5 = rep("01-01-1990", 21),
+  #                        Peak_6 = rep("01-01-1990", 21),
+  #                        Peak_7 = rep("01-01-1990", 21),
+  #                        Peak_8 = rep("01-01-1990", 21),
+  #                        Peak_9 = rep("01-01-1990", 21),
+  #                        Peak_10 = rep("01-01-1990", 21))
+  # 
+  # output$over_table <- renderTable(tab_over, rownames = F, align = 'c', colnames = T, width = '90%')
   
   
 }
