@@ -1,5 +1,8 @@
 # Figures
-\www
+www/figs/**
+
+# Tables
+www/exp_tabs/**
 
 #Report files
 *.pdf
