@@ -1,4 +1,4 @@
-#In-depth analysis of past, present and future flood formation in the Rhine River Basin
+# In-depth analysis of past, present and future flood formation in the Rhine River Basin
 
 ### Summary
 
@@ -6,11 +6,11 @@ Shiny dashboard that enables the in-depth analysis of past, present and future f
        
 ### Overview figures on streamflow peak characteristics (using [plotly](https://plotly.com/r/))
 
-<img src="www/screenshots/screenshot_2.png" width=80% class="center">          
+<img src="www/screenshots/screenshot_2.png" width=100%>          
 
 ### Interactive in-depth analysis of peak flow formation
 
-<img src="www/screenshots/screenshot_1.png", width=80%> 
+<img src="www/screenshots/screenshot_1.png" width=100%>  
 
 ### Authors and Contact
 
