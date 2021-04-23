@@ -12,45 +12,70 @@ library(shinydashboard)
 library(plotly)
 library(DT)
 
-navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selected = "Overview", position = "fixed-top",
+navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selected = "Summary & Overview", position = "fixed-top",
            
            tags$style(type="text/css", "body {padding-top: 70px;}"),
            
-           tabPanel("Overview",
+           tabPanel("Summary & Overview",
                    
+                    HTML("<br>"),
+                    
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "This",
+                      tags$a(href="https://rstudio.github.io/shinydashboard/", "Shiny dashboard",
+                             style="color:#6699CC;", target="_blank"),
+                      "enables the"),
+                    
+                    HTML("<br>"), 
+                    
+                    p(style="text-align: justify; font-size: 40px; width: 99%;",
+                      "In-depth analysis of past, present and future flood formation in the Rhine River Basin"),
+                    
+                    HTML("<br>"), 
+                    
                     h2("Summary"),
                     
-                    p("Hydroogical simulations to help us understand catchment processes;
-                      In a large basin as of Rhine River historic streamflow peaks and processes in the future;
-                      mix of snowmelt and precipitation; importance changes along the cource of the river"),
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "The genesis of riverine floods in large river basins often is complex. 
+                      Streamflow originating from precipitation and snowmelt and from different tributaries can superimpose and cause high water levels threatening cities and comunities residing along the river banks. 
+                      In the framework of this study, we provide detailed insights into the genesis of historic and future streamflow peaks in the Rhine River Basin. 
+                      Investigations base on hydrological simulations using the mesoscale Hydrolgical Model",
+                      tags$a(href="https://www.ufz.de/index.php?en=40114", "mHM.",
+                             style="color:#6699CC;", target="_blank"),
+                      "We force mHM with historic meteorological data based on observations and data from five different global climate models (GCMs). 
+                      With regard to the GCMs, we distinguish between simulations under historic climate conditions and projected future conditions based on representative concentration pathways (RCPs). 
+                      A detailed description of the model simulations analysed in this study can be found in",
+                      tags$a(href="https://doi.org/10.5194/hess-2020-605", "Rottler et al. 2020.",
+                             style="color:#6699CC;", target="_blank"),  
+                      "For each meteorological forcing, we determine the ten highest runoff peaks at four locations along the Rhine River, i.e., Cologne, Kaub, Worms and Speyer, and analyse the genesis of the peak in detail. 
+                      River gauges selected are located before/after the confluence of the Rhine River with one of the main triburaries Neckar, Main or Moselle. 
+                      The in-depth analyis of the streamflow peak genesis includes the assessment and visualization of liquid precipitation, snow cover changes, runoff generated, flood extent and the excess runoff from the High Rhine, Neckar, Main and Moselle up to ten days before the streamflow peak."),
                     
-                    h2("Overview figures"),
-                    p("In the following, a selection of overview figures. We analyse streamflow peaks from 21 different simulation runs."),
-                    p("What are Plotly figures? And how to operate with them..."),
+                    h2("Streamflow peaks"),
                     
-                    HTML("<br><br><br><br><br>"),
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "In case of the 15 future model runs (five GCMs times three RCPs), we extract streamflow peaks between 2020 and 2099. 
+                      For the historic GCM data, runoff peaks are determined between 1951-2005. 
+                      Historic streamflow peaks simulated based on observational data are determined between 1951 and 2013.
+                      In the following, we provide a selection of figures produced using the open source graphing library",
+                      tags$a(href="https://plotly.com/r/", "Plotly,",
+                             style="color:#6699CC;", target="_blank"),  
+                      "which provide an overview on streamflow peak characterstics. Figure content can be adjusted by clicking on the legend elements and zoom in/out options used to investigate regions of the plot in detail.
+                      Detailed information on individual peaks show up when the mouse moves over the plot. 
+                      Should you want to view the detailed analysis of the peak flow genesis, switch to tab 'Peak genesis' and select your peak of interest.
+                      In addition to mangitude and timing of streamflow peaks, the overview figures include information on the flood extent (fraction of grid cells that generated runoff above their long-term 99 % quantile at least on one day during the ten days prior to the streamflow peak), the cumulative snowmelt in the High Rhine Basin starting ten days before the streamflow peak, and the areal fraction of snow accumulation (fraction of grid cells that recorded an increase on snow cover during the ten day period prior to the streamflow peak). More detailed information on variables investigated and visualized can be found below the figure in the tab 'Peak gensis'.)"),
                     
-                    # p("Table caption."),
-                    # 
-                    # tableOutput('over_table'),
-                    # tags$head(tags$style("#over_table table {background-color: #333333; 
-                    #                                          color: white; 
-                    #                                          text-align: center;}", 
-                    #                      media="screen", type="text/css")),
+                    HTML("<br><br>"),
                     
-                    h2("Climate scenarios: Annual temperature"),
-                    
-                    p("Text. Text"),
+                    h3("Fig. 1: Annual mean temperatures of model forcings"),
                     
                     plotlyOutput("plotly_tem_yea", width="100%"),
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h2("Streamflow peak timing | Streamflow peak mangitude"),
+                    h3("Fig. 2: Streamflow peak timing and mangitude"),
                     
-                    p("Text. Text"),
-                    
-                    selectInput("gauge_plotly_doy_mag", "Select river gauge:",
+                    selectInput("gauge_plotly_doy_mag", "",
                                 choices = c("Cologne",
                                             "Kaub",
                                             "Worms",
@@ -60,11 +85,9 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h2("Streamflow peak magnitude | Flood extent"),
+                    h3("Fig. 3: Streamflow peak magnitude and flood extent"),
                     
-                    p("Text. Text"),
-                    
-                    selectInput("gauge_plotly_mag_fra", "Select river gauge:",
+                    selectInput("gauge_plotly_mag_fra", "",
                                 choices = c("Cologne",
                                             "Kaub",
                                             "Worms",
@@ -74,11 +97,9 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h2("Streamflow peak timing | Total snowmelt High Rhine"),
+                    h3("Fig. 4: Streamflow peak timing and total snowmelt High Rhine"),
                     
-                    p("Text. Text"),
-                    
-                    selectInput("gauge_plotly_doy_sno", "Select river gauge:",
+                    selectInput("gauge_plotly_doy_sno", "",
                                 choices = c("Cologne",
                                             "Kaub",
                                             "Worms",
@@ -88,11 +109,9 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h2("Streamflow peak magnitude | Streamflow peak timing | Areal fraction snow accumulation"),
-                    
-                    p("Text. Text"),
-                    
-                    selectInput("gauge_plotly_mag_doy_acc", "Select river gauge:",
+                    h3("Fig. 5: Streamflow peak magnitude and timing and the real fraction of snow accumulation"),
+
+                    selectInput("gauge_plotly_mag_doy_acc", "",
                                 choices = c("Cologne",
                                             "Kaub",
                                             "Worms",
@@ -193,51 +212,99 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
            ),
            
-           tabPanel("Data & Code",
-                    
-                    h2("Data"),
-                    p("Add information on mHM model runs..."),
-                    
-                    h2("Code"),
-                    p("Source code of this Shiny dashboard is available at:"),
-                    tags$a(href= "https://github.com/ERottler/rhine-flood-genesis", "https://github.com/ERottler/rhine-flood-genesis",
-                           style="color:#6699CC; font-weight: bold"),
-                    
-                    h2("Acknowledgements")
-                    
-                    ),
-           
            tabPanel("Authors & Contact",
                     
                     h2("Authors"),
                     
-                    p("This analysis was conducted by",
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "This analysis was conducted by",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/rottler-erwin", "Erwin Rottler",
-                             style="color:#6699CC; font-weight: bold"),
+                             style="color:#6699CC;", target="_blank"),
                       "(member of the working group Hydrology & Climatology, University of Potsdam) in the framework of investigations focusing on future changes Rhine River flood seasonality. 
                       The analysis was supervised by",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/bronstert-axel", "Axel Bronstert",
-                             style="color:#6699CC; font-weight: bold"), 
+                             style="color:#6699CC;", target="_blank"), 
                       "(head of the working group Hydrology & Climatology, University of Potsdam) and",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/buerger-gerd", "Gerd Bürger",
-                             style="color:#6699CC;font-weight: bold"), 
-                      "(senior scientist within the working group Hydrology and Climatology, University of Potsdam). 
+                             style="color:#6699CC;", target="_blank"), 
+                      "(senior scientist within the working group Hydrology & Climatology, University of Potsdam). 
                       We thank our colleagues",
                       tags$a(href="https://www.ufz.de/index.php?en=38114", "Oldrich Rakovec",
-                             style="color:#6699CC; font-weight: bold"), "and",
+                             style="color:#6699CC;", target="_blank"), "and",
                       tags$a(href="https://www.ufz.de/index.php?en=38094", "Luis Samaniego",
-                             style="color:#6699CC; font-weight: bold"), 
+                             style="color:#6699CC;", target="_blank"), 
                       "from the Department of Computational Hydrosystems,
                       Helmholtz Centre for Environmental Research (UFZ) for their support during model setup and data analysis."
                     ),
                     
                     h2("Feedback"),
                     
-                    p("Should you have any comments, questions or suggestions, please do not hesitate to write us an email:", tags$i(style="color:#6699CC; font-weight: bold", "rottler(at)uni-potsdam.de"))
+                    p(style="text-align: justify; font-size: 16px; width: 99%", "Should you have any comments, questions or suggestions, please do not hesitate to write us an email:", tags$i(style="color:#6699CC;", "rottler(at)uni-potsdam.de")),
                     
+                    h2("Code"),
                     
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "The source code of this Shiny dashboard is available at:",
+                    tags$a(href= "https://github.com/ERottler/rhine-flood-genesis", "github.com/ERottler/rhine-flood-genesis",
+                           style="color:#6699CC;", target="_blank")
+                    ),
                     
-                      
+                    h2("Acknowledgements"),
+                    
+                    p(style="text-align: justify; font-size: 16px; width: 99%",
+                      "We acknowledge the datasets generated in the",
+                      tags$a(href="http://edge.climate.copernicus.eu/", "EDgE",
+                             style="color:#6699CC;", target="_blank"),
+                     "proof-of-concept project performed under a contract for the",
+                      tags$a(href="https://climate.copernicus.eu/", "Copernicus Climate Change Service.",
+                             style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.ecmwf.int/", "ECMWF",
+                            style="color:#6699CC;", target="_blank"),
+                      "implements this service and the Copernicus Atmosphere Monitoring Service on behalf of the European Commission. We acknowledge EDgE colleagues",
+                     tags$a(href="https://www.ufz.de/index.php?en=38089", "Rohini Komar",
+                            style="color:#6699CC;", target="_blank"),
+                     "and",
+                     tags$a(href="https://www.ufz.de/index.php?en=38099", "Stephan Thober",
+                            style="color:#6699CC;", target="_blank"),
+                     "for establishing the mHM model setup and performing the downscaling of the CMIP5 data sets, respectively.
+                      We acknowledge the E-OBS dataset from the EU FP6 project",
+                      tags$a(href="http://ensembles-eu.metoffice.com", "ENSEMBLES",
+                             style="color:#6699CC;", target="_blank"),
+                      "and the data providers in the",
+                      tags$a(href=" http://www.ecad.eu", "ECA&D",
+                             style="color:#6699CC;", target="_blank"), "project.",
+                      "We acknowledge the",
+                     tags$a(href="https://www.isimip.org/", "ISI-MIP",
+                            style="color:#6699CC;", target="_blank"),
+                     "project for providing the bias corrected CMIP5 climate model data. The",
+                     tags$a(href="https://land.copernicus.eu/", "Copernicus Land Monitoring Service,",
+                            style="color:#6699CC;", target="_blank"),
+                     "implemented by the European Environmental Agency, provided the European Digital Elevation Model",
+                     tags$a(href="https://www.eea.europa.eu/data-and-maps/data/eu-dem/", "EU-DEM",
+                            style="color:#6699CC;", target="_blank"),
+                     ", version 1.1. We also acknowledge the",
+                      tags$a(href="https://www.ufz.de/hoklim", "HOKLIM",
+                             style="color:#6699CC;", target="_blank"), "project",
+                      "by the German Ministry for Education and Research (grant number 01LS1611A). We also thank various other organisations and projects for providing data used in this study, including", 
+                     tags$a(href="https://ec.europa.eu/info/departments/joint-research-centre_en", "JRC,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="http://www.esa.int/", "ESA,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.nasa.gov/", "NASA,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.usgs.gov/", "USGS,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.bafg.de/GRDC/EN/Home/homepage_node.html", "GRDC,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.bgr.bund.de/EN/Home/homepage_node_en.html", "BGR,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://en.unesco.org/", "UNESCO,",
+                            style="color:#6699CC;", target="_blank"),
+                     tags$a(href="https://www.isric.org/", "ISRIC,",
+                            style="color:#6699CC;", target="_blank"), "and",
+                     tags$a(href="https://www.eea.europa.eu/", "EEA.",
+                            style="color:#6699CC;", target="_blank")
+                    )
                     
            )
            

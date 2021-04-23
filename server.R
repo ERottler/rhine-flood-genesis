@@ -158,7 +158,7 @@ function(input, output, session) {
                             type = 'scatter',
                             mode = "lines",
                             height = '580',
-                            opacity = 0.7,
+                            opacity = 0.8,
                             # legendgroup = "EOBS",
                             text = gcm[1],
                             hoverinfo = 'text',
@@ -782,7 +782,7 @@ function(input, output, session) {
                                       rep("yellow2", 5),
                                       rep("royalblue3", 5)
                            ),
-                           marker = list(size = 8),
+                           marker = list(size = 6),
                            symbol = ~forcing,
                            symbols = c("circle", rep(c('circle', 'square', 'cross', 'diamond'), 5)),
                            height = '1000'
