@@ -193,6 +193,8 @@ peak_doy_all_col <- read.table(paste0(tabs_dir,"peak_doy_all_col.csv"), sep = ",
 warm_lev_all_col <- read.table(paste0(tabs_dir,"warm_lev_all_col.csv"), sep = ",", header = T)
 warm_lev_all_col <- warm_lev_all_col + 0.46  #historic period warmer by 0.46 °C already
 
+temp_yea_all_col <- read.table(paste0(tabs_dir,"temp_yea_all_col.csv"), sep = ",", header = T)
+
 flood_frac_max_all_col <- read.table(paste0(tabs_dir,"flood_frac_max_all_col.csv"), sep = ",", header = T)
 
 sfrac_accu_koel_all_col <- read.table(paste0(tabs_dir, "sfrac_accu_koel_all_col.csv"), sep = ",", header = T)
@@ -230,6 +232,8 @@ peak_doy_all_kau <- read.table(paste0(tabs_dir,"peak_doy_all_kau.csv"), sep = ",
 
 warm_lev_all_kau <- read.table(paste0(tabs_dir,"warm_lev_all_kau.csv"), sep = ",", header = T)
 warm_lev_all_kau <- warm_lev_all_kau + 0.46  #historic period warmer by 0.46 °C already
+
+temp_yea_all_kau <- read.table(paste0(tabs_dir,"temp_yea_all_kau.csv"), sep = ",", header = T)
 
 flood_frac_max_all_kau <- read.table(paste0(tabs_dir,"flood_frac_max_all_kau.csv"), sep = ",", header = T)
 
@@ -269,6 +273,8 @@ peak_doy_all_wor <- read.table(paste0(tabs_dir,"peak_doy_all_wor.csv"), sep = ",
 warm_lev_all_wor <- read.table(paste0(tabs_dir,"warm_lev_all_wor.csv"), sep = ",", header = T)
 warm_lev_all_wor <- warm_lev_all_wor + 0.46  #historic period warmer by 0.46 °C already
 
+temp_yea_all_wor <- read.table(paste0(tabs_dir,"temp_yea_all_wor.csv"), sep = ",", header = T)
+
 flood_frac_max_all_wor <- read.table(paste0(tabs_dir,"flood_frac_max_all_wor.csv"), sep = ",", header = T)
 
 sfrac_accu_worm_all_wor <- read.table(paste0(tabs_dir, "sfrac_accu_worm_all_wor.csv"), sep = ",", header = T)
@@ -306,6 +312,8 @@ peak_doy_all_spe <- read.table(paste0(tabs_dir,"peak_doy_all_spe.csv"), sep = ",
 
 warm_lev_all_spe <- read.table(paste0(tabs_dir,"warm_lev_all_spe.csv"), sep = ",", header = T)
 warm_lev_all_spe <- warm_lev_all_spe + 0.46  #historic period warmer by 0.46 °C already
+
+temp_yea_all_spe <- read.table(paste0(tabs_dir,"temp_yea_all_spe.csv"), sep = ",", header = T)
 
 flood_frac_max_all_spe <- read.table(paste0(tabs_dir,"flood_frac_max_all_spe.csv"), sep = ",", header = T)
 

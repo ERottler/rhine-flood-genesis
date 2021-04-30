@@ -13,22 +13,22 @@ load(paste0(base_dir, "www/exp_tabs/synt_tables.RData"))
 
 function(input, output, session) {
   
-  # query_modal <- modalDialog(
-  #   title = "Welcome!",
-  #   "Rhine flood stories...information on simulation data...detailed description of the methods and the individual plot panels...runoff peaks from all GCM-RCP combinations....",
-  #   easyClose = F,
-  #   footer = tagList(
-  #     actionButton("start_window", "Get the story!")
-  #   )
-  # )
-  # 
-  # # Show the model on start up ...
-  # showModal(query_modal)
-  # 
-  # observeEvent(input$start_window, {
-  #   removeModal()
-  # })
-  # 
+  query_modal <- modalDialog(
+    title = "Welcome!",
+    "This Shiny dashboard enables the investigation of past, present and future Rhine River flood genesis. Switch between tabs to read a short summary, browse through overview plots and view the in-depth analysis of Rhine River floods!",
+    easyClose = F,
+    footer = tagList(
+      actionButton("start_window", "Start exploring!")
+    )
+  )
+
+  # Show the model on start up ...
+  showModal(query_modal)
+
+  observeEvent(input$start_window, {
+    removeModal()
+  })
+
   
   output$plot <- renderImage({
     
@@ -851,6 +851,7 @@ function(input, output, session) {
 
   })
   
+
   #Overview table
   
   # gcm <- c("EOBS", rep(c("GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "NorESM1-M"), 4))

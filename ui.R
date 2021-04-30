@@ -12,7 +12,7 @@ library(shinydashboard)
 library(plotly)
 library(DT)
 
-navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selected = "Summary & Overview", position = "fixed-top",
+navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected = "Summary & Overview", position = "fixed-top",
            
            tags$style(type="text/css", "body {padding-top: 70px;}"),
            
@@ -29,7 +29,7 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     HTML("<br>"), 
                     
                     p(style="text-align: justify; font-size: 40px; width: 99%;",
-                      "In-depth analysis of past, present and future flood formation in the Rhine River Basin"),
+                      "Analysis of past, present and future flood formation in the Rhine River basin"),
                     
                     HTML("<br>"), 
                     
@@ -37,7 +37,7 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%",
                       "The genesis of riverine floods in large river basins often is complex. 
-                      Streamflow originating from precipitation and snowmelt and from different tributaries can superimpose and cause high water levels threatening cities and comunities residing along the river banks. 
+                      Streamflow originating from precipitation and snowmelt and flood waves from different tributaries can superimpose and cause high water levels threatening cities and comunities residing along the river banks. 
                       In the framework of this study, we provide detailed insights into the genesis of historic and future streamflow peaks in the Rhine River Basin. 
                       Investigations base on hydrological simulations using the mesoscale Hydrolgical Model",
                       tags$a(href="https://www.ufz.de/index.php?en=40114", "mHM.",
@@ -47,33 +47,45 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                       A detailed description of the model simulations analysed in this study can be found in",
                       tags$a(href="https://doi.org/10.5194/hess-2020-605", "Rottler et al. 2020.",
                              style="color:#6699CC;", target="_blank"),  
-                      "For each meteorological forcing, we determine the ten highest runoff peaks at four locations along the Rhine River, i.e., Cologne, Kaub, Worms and Speyer, and analyse the genesis of the peak in detail. 
+                      "For each meteorological forcing, we determine the ten highest runoff peaks at four locations along the Rhine River: Cologne, Kaub, Worms and Speyer. 
                       River gauges selected are located before/after the confluence of the Rhine River with one of the main triburaries Neckar, Main or Moselle. 
-                      The in-depth analyis of the streamflow peak genesis includes the assessment and visualization of liquid precipitation, snow cover changes, runoff generated, flood extent and the excess runoff from the High Rhine, Neckar, Main and Moselle up to ten days before the streamflow peak."),
+                      The in-depth analyis of the streamflow peak genesis includes the assessment and visualisation of liquid precipitation, snow cover changes, runoff generated, flood extent and the excess runoff from the High Rhine, Neckar, Main and Moselle up to ten days before a streamflow peak."),
                     
-                    h2("Streamflow peaks"),
+                    HTML("<br><br>"),
+                    
+                    h2("Overview figures"),
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%",
-                      "In case of the 15 future model runs (five GCMs times three RCPs), we extract streamflow peaks between 2020 and 2099. 
-                      For the historic GCM data, runoff peaks are determined between 1951-2005. 
-                      Historic streamflow peaks simulated based on observational data are determined between 1951 and 2013.
-                      In the following, we provide a selection of figures produced using the open source graphing library",
+                      "In the following, we provide a selection of figures produced using the open source graphing library",
                       tags$a(href="https://plotly.com/r/", "Plotly,",
                              style="color:#6699CC;", target="_blank"),  
                       "which provide an overview on streamflow peak characterstics. Figure content can be adjusted by clicking on the legend elements and zoom in/out options used to investigate regions of the plot in detail.
-                      Detailed information on individual peaks show up when the mouse moves over the plot. 
-                      Should you want to view the detailed analysis of the peak flow genesis, switch to tab 'Peak genesis' and select your peak of interest.
-                      In addition to mangitude and timing of streamflow peaks, the overview figures include information on the flood extent (fraction of grid cells that generated runoff above their long-term 99 % quantile at least on one day during the ten days prior to the streamflow peak), the cumulative snowmelt in the High Rhine Basin starting ten days before the streamflow peak, and the areal fraction of snow accumulation (fraction of grid cells that recorded an increase on snow cover during the ten day period prior to the streamflow peak). More detailed information on variables investigated and visualized can be found below the figure in the tab 'Peak gensis'.)"),
+                      Detailed information on the plot content show up when the mouse moves over the plot. 
+                      To view the detailed analysis of the peak flow genesis, switch to tab 'Peak genesis' and select your peak of interest."),
                     
                     HTML("<br><br>"),
                     
                     h3("Fig. 1: Annual mean temperatures of model forcings"),
+                    
+                    p(style="text-align: justify; font-size: 16px; width: 99%", 
+                      "Mean annual temperatures are averaged over the model domain, i.e. the Rhine River basin until gauge Lobith, for historic simulations and GCM-RCP combinations. 
+                      For each model forcing, we investigate the 10 highest streamflow peaks.
+                      In case of the 15 future model runs (five GCMs times three RCPs), we extract streamflow peaks between 2020 and 2099. 
+                      For the historic GCM data, runoff peaks are determined between 1951-2005. 
+                      Historic streamflow peaks simulated based on observational data are determined between 1951 and 2013."),
                     
                     plotlyOutput("plotly_tem_yea", width="100%"),
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
                     h3("Fig. 2: Streamflow peak timing and mangitude"),
+                    
+                    p(style="text-align: justify; font-size: 16px; width: 99%", 
+                      "Timing and magnitude are two key characteristics of a streamflow peak. 
+                      Moving upstream the Rhine River from Cologne via Kaub and Worms to Speyer, more and more streamflow peaks are recorded outside winter.
+                      It seems that the potential for streamflow extremes differs depending on the GCM data used.
+                      In general, highest streamflow peak magnitudes are realted to simulations with meteorological data from HadGEM2-ES.
+                      This is a signal not showing up investigating annual streamflow maxima."),
                     
                     selectInput("gauge_plotly_doy_mag", "",
                                 choices = c("Cologne",
@@ -87,6 +99,11 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     h3("Fig. 3: Streamflow peak magnitude and flood extent"),
                     
+                    p(style="text-align: justify; font-size: 16px; width: 99%", 
+                      "In large river basins, dangerously high water level only are possible if a sufficient part of the basin is generating runoff.
+                      This seems also valid for the Rhine River basin at the selected gauges: The magnitude of streamflow peaks correlates with the extent of the flood.
+                      In the framework of this study, flood extent is estimated as the fraction of grid cells that generated runoff above their long-term 99 % quantile (determined based on simulations for the time frame 1951-2013 using EOBS-based meteorological forcing data) at least on one day during the ten day during the peak genesis."),
+                    
                     selectInput("gauge_plotly_mag_fra", "",
                                 choices = c("Cologne",
                                             "Kaub",
@@ -99,6 +116,10 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     h3("Fig. 4: Streamflow peak timing and total snowmelt High Rhine"),
                     
+                    p(style="text-align: justify; font-size: 16px; width: 99%", 
+                      "In the Rhine River, rainfall- and snowmelt driven runoff overlap. To assess the importance of snowmelt from the High Rhine basin with regard to streamflow peaks along the Rhine River, we investigate the cumulative snowmelt in the High Rhine basin upstream of gauge Basel up to ten days before the recorded streamflow peak."
+                      ),
+                      
                     selectInput("gauge_plotly_doy_sno", "",
                                 choices = c("Cologne",
                                             "Kaub",
@@ -111,6 +132,10 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                     
                     h3("Fig. 5: Streamflow peak magnitude and timing and the real fraction of snow accumulation"),
 
+                    p(style="text-align: justify; font-size: 16px; width: 99%", 
+                      "Often, parts of the precipitation are solid and stored in temporary snow packs. To detect streamflow peaks, which were subject to temporal storage of precipitation in sonw packs, we determine the areal fraction of the basin that show an increase in snow water equivalent over the 10-days before the streamflow peak."
+                      ),
+                    
                     selectInput("gauge_plotly_mag_doy_acc", "",
                                 choices = c("Cologne",
                                             "Kaub",
@@ -118,9 +143,9 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                                             "Speyer")),
                     
                     plotlyOutput("plotly_mag_doy_acc", width="100%"),
-                    
+
                     HTML("<br><br><br><br><br><br><br><br><br><br>")
-        
+                    
                     ),
            
            tabPanel("Peak genesis",
@@ -167,6 +192,8 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                                                width = '100%'),
                                    
                                    sliderInput("day", "Day before flood peak:", -10, 0, 1, width = '100%', animate = T),
+                                   hr(),
+                                   p("Push the play button to see the plot sequence as a short video.", style="color:#6699CC;", align = "center"),
                                    hr(),
                                    p("Scroll down for a description of individial plot panels.", style="color:#6699CC;", align = "center")
                       ),
@@ -260,7 +287,10 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), selecte
                              style="color:#6699CC;", target="_blank"),
                      tags$a(href="https://www.ecmwf.int/", "ECMWF",
                             style="color:#6699CC;", target="_blank"),
-                      "implements this service and the Copernicus Atmosphere Monitoring Service on behalf of the European Commission. We acknowledge EDgE colleagues",
+                      "implements this service and the", 
+                     tags$a(href="https://atmosphere.copernicus.eu/", "Copernicus Atmosphere Monitoring Service",
+                            style="color:#6699CC;", target="_blank"),
+                     "on behalf of the European Commission. We acknowledge EDgE colleagues",
                      tags$a(href="https://www.ufz.de/index.php?en=38089", "Rohini Komar",
                             style="color:#6699CC;", target="_blank"),
                      "and",

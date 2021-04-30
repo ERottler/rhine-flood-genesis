@@ -8,7 +8,7 @@ Shiny dashboard that enables the in-depth analysis of past, present and future f
 
 <img src="www/screenshots/screenshot_2.png" width=100%>          
 
-### Interactive in-depth analysis of peak flow formation
+### Interactive analysis of peak flow formation
 
 <img src="www/screenshots/screenshot_1.png" width=100%>  
 
