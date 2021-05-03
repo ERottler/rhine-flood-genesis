@@ -38,14 +38,14 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                     p(style="text-align: justify; font-size: 16px; width: 99%",
                       "The genesis of riverine floods in large river basins often is complex. 
                       Streamflow originating from precipitation and snowmelt and flood waves from different tributaries can superimpose and cause high water levels threatening cities and comunities residing along the river banks. 
-                      In the framework of this study, we provide detailed insights into the genesis of historic and future streamflow peaks in the Rhine River Basin. 
+                      In the framework of this study, we provide detailed insights into the genesis of historic and future streamflow peaks in the Rhine River basin. 
                       Investigations base on hydrological simulations using the mesoscale Hydrolgical Model",
                       tags$a(href="https://www.ufz.de/index.php?en=40114", "mHM.",
                              style="color:#6699CC;", target="_blank"),
-                      "We force mHM with historic meteorological data based on observations and data from five different global climate models (GCMs). 
+                      "We force mHM with historic meteorological data based on observations and data from five global climate models (GCMs). 
                       With regard to the GCMs, we distinguish between simulations under historic climate conditions and projected future conditions based on representative concentration pathways (RCPs). 
                       A detailed description of the model simulations analysed in this study can be found in",
-                      tags$a(href="https://doi.org/10.5194/hess-2020-605", "Rottler et al. 2020.",
+                      tags$a(href="https://doi.org/10.5194/hess-25-2353-2021", "Rottler et al. 2021.",
                              style="color:#6699CC;", target="_blank"),  
                       "For each meteorological forcing, we determine the ten highest runoff peaks at four locations along the Rhine River: Cologne, Kaub, Worms and Speyer. 
                       River gauges selected are located before/after the confluence of the Rhine River with one of the main triburaries Neckar, Main or Moselle. 
@@ -130,10 +130,11 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h3("Fig. 5: Streamflow peak magnitude and timing and the real fraction of snow accumulation"),
+                    h3("Fig. 5: Streamflow peak magnitude and timing and the areal fraction of snow accumulation"),
 
                     p(style="text-align: justify; font-size: 16px; width: 99%", 
-                      "Often, parts of the precipitation are solid and stored in temporary snow packs. To detect streamflow peaks, which were subject to temporal storage of precipitation in sonw packs, we determine the areal fraction of the basin that show an increase in snow water equivalent over the 10-days before the streamflow peak."
+                      "Often, parts of the precipitation are solid and stored in temporary snow packs. 
+                      To detect streamflow peaks, which were subject to such a temporal storage of precipitation in snow packs, we determine the areal fraction of the basin that show an increase in snow water equivalent over the 10-days before the streamflow peak."
                       ),
                     
                     selectInput("gauge_plotly_mag_doy_acc", "",
@@ -255,13 +256,11 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/buerger-gerd", "Gerd Bürger",
                              style="color:#6699CC;", target="_blank"), 
                       "(senior scientist within the working group Hydrology & Climatology, University of Potsdam). 
-                      We thank our colleagues",
-                      tags$a(href="https://www.ufz.de/index.php?en=38114", "Oldrich Rakovec",
-                             style="color:#6699CC;", target="_blank"), "and",
-                      tags$a(href="https://www.ufz.de/index.php?en=38094", "Luis Samaniego",
-                             style="color:#6699CC;", target="_blank"), 
-                      "from the Department of Computational Hydrosystems,
-                      Helmholtz Centre for Environmental Research (UFZ) for their support during model setup and data analysis."
+                      We thank our colleagues from the Department of Computational Hydrosystems, Helmholtz Centre for Environmental Research (UFZ), particularly",
+                      tags$a(href="https://www.ufz.de/index.php?en=38114", "Oldrich Rakovec,",
+                             style="color:#6699CC;", target="_blank"),
+                      
+                      "for their support during model setup and data analysis."
                     ),
                     
                     h2("Feedback"),
@@ -291,6 +290,9 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                      tags$a(href="https://atmosphere.copernicus.eu/", "Copernicus Atmosphere Monitoring Service",
                             style="color:#6699CC;", target="_blank"),
                      "on behalf of the European Commission. We acknowledge EDgE colleagues",
+                     tags$a(href="https://www.ufz.de/index.php?en=38094", "Luis Samaniego",
+                            style="color:#6699CC;", target="_blank"), 
+                     ",",
                      tags$a(href="https://www.ufz.de/index.php?en=38089", "Rohini Komar",
                             style="color:#6699CC;", target="_blank"),
                      "and",
