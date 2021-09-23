@@ -2,7 +2,6 @@
 
 #Rhine Flood genesis
 #Erwin Rottler, University of Potsdam
-#WS 2020/2021
 
 ###
 
@@ -10,8 +9,8 @@
 
 tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 
-#Select gauge
-gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
+#Select gauge (define again in loop!!!)
+gauge_sel <- "Speyer" #Options: Cologne, Kaub, Worms or Speyer
 
 if(gauge_sel == "Cologne"){
   
@@ -328,6 +327,9 @@ if(gauge_sel == "Speyer"){
 
 #loop over GCM-RCP combinations
 for(f in 1:21){
+
+#Select gauge
+gauge_sel <- "Speyer" #Options: Cologne, Kaub, Worms or Speyer
   
 #set_up----
 
@@ -1657,7 +1659,7 @@ for(p in 1:length(peaks_ind)){
     peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_col.csv"), sep = ",", header = T)
     peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_col.csv"), sep = ",", header = T)
     
-    peak_mag_all[p, f] <- simu_koel[peak_ind]
+    peak_mag_all[p, f] <- simu_sel[peak_ind]
     peak_doy_all[p, f] <- strftime(date_sel[peak_ind], format = "%j")
     
     write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all_col.csv"), quote = F, row.names = F)
@@ -1682,7 +1684,11 @@ for(p in 1:length(peaks_ind)){
     temp_yea_all_col <- read.table(paste0(tabs_dir,"temp_yea_all_col.csv"), sep = ",", header = T)
     temp_yea_all <- read.table(paste0(tabs_dir,"temp_yea_all.csv"), sep = ",", header = T)
     
-    date_sel_in <- which(date_sel == date_sel[peak_ind])
+    start_date <- as.Date("1950-01-01", "%Y-%m-%d")
+    end_date   <- as.Date("2099-12-31", "%Y-%m-%d")
+    full_date  <- as.Date(seq(start_date, end_date, by="day"))
+    
+    date_sel_in <- which(full_date == date_sel[peak_ind])
     
     temp_yea_all_col[p, f] <- temp_yea_all[date_sel_in, f]
     
@@ -1784,7 +1790,7 @@ for(p in 1:length(peaks_ind)){
     peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_kau.csv"), sep = ",", header = T)
     peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_kau.csv"), sep = ",", header = T)
     
-    peak_mag_all[p, f] <- simu_koel[peak_ind]
+    peak_mag_all[p, f] <- simu_sel[peak_ind]
     peak_doy_all[p, f] <- strftime(date_sel[peak_ind], format = "%j")
     
     write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all_kau.csv"), quote = F, row.names = F)
@@ -1809,11 +1815,15 @@ for(p in 1:length(peaks_ind)){
     temp_yea_all_kau <- read.table(paste0(tabs_dir,"temp_yea_all_kau.csv"), sep = ",", header = T)
     temp_yea_all <- read.table(paste0(tabs_dir,"temp_yea_all.csv"), sep = ",", header = T)
     
-    date_sel_in <- which(date_sel == date_sel[peak_ind])
+    start_date <- as.Date("1950-01-01", "%Y-%m-%d")
+    end_date   <- as.Date("2099-12-31", "%Y-%m-%d")
+    full_date  <- as.Date(seq(start_date, end_date, by="day"))
     
-    temp_yea_all[p, f] <- temp_yea_all[date_sel_in, f]
+    date_sel_in <- which(full_date == date_sel[peak_ind])
     
-    write.csv(temp_yea_all, paste0(tabs_dir,"temp_yea_all_kau.csv"), quote = F, row.names = F)
+    temp_yea_all_kau[p, f] <- temp_yea_all[date_sel_in, f]
+    
+    write.csv(temp_yea_all_kau, paste0(tabs_dir,"temp_yea_all_kau.csv"), quote = F, row.names = F)
     
     #Maximum flood extent
     flood_frac_max_all_kau_tab <- read.table(paste0(tabs_dir,"flood_frac_max_all_kau.csv"), sep = ",", header = T)
@@ -1911,7 +1921,7 @@ for(p in 1:length(peaks_ind)){
     peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_wor.csv"), sep = ",", header = T)
     peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_wor.csv"), sep = ",", header = T)
     
-    peak_mag_all[p, f] <- simu_koel[peak_ind]
+    peak_mag_all[p, f] <- simu_sel[peak_ind]
     peak_doy_all[p, f] <- strftime(date_sel[peak_ind], format = "%j")
     
     write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all_wor.csv"), quote = F, row.names = F)
@@ -1936,11 +1946,15 @@ for(p in 1:length(peaks_ind)){
     temp_yea_all_wor <- read.table(paste0(tabs_dir,"temp_yea_all_wor.csv"), sep = ",", header = T)
     temp_yea_all <- read.table(paste0(tabs_dir,"temp_yea_all.csv"), sep = ",", header = T)
     
-    date_sel_in <- which(date_sel == date_sel[peak_ind])
+    start_date <- as.Date("1950-01-01", "%Y-%m-%d")
+    end_date   <- as.Date("2099-12-31", "%Y-%m-%d")
+    full_date  <- as.Date(seq(start_date, end_date, by="day"))
     
-    temp_yea_all[p, f] <- temp_yea_all[date_sel_in, f]
+    date_sel_in <- which(full_date == date_sel[peak_ind])
     
-    write.csv(temp_yea_all, paste0(tabs_dir,"temp_yea_all_wor.csv"), quote = F, row.names = F)
+    temp_yea_all_wor[p, f] <- temp_yea_all[date_sel_in, f]
+    
+    write.csv(temp_yea_all_wor, paste0(tabs_dir,"temp_yea_all_wor.csv"), quote = F, row.names = F)
     
     #Maximum flood extent
     flood_frac_max_all_wor_tab <- read.table(paste0(tabs_dir,"flood_frac_max_all_wor.csv"), sep = ",", header = T)
@@ -2038,7 +2052,7 @@ for(p in 1:length(peaks_ind)){
     peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_spe.csv"), sep = ",", header = T)
     peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_spe.csv"), sep = ",", header = T)
     
-    peak_mag_all[p, f] <- simu_koel[peak_ind]
+    peak_mag_all[p, f] <- simu_sel[peak_ind]
     peak_doy_all[p, f] <- strftime(date_sel[peak_ind], format = "%j")
     
     write.csv(peak_mag_all, paste0(tabs_dir,"peak_mag_all_spe.csv"), quote = F, row.names = F)
@@ -2063,11 +2077,15 @@ for(p in 1:length(peaks_ind)){
     temp_yea_all_spe <- read.table(paste0(tabs_dir,"temp_yea_all_spe.csv"), sep = ",", header = T)
     temp_yea_all <- read.table(paste0(tabs_dir,"temp_yea_all.csv"), sep = ",", header = T)
     
-    date_sel_in <- which(date_sel == date_sel[peak_ind])
+    start_date <- as.Date("1950-01-01", "%Y-%m-%d")
+    end_date   <- as.Date("2099-12-31", "%Y-%m-%d")
+    full_date  <- as.Date(seq(start_date, end_date, by="day"))
     
-    temp_yea_all[p, f] <- temp_yea_all[date_sel_in, f]
+    date_sel_in <- which(full_date == date_sel[peak_ind])
     
-    write.csv(temp_yea_all, paste0(tabs_dir,"temp_yea_all_spe.csv"), quote = F, row.names = F)
+    temp_yea_all_spe[p, f] <- temp_yea_all[date_sel_in, f]
+    
+    write.csv(temp_yea_all_spe, paste0(tabs_dir,"temp_yea_all_spe.csv"), quote = F, row.names = F)
     
     #Maximum flood extent
     flood_frac_max_all_spe_tab <- read.table(paste0(tabs_dir,"flood_frac_max_all_spe.csv"), sep = ",", header = T)
