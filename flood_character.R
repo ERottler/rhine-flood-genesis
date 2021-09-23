@@ -7,45 +7,100 @@
 
 pacman::p_load(alptempr, meltimr)
 
-tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
+# tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
+tabs_dir = "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
 
 #read_tables----
 
-peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all.csv"), sep = ",", header = T)
-peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all.csv"), sep = ",", header = T)
+peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_spe.csv"), sep = ",", header = T)
+peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_spe.csv"), sep = ",", header = T)
 
-warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all.csv"), sep = ",", header = T)
+warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all_spe.csv"), sep = ",", header = T)
 warm_lev_all <- warm_lev_all + 0.46  #historic period warmer by 0.46 Â°C already
 
-flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all.csv"), sep = ",", header = T)
+flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all_spe.csv"), sep = ",", header = T)
 
-sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_all.csv"), sep = ",", header = T)
-sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all.csv"), sep = ",", header = T)
-sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all.csv"), sep = ",", header = T)
-sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all.csv"), sep = ",", header = T)
-sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all.csv"), sep = ",", header = T)
+sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_koel_all_spe.csv"), sep = ",", header = T)
+sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all_spe.csv"), sep = ",", header = T)
+sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all_spe.csv"), sep = ",", header = T)
+sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all_spe.csv"), sep = ",", header = T)
+sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all_spe.csv"), sep = ",", header = T)
 
-melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all.csv"), sep = ",", header = T)
-melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all.csv"), sep = ",", header = T)
-melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all.csv"), sep = ",", header = T)
-melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all.csv"), sep = ",", header = T)
+melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all_spe.csv"), sep = ",", header = T)
+melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all_spe.csv"), sep = ",", header = T)
+melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all_spe.csv"), sep = ",", header = T)
+melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all_spe.csv"), sep = ",", header = T)
 
-pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all.csv"), sep = ",", header = T)
-pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all.csv"), sep = ",", header = T)
-pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all.csv"), sep = ",", header = T)
-pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all.csv"), sep = ",", header = T)
+pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all_spe.csv"), sep = ",", header = T)
+pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all_spe.csv"), sep = ",", header = T)
+pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all_spe.csv"), sep = ",", header = T)
+pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all_spe.csv"), sep = ",", header = T)
 
-pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all.csv"), sep = ",", header = T)
-pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all.csv"), sep = ",", header = T)
-pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all.csv"), sep = ",", header = T)
-pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all.csv"), sep = ",", header = T)
+pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all_spe.csv"), sep = ",", header = T)
+pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all_spe.csv"), sep = ",", header = T)
+pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all_spe.csv"), sep = ",", header = T)
+pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all_spe.csv"), sep = ",", header = T)
 
-disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all.csv"), sep = ",", header = T)
-disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all.csv"), sep = ",", header = T)
-disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all.csv"), sep = ",", header = T)
-disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all.csv"), sep = ",", header = T)
+disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all_spe.csv"), sep = ",", header = T)
+disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all_spe.csv"), sep = ",", header = T)
+disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all_spe.csv"), sep = ",", header = T)
+disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all_spe.csv"), sep = ",", header = T)
+
+date_peak_all <- read.table(paste0(tabs_dir, "date_peak_all_spe.csv"), sep = ",", header = T, stringsAsFactors = F)
 
 
+
+#dates_from_files----
+
+img_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/worms/"
+
+gcm_rcp_paths <- c("EOBS",
+                   "GFDL-ESM2M/historical/",
+                   "HadGEM2-ES/historical/",
+                   "IPSL-CM5A-LR/historical/",
+                   "MIROC-ESM-CHEM/historical/",
+                   "NorESM1-M/historical/",
+                   "GFDL-ESM2M/rcp2p6/",
+                   "HadGEM2-ES/rcp2p6/",
+                   "IPSL-CM5A-LR/rcp2p6/",
+                   "MIROC-ESM-CHEM/rcp2p6/",
+                   "NorESM1-M/rcp2p6/",
+                   "GFDL-ESM2M/rcp6p0/",
+                   "HadGEM2-ES/rcp6p0/",
+                   "IPSL-CM5A-LR/rcp6p0/",
+                   "MIROC-ESM-CHEM/rcp6p0/",
+                   "NorESM1-M/rcp6p0/",
+                   "GFDL-ESM2M/rcp8p5/",
+                   "HadGEM2-ES/rcp8p5/",
+                   "IPSL-CM5A-LR/rcp8p5/",
+                   "MIROC-ESM-CHEM/rcp8p5/",
+                   "NorESM1-M/rcp8p5/")
+
+date_peak_all <- as.data.frame(matrix(data = NA, nrow = 10,  ncol = 21))
+
+for(i in 1:length(gcm_rcp_paths)){
+  
+  for(r in 1:10){
+    
+    imgs <- list.files(paste0(img_dir, gcm_rcp_paths[i], "/flood_", r), pattern = ".png", full.names = F)
+    
+    dates_imgs <- NA
+    for(p in 1:length(imgs)){
+      
+      date_sel <- as.Date(substr(imgs[p], 7, 14), "%Y%m%d")
+      
+      date_max <- structure(max(dates_imgs, date_sel, na.rm = T), class = "Date")
+      
+    }
+    
+    date_peak_all[r, i] <- as.character(date_max)
+    
+  }
+  
+    
+  }
+  
+write.csv(date_peak_all, paste0(tabs_dir, "date_peak_all_wor.csv"), quote = F, row.names = F)
 
 #mag_ext----
 
@@ -57,6 +112,7 @@ for(i in 1:21){
   points(flood_frac_max_all[1:10, i], peak_mag_all[1:10, i])
    
 }
+
 
 
 #excess_all----
@@ -209,7 +265,7 @@ ylims <- range(peak_mag_vec, na.rm = T)
 
 boxplot(cbind(peak_mag_vec, peak_mag_vec, peak_mag_vec), boxfill = NA, border = NA, axes = F, ylim = ylims)
 axis(2, mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.5)
-axis(1, at = c(1, 2, 3), labels = c("< 2 °C", "2-3 °C", "> 3 °C"),
+axis(1, at = c(1, 2, 3), labels = c("< 2 ?C", "2-3 ?C", "> 3 ?C"),
      mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.2)
 grid(nx = 0, ny = 6, col = "grey55", lwd = 0.6, lty = "dashed")  
 mtext("Future flood magnitude", side = 3, line = 0.2, cex = 1.2)
@@ -437,4 +493,44 @@ boxplot(unlist(sfrac_accu_mose_all[7:21, 1:20]))
 boxplot(unlist(sfrac_accu_neck_all[7:21, 1:20]))
 boxplot(unlist(sfrac_accu_main_all[7:21, 1:20]))
 
-plot(unlist(warm_lev_all[7:21, 1:20]), unlist(sfrac_accu_base_all[7:21, 1:20]))
+plot(unlist(disc_exce_base_all[1:10, ]), unlist(sfrac_accu_base_all[1:10, ]))
+
+
+mtcars$am[which(mtcars$am == 0)] <- 'Automatic'
+mtcars$am[which(mtcars$am == 1)] <- 'Manual'
+mtcars$am <- as.factor(mtcars$am)
+
+plot(unlist(sfrac_accu_base_all[1:10, ]), unlist(disc_exce_base_all[1:10, ]))
+
+gcm <- c(rep("EOBS", 10), 
+         rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
+)
+rcp <- c(rep("observed", 10),
+         rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
+)
+
+my_x <- unlist(peak_doy_all[1:10, ])
+my_y <- unlist(melt_sum_base_all[1:10, ])
+my_z <- unlist(peak_mag_all[1:10, ]) 
+my_c <- unlist(peak_mag_all[1:10, ]) 
+
+ord_peaks <- order(unlist(peak_mag_all[1:10, ]))
+
+my_data_frame <- data.frame(x = my_x,
+                            y = my_y,
+                            z = my_z,
+                            c = my_c,
+                            gcm = gcm,
+                            rcp = rcp,
+                            ord_peaks = ord_peaks)
+
+fig <- plot_ly(my_data_frame, x = ~x, y = ~y, z = ~z, color = ~gcm)
+fig <- plot_ly(my_data_frame, x = ~x, y = ~y, color = ~gcm)
+fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene = list(xaxis = list(title = 'DOY'),
+                                   yaxis = list(title = 'Melt'),
+                                   zaxis = list(title = 'Peak')))
+
+fig
+
+plot(unlist(melt_sum_base_all[1:10, ]), unlist(peak_doy_all[1:10, ]))
