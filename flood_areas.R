@@ -5,6 +5,8 @@
 
 ###
 
+#calc----
+
 for(ind_forc in 1:21){
   
   #Select gauge
@@ -365,7 +367,7 @@ for(ind_forc in 1:21){
       
       print(paste("Day", counter))
       
-      quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- 1
+      quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] + 1
       
     }
     
@@ -400,7 +402,6 @@ for(ind_forc in 1:21){
   
   rm(list = ls())
   
-  .rs.restartR()
+  # .rs.restartR()
 
 }
-
