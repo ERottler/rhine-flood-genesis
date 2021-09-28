@@ -10,7 +10,7 @@
 for(ind_forc in 1:21){
   
   #Select gauge
-  gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
+  gauge_sel <- "Kaub" #Options: Cologne, Kaub, Worms or Speyer
   
   #set_up----
   
@@ -44,6 +44,7 @@ for(ind_forc in 1:21){
 
   #dummy to collect results flood extent
   quan_exc_all <- NULL  
+  qtot_sum_all <- NULL  
   
   #get_data----
   
@@ -169,6 +170,21 @@ for(ind_forc in 1:21){
   disc_cube <- ncvar_get(nc_disc, start = c(1, 1, sta_date_ind), 
                          count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
   
+  #Fluxes and states
+  nc_flux_file <- paste0(nc_output_paths[ind_forc], "output/mHM_Fluxes_States.nc")
+  nc_flux <- nc_open(nc_flux_file)
+  
+  lon <- ncdf4::ncvar_get(nc_flux, varid = "lon")
+  lat <- ncdf4::ncvar_get(nc_flux, varid = "lat")
+  date_flux <- as.Date(as.character(nc.get.time.series(nc_flux, time.dim.name = "time")))
+  
+  sta_date_ind <- which(format(date_flux) == date_start)
+  count_date <- length(date_flux) - sta_date_ind + 1
+  
+  qto_cube <- ncvar_get(nc_flux, start = c(1, 1, sta_date_ind), 
+                        count = c(nrow(lon), ncol(lon), count_date), varid = "Q")
+  
+  #long-term mean
   disc_mea <- apply(disc_cube, c(1,2), mea_na)
   
   lobi_file <- paste0(grdc_dir, "6435060_Q_Day.Cmd.txt")
@@ -358,6 +374,7 @@ for(ind_forc in 1:21){
     ind_sel <- (peak_ind-10):peak_ind #10 days before
     
     quan_exc <- rep(0, length(c(disc_cube[ , , i]))) #flood extent
+    qtot_sum <- rep(0, length(c(qto_cube[ , , i]))) #discharge generated
     
     #loop over flood genesis period 
     counter <- 0
@@ -369,10 +386,13 @@ for(ind_forc in 1:21){
       
       quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] + 1
       
+      qtot_sum <- qtot_sum + c(qto_cube[ , , i])
+
     }
     
     #collect resutls of peaks
     quan_exc_all <- cbind(quan_exc_all, quan_exc)
+    qtot_sum_all <- cbind(qtot_sum_all, qtot_sum)
     
   }
   
@@ -380,18 +400,22 @@ for(ind_forc in 1:21){
   
   if(gauge_sel == "Cologne"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_col", ".csv"), quote = F, row.names = F)
+    write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_col", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Kaub"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_kau", ".csv"), quote = F, row.names = F)
+    write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_kau", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Worms"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_wor", ".csv"), quote = F, row.names = F)
+    write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_wor", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Speyer"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_spe", ".csv"), quote = F, row.names = F)
+    write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_spe", ".csv"), quote = F, row.names = F)
   }
   
   
