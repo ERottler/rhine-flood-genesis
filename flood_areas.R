@@ -9,8 +9,10 @@
 
 for(ind_forc in 1:21){
   
+  print(paste("Forcing", ind_forc))
+  
   #Select gauge
-  gauge_sel <- "Kaub" #Options: Cologne, Kaub, Worms or Speyer
+  gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
   
   #set_up----
   
@@ -39,19 +41,22 @@ for(ind_forc in 1:21){
   epsg3035 <- sp::CRS("+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 
                     +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
   
-  source("funcs.R")
+  source("U:/rhine_genesis/R/rhine-flood-genesis/funcs.R")
   
-
   #dummy to collect results flood extent
   quan_exc_all <- NULL  
   qtot_sum_all <- NULL  
-  
+  melt_sum_all <- NULL
+  lpre_sum_all <- NULL
+
   #get_data----
   
   if(ind_forc <= 6){
     date_start <- "1951-01-02" # historical
+    date_end <- "2000-12-31"
   }else{
-    date_start <- "2020-01-01" # GCM-RCP-based simulations
+    date_start <- "2050-01-01" # GCM-RCP-based simulations
+    date_end <- "2099-12-31"
   }
   
   #paths output files
@@ -139,7 +144,8 @@ for(ind_forc in 1:21){
   date_disc_eobs <- as.Date(as.character(nc.get.time.series(nc_disc_obs, time.dim.name = "time")))
   
   sta_date_ind <- which(format(date_disc_eobs) == "1951-01-02")
-  count_date <- length(date_disc_eobs) - sta_date_ind + 1
+  end_date_ind <- which(format(date_disc_eobs) == "2000-12-31")
+  count_date <- length(sta_date_ind:end_date_ind)
   
   disc_cube_obs <- ncvar_get(nc_disc_obs, start = c(1, 1, sta_date_ind), 
                              count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
@@ -165,7 +171,8 @@ for(ind_forc in 1:21){
   date_disc <- as.Date(as.character(nc.get.time.series(nc_disc, time.dim.name = "time")))
   
   sta_date_ind <- which(format(date_disc) == date_start)
-  count_date <- length(date_disc) - sta_date_ind + 1
+  end_date_ind <- which(format(date_disc) == date_end)
+  count_date <- length(sta_date_ind:end_date_ind)
   
   disc_cube <- ncvar_get(nc_disc, start = c(1, 1, sta_date_ind), 
                          count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
@@ -179,13 +186,13 @@ for(ind_forc in 1:21){
   date_flux <- as.Date(as.character(nc.get.time.series(nc_flux, time.dim.name = "time")))
   
   sta_date_ind <- which(format(date_flux) == date_start)
-  count_date <- length(date_flux) - sta_date_ind + 1
+  end_date_ind <- which(format(date_flux) == date_end)
+  count_date <- length(sta_date_ind:end_date_ind)
   
   qto_cube <- ncvar_get(nc_flux, start = c(1, 1, sta_date_ind), 
                         count = c(nrow(lon), ncol(lon), count_date), varid = "Q")
-  
-  #long-term mean
-  disc_mea <- apply(disc_cube, c(1,2), mea_na)
+  snow_cube <- ncvar_get(nc_flux, start = c(1, 1, sta_date_ind), 
+                         count = c(nrow(lon), ncol(lon), count_date), varid = "snowpack")
   
   lobi_file <- paste0(grdc_dir, "6435060_Q_Day.Cmd.txt")
   koel_file <- paste0(grdc_dir, "6335060_Q_Day.Cmd.txt")
@@ -335,8 +342,53 @@ for(ind_forc in 1:21){
   simu_neck <- ncvar_get(nc_disc, start = c(row_sel_neck, col_sel_neck, sta_date_ind), 
                          count = c(1, 1, count_date), varid = "Qrouted")
   
+  #Meteo input
+  nc_tavg_file <- paste0(nc_input_paths[ind_forc], "tavg.nc")
+  nc_prec_file <- paste0(nc_input_paths[ind_forc], "pre.nc")
+  
+  nc_tavg <- nc_open(nc_tavg_file)
+  nc_prec <- nc_open(nc_prec_file)
+  
+  # lon <- ncdf4::ncvar_get(nc_tavg, varid = "lon2D")
+  # lat <- ncdf4::ncvar_get(nc_tavg, varid = "lat2D")
+  date_meteo <- as.Date(as.character(nc.get.time.series(nc_tavg, time.dim.name = "time")))
+  
+  sta_date_ind <- which(format(date_meteo) == date_start)
+  end_date_ind <- which(format(date_meteo) == date_end)
+  count_date <- length(sta_date_ind:end_date_ind)
+  
+  temps_cube <- ncvar_get(nc_tavg, start = c(1, 1, sta_date_ind), 
+                          count = c(nrow(lon), ncol(lat), count_date), varid = "tavg")
+  precs_cube <- ncvar_get(nc_prec, start = c(1, 1, sta_date_ind), 
+                          count = c(nrow(lon), ncol(lat), count_date), varid = "pre")
+  
+  #snommelt and snow accumulation
+  snow_diff <- snow_cube
+  for(i in 1:nrow(snow_cube)){
+    # print(i)
+    for(k in 1:ncol(snow_cube)){
+      snow_diff[i, k, ] <- c(NA, diff(snow_cube[i, k, ]))
+    }
+  }
+  
+  #liquid precipitation
+  prec_liqu <- precs_cube
+  for(i in 1:nrow(precs_cube)){
+    # print(i)
+    for(k in 1:ncol(precs_cube)){
+      
+      temp_thresh <- 0.965483531537 #determined at calibration
+      
+      if(is.na(disc_cube[i, k, 1])){ #if outside watershed, put to NA
+        prec_liqu[i, k, ] <- NA
+      }else{
+        prec_liqu[i, k, which(temps_cube[i, k, ] < temp_thresh)] <- 0
+      }
+    }
+  }
+  
   #select runoff peaks
-  date_sel <- date_disc[which(format(date_disc) == date_start):length(date_disc)]
+  date_sel <- date_flux[which(format(date_flux) == date_start):which(format(date_flux) == date_end)]
   
   if(gauge_sel == "Cologne"){
     simu_sel <- simu_koel  
@@ -363,6 +415,13 @@ for(ind_forc in 1:21){
   
   pot_peaks_sel_ord <- pot_peaks_sel[order(pot_peaks_sel[, 2], decreasing = T), ]
   
+  #at least ten days before event need to be available
+  if(length(which(pot_peaks_sel_ord[, 3] < 10)) > 0){
+    
+    pot_peaks_sel_ord <- pot_peaks_sel_ord[-which(pot_peaks_sel_ord[, 3] < 10), ] 
+    
+  }
+  
   peaks_ind <- pot_peaks_sel_ord[1:10, 3] #ten peaks
   
   #Get values on flood extent for selected peaks
@@ -375,6 +434,8 @@ for(ind_forc in 1:21){
     
     quan_exc <- rep(0, length(c(disc_cube[ , , i]))) #flood extent
     qtot_sum <- rep(0, length(c(qto_cube[ , , i]))) #discharge generated
+    melt_sum <- rep(0, length(c(snow_diff[ , , i]))) #snowmelt
+    lpre_sum <- rep(0, length(c(prec_liqu[ , , i]))) #liquid precipitation
     
     #loop over flood genesis period 
     counter <- 0
@@ -387,12 +448,16 @@ for(ind_forc in 1:21){
       quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] + 1
       
       qtot_sum <- qtot_sum + c(qto_cube[ , , i])
+      melt_sum <- melt_sum + c(snow_diff[ , , i])
+      lpre_sum <- lpre_sum + c(prec_liqu[ , , i])
 
     }
     
     #collect resutls of peaks
     quan_exc_all <- cbind(quan_exc_all, quan_exc)
     qtot_sum_all <- cbind(qtot_sum_all, qtot_sum)
+    melt_sum_all <- cbind(melt_sum_all, melt_sum)
+    lpre_sum_all <- cbind(lpre_sum_all, lpre_sum)
     
   }
   
@@ -401,21 +466,29 @@ for(ind_forc in 1:21){
   if(gauge_sel == "Cologne"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_col", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_col", ".csv"), quote = F, row.names = F)
+    write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_col", ".csv"), quote = F, row.names = F)
+    write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_col", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Kaub"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_kau", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_kau", ".csv"), quote = F, row.names = F)
+    write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_kau", ".csv"), quote = F, row.names = F)
+    write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_kau", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Worms"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_wor", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_wor", ".csv"), quote = F, row.names = F)
+    write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_wor", ".csv"), quote = F, row.names = F)
+    write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_wor", ".csv"), quote = F, row.names = F)
   }
   
   if(gauge_sel == "Speyer"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_spe", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_spe", ".csv"), quote = F, row.names = F)
+    write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_spe", ".csv"), quote = F, row.names = F)
+    write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_spe", ".csv"), quote = F, row.names = F)
   }
   
   
