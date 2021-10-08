@@ -46,6 +46,7 @@ for(ind_forc in 1:21){
   #dummy to collect results flood extent
   quan_exc_all <- NULL  
   qtot_sum_all <- NULL  
+  qrou_sum_all <- NULL  
   melt_sum_all <- NULL
   lpre_sum_all <- NULL
 
@@ -434,6 +435,7 @@ for(ind_forc in 1:21){
     
     quan_exc <- rep(0, length(c(disc_cube[ , , i]))) #flood extent
     qtot_sum <- rep(0, length(c(qto_cube[ , , i]))) #discharge generated
+    qrou_sum <- rep(0, length(c(disc_cube[ , , i]))) #routed discharge
     melt_sum <- rep(0, length(c(snow_diff[ , , i]))) #snowmelt
     lpre_sum <- rep(0, length(c(prec_liqu[ , , i]))) #liquid precipitation
     
@@ -443,11 +445,12 @@ for(ind_forc in 1:21){
       
       counter = counter+1
       
-      print(paste("Day", counter))
+      # print(paste("Day", counter))
       
       quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] + 1
       
       qtot_sum <- qtot_sum + c(qto_cube[ , , i])
+      qrou_sum <- qrou_sum + c(disc_cube[ , , i])
       melt_sum <- melt_sum + c(snow_diff[ , , i])
       lpre_sum <- lpre_sum + c(prec_liqu[ , , i])
 
@@ -456,6 +459,7 @@ for(ind_forc in 1:21){
     #collect resutls of peaks
     quan_exc_all <- cbind(quan_exc_all, quan_exc)
     qtot_sum_all <- cbind(qtot_sum_all, qtot_sum)
+    qrou_sum_all <- cbind(qrou_sum_all, qrou_sum)
     melt_sum_all <- cbind(melt_sum_all, melt_sum)
     lpre_sum_all <- cbind(lpre_sum_all, lpre_sum)
     
@@ -466,6 +470,7 @@ for(ind_forc in 1:21){
   if(gauge_sel == "Cologne"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_col", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_col", ".csv"), quote = F, row.names = F)
+    write.csv(qrou_sum_all, paste0(paths_output_tables[ind_forc],"qrout_col", ".csv"), quote = F, row.names = F)
     write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_col", ".csv"), quote = F, row.names = F)
     write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_col", ".csv"), quote = F, row.names = F)
   }
@@ -473,6 +478,7 @@ for(ind_forc in 1:21){
   if(gauge_sel == "Kaub"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_kau", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_kau", ".csv"), quote = F, row.names = F)
+    write.csv(qrou_sum_all, paste0(paths_output_tables[ind_forc],"qrout_kau", ".csv"), quote = F, row.names = F)
     write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_kau", ".csv"), quote = F, row.names = F)
     write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_kau", ".csv"), quote = F, row.names = F)
   }
@@ -480,6 +486,7 @@ for(ind_forc in 1:21){
   if(gauge_sel == "Worms"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_wor", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_wor", ".csv"), quote = F, row.names = F)
+    write.csv(qrou_sum_all, paste0(paths_output_tables[ind_forc],"qrout_wor", ".csv"), quote = F, row.names = F)
     write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_wor", ".csv"), quote = F, row.names = F)
     write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_wor", ".csv"), quote = F, row.names = F)
   }
@@ -487,6 +494,7 @@ for(ind_forc in 1:21){
   if(gauge_sel == "Speyer"){
     write.csv(quan_exc_all, paste0(paths_output_tables[ind_forc],"areas_spe", ".csv"), quote = F, row.names = F)
     write.csv(qtot_sum_all, paste0(paths_output_tables[ind_forc],"qtota_spe", ".csv"), quote = F, row.names = F)
+    write.csv(qrou_sum_all, paste0(paths_output_tables[ind_forc],"qrout_spe", ".csv"), quote = F, row.names = F)
     write.csv(melt_sum_all, paste0(paths_output_tables[ind_forc],"smelt_spe", ".csv"), quote = F, row.names = F)
     write.csv(lpre_sum_all, paste0(paths_output_tables[ind_forc],"lipre_spe", ".csv"), quote = F, row.names = F)
   }

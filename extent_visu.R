@@ -97,11 +97,14 @@ for(i in 1:21){
     
 }
 
+#change sign snowmelt: negative accumulation and melt positive
+peaks_sno_all <- peaks_sno_all * -1
+
 #get peak timing (DOY)
-pea_doy <- read.table(paste0(tabs_dir, "peak_doy_all_kau.csv"), sep = ",", header = T)
+pea_doy <- read.table(paste0(tabs_dir, "peak_doy_all_col.csv"), sep = ",", header = T)
 
 #get warming level for peaks
-pea_war <- read.table(paste0(tabs_dir, "warm_lev_all_kau.csv"), sep = ",", header = T)
+pea_war <- read.table(paste0(tabs_dir, "warm_lev_all_col.csv"), sep = ",", header = T)
 
 #seasonal differences
 oct_mar_ind <- which(pea_doy > 273 | pea_doy < 91)
@@ -155,6 +158,7 @@ ref_qto_sum <- range(c(qto_oct_mar, qto_apr_sep, qto_sea_le1, qto_sea_le2))
 ref_lpr_sum <- range(c(lpr_oct_mar, lpr_apr_sep, lpr_sea_le1, lpr_sea_le2))
 ref_sno_sum <- range(c(sno_oct_mar, sno_apr_sep, sno_sea_le1, sno_sea_le2))
 
+ref_dif_sum <- range(c(qto_lev_dif, lpr_lev_dif, sno_lev_dif), na.rm = T)
 
 #qto
 cols_qto_oct_mar <- foreach(t = 1:length(qto_oct_mar), .combine = 'c') %dopar% {
@@ -205,7 +209,7 @@ cols_qto_le2 <- foreach(t = 1:length(qto_sea_le2), .combine = 'c') %dopar% {
 cols_qto_lev_dif <- foreach(t = 1:length(qto_lev_dif), .combine = 'c') %dopar% {
   
   val2col(val_in = qto_lev_dif[t],
-          dat_ref = range(qto_lev_dif),
+          dat_ref = range(ref_dif_sum),
           do_log = F,
           cols_sel = 1)
   
@@ -268,7 +272,7 @@ cols_lpr_le2 <- foreach(t = 1:length(lpr_sea_le2), .combine = 'c') %dopar% {
 cols_lpr_lev_dif <- foreach(t = 1:length(lpr_lev_dif), .combine = 'c') %dopar% {
   
   val2col(val_in = lpr_lev_dif[t],
-          dat_ref = range(lpr_lev_dif),
+          dat_ref = range(ref_dif_sum),
           do_log = F,
           cols_sel = 1)
   
@@ -331,7 +335,7 @@ cols_sno_le2 <- foreach(t = 1:length(sno_sea_le2), .combine = 'c') %dopar% {
 cols_sno_lev_dif <- foreach(t = 1:length(sno_lev_dif), .combine = 'c') %dopar% {
   
   val2col(val_in = sno_lev_dif[t],
-          dat_ref = range(sno_lev_dif),
+          dat_ref = range(ref_dif_sum),
           do_log = F,
           cols_sel = 1)
   
@@ -347,73 +351,28 @@ cols_sno_lev_dif[which(is.na(disc_cube_obs[ , , 100]))] <- NA
 
 #visu----
 
-#Total runoff generated
-
-png(paste0(bas_dir,"qtot_maps.png"), width = 16, height = 8,
+png(paste0(bas_dir,"floods_maps.png"), width = 16, height = 12,
     units = "in", res = 300)
 
-layout(matrix(c(rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
-                rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12),
-              2, 24, byrow = T), widths=c(), heights=c())
-
+layout(matrix(c(rep(19, 25),
+                20, rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
+                20, rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12,
+                20, rep(13, 7), 14, rep(15, 7), 16, rep(17, 7), 18),
+              4, 25, byrow = T), widths=c(0.2, 1, 1, 1), heights=c(0.2, 1, 1, 1))
+layout.show(n=20)
 par(family = "serif")
-cex_pch <- 0.75
+cex_pch <- 0.90
+col_river <- scales::alpha("black", alpha = 1.0)
+mar_1 <- c(0.5, 1.5, 2.0, 0.5)
+mar_2 <- c(2.0, 0.2, 5.0, 3.0)
 
-#Oct-Mar
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_qto_oct_mar, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("a) Oct-Mar", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
-my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#difference seasons
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_qto_sea_dif, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("b) Difference c - a", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
-cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
-my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(qto_sea_dif)), max_na(abs(qto_sea_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(qto_sea_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Apr-Sep
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_qto_apr_sep, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("c) Apr-Sep", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
-my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Oct-Mar below 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Total Runoff generated: Oct-Mar below 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_qto_le1, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) < 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
 my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
 alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
@@ -421,31 +380,29 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar difference warming levels
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Total Runoff generated: Oct-Mar difference warming levels
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_qto_lev_dif, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("e) Difference f - d", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(qto_lev_dif)), max_na(abs(qto_lev_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(qto_lev_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+my_bre <- seq(-max_na(abs(ref_dif_sum)), max_na(abs(ref_dif_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_dif_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
 axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar above 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Runoff: Oct-Mar above 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_qto_le2, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) > 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
 my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
 alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
@@ -454,78 +411,13 @@ mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
 
-dev.off()
-
-
-
-
-#Liquid precipitation
-
-png(paste0(bas_dir,"lprec_maps.png"), width = 16, height = 8,
-    units = "in", res = 300)
-
-layout(matrix(c(rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
-                rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12),
-              2, 24, byrow = T), widths=c(), heights=c())
-
-par(family = "serif")
-cex_pch <- 0.75
-
-#Oct-Mar
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_lpr_oct_mar, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("a) Oct-Mar", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
-my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#difference seasons
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_lpr_sea_dif, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("b) Difference c - a", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
-cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
-my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(lpr_sea_dif)), max_na(abs(lpr_sea_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(lpr_sea_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Apr-Sep
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_lpr_apr_sep, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("c) Apr-Sep", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
-my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Oct-Mar below 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Liquid Precipitation: Oct-Mar below 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_lpr_le1, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) < 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
 my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
 alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
@@ -533,31 +425,29 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar difference warming levels
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Liquid Precipitation: Oct-Mar difference warming levels
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_lpr_lev_dif, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("e) Difference f - d", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(lpr_lev_dif)), max_na(abs(lpr_lev_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(lpr_lev_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+my_bre <- seq(-max_na(abs(ref_dif_sum)), max_na(abs(ref_dif_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_dif_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
 axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar above 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Liquid Precipitation: Oct-Mar above 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_lpr_le2, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) > 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
 my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
 alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
@@ -566,83 +456,13 @@ mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
 
-dev.off()
-
-
-
-
-#Snowmelt
-
-png(paste0(bas_dir,"melt_maps.png"), width = 16, height = 8,
-    units = "in", res = 300)
-
-layout(matrix(c(rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
-                rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12),
-              2, 24, byrow = T), widths=c(), heights=c())
-# layout.show(n = 7)
-
-par(family = "serif")
-cex_pch <- 0.75
-
-#Oct-Mar
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_sno_oct_mar, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("a) Oct-Mar", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
-cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
-my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(ref_sno_sum)), max_na(abs(ref_sno_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_sno_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#difference seasons
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_sno_sea_dif, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("b) Difference c - a", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
-cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
-my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(sno_sea_dif)), max_na(abs(sno_sea_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(sno_sea_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Apr-Sep
-par(mar = c(0.5, 0.5, 1.0, 0.5))
-plot(c(lon), c(lat), pch = 15, col = cols_sno_apr_sep, cex = cex_pch,
-     axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("c) Apr-Sep", side = 3, line = -1.0, cex = 1.7)
-
-par(mar = c(2.0, 0.2, 5.0, 3.0))
-cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
-cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
-my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(ref_sno_sum)), max_na(abs(ref_sno_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_sno_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
-axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
-mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
-box()
-
-#Oct-Mar below 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Snow cover changes: Oct-Mar below 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_le1, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) < 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
@@ -652,31 +472,29 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar difference warming levels
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Snow cover changes: Oct-Mar difference warming levels
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_lev_dif, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("e) Difference f - d", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(sno_lev_dif)), max_na(abs(sno_lev_dif)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(sno_lev_dif), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+my_bre <- seq(-max_na(abs(ref_dif_sum)), max_na(abs(ref_dif_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_dif_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
 axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Oct-Mar above 2 °C warming
-par(mar = c(0.5, 0.5, 1.0, 0.5))
+#Snow cover changes: Oct-Mar above 2 °C warming
+par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_le2, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
-plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
-mtext("d) > 2 °C", side = 3, line = -1.0, cex = 1.7)
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
 
-par(mar = c(2.0, 0.2, 5.0, 3.0))
+par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
@@ -686,5 +504,19 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
+par(mar = c(0, 0, 0, 0))
+
+#Description on top
+plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "", cex = 1.7)
+mtext("a) Below 2°C warming", side = 3, line = -2.0, adj = 0.0, cex = 1.7)
+mtext("b) Difference (c-a)", side = 3, line = -2.0, adj = 0.5, cex = 1.7)
+mtext("c) Above 2°C warming", side = 3, line = -2.0, adj = 1.0, cex = 1.7)
+
+#Description left
+plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "", cex = 2.0)
+mtext("1. Snow cover changes", side = 2, line = -2.0, adj = 0.0, cex = 2.0)
+mtext("2. Liquid precipitation", side = 2, line = -2.0, adj = 0.5, cex = 2.0)
+mtext("3. Discharge generated", side = 2, line = -2.0, adj = 1.0, cex = 2.0)
 
 dev.off()
+
