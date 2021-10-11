@@ -328,6 +328,8 @@ if(gauge_sel == "Speyer"){
 #loop over GCM-RCP combinations
 for(f in 1:21){
 
+print(paste0("Forcing: ", f))
+  
 #Select gauge
 gauge_sel <- "Speyer" #Options: Cologne, Kaub, Worms or Speyer
   
@@ -367,8 +369,10 @@ ind_forc <- f
 
 if(ind_forc <= 6){
   date_start <- "1951-01-02" # historical
+  date_end <- "2000-12-31"
 }else{
-  date_start <- "2020-01-01" # GCM-RCP-based simulations
+  date_start <- "2050-01-01" # GCM-RCP-based simulations
+  date_end <- "2099-12-31"
 }
 
 #paths output files
@@ -544,7 +548,8 @@ lat <- ncdf4::ncvar_get(nc_flux, varid = "lat")
 date_flux <- as.Date(as.character(nc.get.time.series(nc_flux, time.dim.name = "time")))
 
 sta_date_ind <- which(format(date_flux) == date_start)
-count_date <- length(date_flux) - sta_date_ind + 1
+end_date_ind <- which(format(date_flux) == date_end)
+count_date <- length(sta_date_ind:end_date_ind)
 
 snow_cube <- ncvar_get(nc_flux, start = c(1, 1, sta_date_ind), 
                        count = c(nrow(lon), ncol(lon), count_date), varid = "snowpack")
@@ -560,7 +565,8 @@ lat <- ncdf4::ncvar_get(nc_disc, varid = "lat")
 date_disc <- as.Date(as.character(nc.get.time.series(nc_disc, time.dim.name = "time")))
 
 sta_date_ind <- which(format(date_disc) == date_start)
-count_date <- length(date_disc) - sta_date_ind + 1
+end_date_ind <- which(format(date_disc) == date_end)
+count_date <- length(sta_date_ind:end_date_ind)
 
 disc_cube <- ncvar_get(nc_disc, start = c(1, 1, sta_date_ind), 
                        count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
@@ -727,7 +733,8 @@ nc_prec <- nc_open(nc_prec_file)
 date_meteo <- as.Date(as.character(nc.get.time.series(nc_tavg, time.dim.name = "time")))
 
 sta_date_ind <- which(format(date_meteo) == date_start)
-count_date <- length(date_meteo) - sta_date_ind + 1
+end_date_ind <- which(format(date_meteo) == date_end)
+count_date <- length(sta_date_ind:end_date_ind)
 
 temps_cube <- ncvar_get(nc_tavg, start = c(1, 1, sta_date_ind), 
                         count = c(nrow(lon), ncol(lat), count_date), varid = "tavg")
@@ -929,28 +936,29 @@ lon <- ncdf4::ncvar_get(nc_disc_obs, varid = "lon")
 lat <- ncdf4::ncvar_get(nc_disc_obs, varid = "lat")
 date_disc <- as.Date(as.character(nc.get.time.series(nc_disc_obs, time.dim.name = "time")))
 
-sta_date_ind <- which(format(date_disc) == "1951-01-02")
-count_date <- length(date_disc) - sta_date_ind + 1
+sta_date_ind_obs <- which(format(date_disc) == "1951-01-02")
+end_date_ind_obs <- which(format(date_disc) == "2000-12-31")
+count_date_obs <- length(sta_date_ind:end_date_ind)
 
-disc_cube_obs <- ncvar_get(nc_disc_obs, start = c(1, 1, sta_date_ind), 
-                           count = c(nrow(lon), ncol(lon), count_date), varid = "Qrouted")
+disc_cube_obs <- ncvar_get(nc_disc_obs, start = c(1, 1, sta_date_ind_obs), 
+                           count = c(nrow(lon), ncol(lon), count_date_obs), varid = "Qrouted")
 
-simu_koel_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[2], cols_sel_gaugs[2], sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_kaub_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[4], cols_sel_gaugs[4], sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_worm_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[6], cols_sel_gaugs[6], sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_spey_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[8], cols_sel_gaugs[8], sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_base_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[9], cols_sel_gaugs[9], sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_mose_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_mose, col_sel_mose, sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_main_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_main, col_sel_main, sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
-simu_neck_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_neck, col_sel_neck, sta_date_ind), 
-                           count = c(1, 1, count_date), varid = "Qrouted")
+simu_koel_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[2], cols_sel_gaugs[2], sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_kaub_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[4], cols_sel_gaugs[4], sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_worm_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[6], cols_sel_gaugs[6], sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_spey_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[8], cols_sel_gaugs[8], sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_base_obs <- ncvar_get(nc_disc_obs, start = c(rows_sel_gaugs[9], cols_sel_gaugs[9], sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_mose_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_mose, col_sel_mose, sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_main_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_main, col_sel_main, sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
+simu_neck_obs <- ncvar_get(nc_disc_obs, start = c(row_sel_neck, col_sel_neck, sta_date_ind_obs), 
+                           count = c(1, 1, count_date_obs), varid = "Qrouted")
 
 simu_base_rel <- simu_base / mea_na(simu_base_obs)
 simu_mose_rel <- simu_mose / mea_na(simu_mose_obs)
@@ -976,7 +984,7 @@ disc_qua <- apply(disc_cube_obs, c(1,2), f_qthres)
 #data_calc_vis----
 
 #select runoff peaks
-date_sel <- date_flux[which(format(date_flux) == date_start):length(date_flux)]
+date_sel <- date_flux[which(format(date_flux) == date_start):which(format(date_flux) == date_end)]
 
 if(gauge_sel == "Cologne"){
   simu_sel <- simu_koel  
@@ -1002,6 +1010,13 @@ pot_data_sel <- data.frame(obs = simu_sel,
 pot_peaks_sel <- clust(data = pot_data_sel, u = pot_thre_sel, tim.cond = 21, clust.max = T, plot = F)
 
 pot_peaks_sel_ord <- pot_peaks_sel[order(pot_peaks_sel[, 2], decreasing = T), ]
+
+#at least ten days before event need to be available
+if(length(which(pot_peaks_sel_ord[, 3] < 10)) > 0){
+  
+  pot_peaks_sel_ord <- pot_peaks_sel_ord[-which(pot_peaks_sel_ord[, 3] < 10), ] 
+  
+}
 
 peaks_ind <- pot_peaks_sel_ord[1:10, 3] #ten peaks
 
@@ -1070,7 +1085,7 @@ for(p in 1:length(peaks_ind)){
     
     counter = counter+1
     
-    print(paste("Graph", counter))
+    # print(paste("Graph", counter))
     
     #cumulative maps
     prec_sel <- prec_sel + c(prec_liqu[ , , i])
