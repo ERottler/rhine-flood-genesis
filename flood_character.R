@@ -9,98 +9,102 @@ pacman::p_load(alptempr, meltimr)
 
 # tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 tabs_dir = "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
+base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/"
+
+#load data tables for synthesis plots
+load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
 
 #read_tables----
 
-peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_spe.csv"), sep = ",", header = T)
-peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_spe.csv"), sep = ",", header = T)
-
-warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all_spe.csv"), sep = ",", header = T)
-warm_lev_all <- warm_lev_all + 0.46  #historic period warmer by 0.46 °C already
-
-flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all_spe.csv"), sep = ",", header = T)
-
-sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_koel_all_spe.csv"), sep = ",", header = T)
-sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all_spe.csv"), sep = ",", header = T)
-sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all_spe.csv"), sep = ",", header = T)
-sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all_spe.csv"), sep = ",", header = T)
-sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all_spe.csv"), sep = ",", header = T)
-
-melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all_spe.csv"), sep = ",", header = T)
-melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all_spe.csv"), sep = ",", header = T)
-melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all_spe.csv"), sep = ",", header = T)
-melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all_spe.csv"), sep = ",", header = T)
-
-pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all_spe.csv"), sep = ",", header = T)
-pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all_spe.csv"), sep = ",", header = T)
-pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all_spe.csv"), sep = ",", header = T)
-pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all_spe.csv"), sep = ",", header = T)
-
-pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all_spe.csv"), sep = ",", header = T)
-pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all_spe.csv"), sep = ",", header = T)
-pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all_spe.csv"), sep = ",", header = T)
-pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all_spe.csv"), sep = ",", header = T)
-
-disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all_spe.csv"), sep = ",", header = T)
-disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all_spe.csv"), sep = ",", header = T)
-disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all_spe.csv"), sep = ",", header = T)
-disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all_spe.csv"), sep = ",", header = T)
-
-date_peak_all <- read.table(paste0(tabs_dir, "date_peak_all_spe.csv"), sep = ",", header = T, stringsAsFactors = F)
+# peak_mag_all <- read.table(paste0(tabs_dir,"peak_mag_all_col.csv"), sep = ",", header = T)
+# peak_doy_all <- read.table(paste0(tabs_dir,"peak_doy_all_col.csv"), sep = ",", header = T)
+# 
+# warm_lev_all <- read.table(paste0(tabs_dir,"warm_lev_all_col.csv"), sep = ",", header = T)
+# warm_lev_all <- warm_lev_all + 0.46  #historic period warmer by 0.46 °C already
+# 
+# flood_frac_max_all <- read.table(paste0(tabs_dir,"flood_frac_max_all_col.csv"), sep = ",", header = T)
+# 
+# sfrac_accu_all <- read.table(paste0(tabs_dir, "sfrac_accu_koel_all_col.csv"), sep = ",", header = T)
+# sfrac_accu_base_all <- read.table(paste0(tabs_dir, "sfrac_accu_base_all_col.csv"), sep = ",", header = T)
+# sfrac_accu_mose_all <- read.table(paste0(tabs_dir, "sfrac_accu_mose_all_col.csv"), sep = ",", header = T)
+# sfrac_accu_neck_all <- read.table(paste0(tabs_dir, "sfrac_accu_neck_all_col.csv"), sep = ",", header = T)
+# sfrac_accu_main_all <- read.table(paste0(tabs_dir, "sfrac_accu_main_all_col.csv"), sep = ",", header = T)
+# 
+# melt_sum_base_all <- read.table(paste0(tabs_dir, "melt_sum_base_all_col.csv"), sep = ",", header = T)
+# melt_sum_mose_all <- read.table(paste0(tabs_dir, "melt_sum_mose_all_col.csv"), sep = ",", header = T)
+# melt_sum_main_all <- read.table(paste0(tabs_dir, "melt_sum_main_all_col.csv"), sep = ",", header = T)
+# melt_sum_neck_all <- read.table(paste0(tabs_dir, "melt_sum_neck_all_col.csv"), sep = ",", header = T)
+# 
+# pliq_sum_base_all <- read.table(paste0(tabs_dir, "pliq_sum_base_all_col.csv"), sep = ",", header = T)
+# pliq_sum_mose_all <- read.table(paste0(tabs_dir, "pliq_sum_mose_all_col.csv"), sep = ",", header = T)
+# pliq_sum_main_all <- read.table(paste0(tabs_dir, "pliq_sum_main_all_col.csv"), sep = ",", header = T)
+# pliq_sum_neck_all <- read.table(paste0(tabs_dir, "pliq_sum_neck_all_col.csv"), sep = ",", header = T)
+# 
+# pliq_frac_base_all <- read.table(paste0(tabs_dir, "pliq_frac_base_all_col.csv"), sep = ",", header = T)
+# pliq_frac_mose_all <- read.table(paste0(tabs_dir, "pliq_frac_mose_all_col.csv"), sep = ",", header = T)
+# pliq_frac_main_all <- read.table(paste0(tabs_dir, "pliq_frac_main_all_col.csv"), sep = ",", header = T)
+# pliq_frac_neck_all <- read.table(paste0(tabs_dir, "pliq_frac_neck_all_col.csv"), sep = ",", header = T)
+# 
+# disc_exce_base_all <- read.table(paste0(tabs_dir, "disc_exce_base_all_col.csv"), sep = ",", header = T)
+# disc_exce_mose_all <- read.table(paste0(tabs_dir, "disc_exce_mose_all_col.csv"), sep = ",", header = T)
+# disc_exce_main_all <- read.table(paste0(tabs_dir, "disc_exce_main_all_col.csv"), sep = ",", header = T)
+# disc_exce_neck_all <- read.table(paste0(tabs_dir, "disc_exce_neck_all_col.csv"), sep = ",", header = T)
+# 
+# date_peak_all <- read.table(paste0(tabs_dir, "date_peak_all_col.csv"), sep = ",", header = T, stringsAsFactors = F)
 
 
 
 #dates_from_files----
 
-img_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/worms/"
-
-gcm_rcp_paths <- c("EOBS",
-                   "GFDL-ESM2M/historical/",
-                   "HadGEM2-ES/historical/",
-                   "IPSL-CM5A-LR/historical/",
-                   "MIROC-ESM-CHEM/historical/",
-                   "NorESM1-M/historical/",
-                   "GFDL-ESM2M/rcp2p6/",
-                   "HadGEM2-ES/rcp2p6/",
-                   "IPSL-CM5A-LR/rcp2p6/",
-                   "MIROC-ESM-CHEM/rcp2p6/",
-                   "NorESM1-M/rcp2p6/",
-                   "GFDL-ESM2M/rcp6p0/",
-                   "HadGEM2-ES/rcp6p0/",
-                   "IPSL-CM5A-LR/rcp6p0/",
-                   "MIROC-ESM-CHEM/rcp6p0/",
-                   "NorESM1-M/rcp6p0/",
-                   "GFDL-ESM2M/rcp8p5/",
-                   "HadGEM2-ES/rcp8p5/",
-                   "IPSL-CM5A-LR/rcp8p5/",
-                   "MIROC-ESM-CHEM/rcp8p5/",
-                   "NorESM1-M/rcp8p5/")
-
-date_peak_all <- as.data.frame(matrix(data = NA, nrow = 10,  ncol = 21))
-
-for(i in 1:length(gcm_rcp_paths)){
-  
-  for(r in 1:10){
-    
-    imgs <- list.files(paste0(img_dir, gcm_rcp_paths[i], "/flood_", r), pattern = ".png", full.names = F)
-    
-    dates_imgs <- NA
-    for(p in 1:length(imgs)){
-      
-      date_sel <- as.Date(substr(imgs[p], 7, 14), "%Y%m%d")
-      
-      date_max <- structure(max(dates_imgs, date_sel, na.rm = T), class = "Date")
-      
-    }
-    
-    date_peak_all[r, i] <- as.character(date_max)
-    
-  }
-  
-    
-  }
-  
-write.csv(date_peak_all, paste0(tabs_dir, "date_peak_all_wor.csv"), quote = F, row.names = F)
+# img_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/speyer/"
+# 
+# gcm_rcp_paths <- c("EOBS",
+#                    "GFDL-ESM2M/historical/",
+#                    "HadGEM2-ES/historical/",
+#                    "IPSL-CM5A-LR/historical/",
+#                    "MIROC-ESM-CHEM/historical/",
+#                    "NorESM1-M/historical/",
+#                    "GFDL-ESM2M/rcp2p6/",
+#                    "HadGEM2-ES/rcp2p6/",
+#                    "IPSL-CM5A-LR/rcp2p6/",
+#                    "MIROC-ESM-CHEM/rcp2p6/",
+#                    "NorESM1-M/rcp2p6/",
+#                    "GFDL-ESM2M/rcp6p0/",
+#                    "HadGEM2-ES/rcp6p0/",
+#                    "IPSL-CM5A-LR/rcp6p0/",
+#                    "MIROC-ESM-CHEM/rcp6p0/",
+#                    "NorESM1-M/rcp6p0/",
+#                    "GFDL-ESM2M/rcp8p5/",
+#                    "HadGEM2-ES/rcp8p5/",
+#                    "IPSL-CM5A-LR/rcp8p5/",
+#                    "MIROC-ESM-CHEM/rcp8p5/",
+#                    "NorESM1-M/rcp8p5/")
+# 
+# date_peak_all <- as.data.frame(matrix(data = NA, nrow = 10,  ncol = 21))
+# 
+# for(i in 1:length(gcm_rcp_paths)){
+#   
+#   for(r in 1:10){
+#     
+#     imgs <- list.files(paste0(img_dir, gcm_rcp_paths[i], "/flood_", r), pattern = ".png", full.names = F)
+#     
+#     dates_imgs <- NA
+#     for(p in 1:length(imgs)){
+#       
+#       date_sel <- as.Date(substr(imgs[p], 7, 14), "%Y%m%d")
+#       
+#       date_max <- structure(max(dates_imgs, date_sel, na.rm = T), class = "Date")
+#       
+#     }
+#     
+#     date_peak_all[r, i] <- as.character(date_max)
+#     
+#   }
+#   
+#     
+#   }
+#   
+# write.csv(date_peak_all, paste0(tabs_dir, "date_peak_all_spe.csv"), quote = F, row.names = F)
 
 #mag_ext----
 
@@ -117,10 +121,10 @@ for(i in 1:21){
 
 #excess_all----
 
-disc_exce_all <- data.frame(exce_base = unlist(disc_exce_base_all[1:10, ]),
-                            exce_mose = unlist(disc_exce_mose_all[1:10, ]),
-                            exce_neck = unlist(disc_exce_neck_all[1:10, ]),
-                            exce_main = unlist(disc_exce_main_all[1:10, ]))
+disc_exce_all <- data.frame(exce_base = unlist(disc_exce_base_all_col[1:10, ]),
+                            exce_mose = unlist(disc_exce_mose_all_col[1:10, ]),
+                            exce_neck = unlist(disc_exce_neck_all_col[1:10, ]),
+                            exce_main = unlist(disc_exce_main_all_col[1:10, ]))
 
 ylims <- range(disc_exce_all, na.rm = T)
 
@@ -130,7 +134,7 @@ axis(1, at = c(1, 2, 3, 4), labels = c("High Rhine", "Moselle", "Neckar", "Main"
      mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.2)
 grid(nx = 0, ny = 6, col = "grey55", lwd = 0.6, lty = "dashed")  
 mtext("Excess runoff", side = 3, line = 0.2, cex = 1.2)
-box()
+graphics::box()
 
 boxplot(disc_exce_all[, 1], ylim = ylims, col = "darkblue", axes = F, xaxt = "n", add = TRUE, 
         at = 1, boxwex = 1.5, whisklwd = 2, staplelwd = 2, whisklty = 1, notch = T,
@@ -148,14 +152,14 @@ boxplot(disc_exce_all[, 4], ylim = ylims, col = "darkblue", axes = F, xaxt = "n"
 
 #lpr_melt_all----
 
-melt_pliq_all <- data.frame(pliq_base = unlist(pliq_sum_base_all[1:10, ]),
-                            melt_base = unlist(melt_sum_base_all[1:10, ]),
-                            pliq_mose = unlist(pliq_sum_mose_all[1:10, ]),
-                            melt_mose = unlist(melt_sum_mose_all[1:10, ]),
-                            pliq_neck = unlist(pliq_sum_neck_all[1:10, ]),
-                            melt_neck = unlist(melt_sum_neck_all[1:10, ]),
-                            pliq_main = unlist(pliq_sum_main_all[1:10, ]),
-                            melt_main = unlist(melt_sum_main_all[1:10, ]))
+melt_pliq_all <- data.frame(pliq_base = unlist(pliq_sum_base_all_col[1:10, ]),
+                            melt_base = unlist(melt_sum_base_all_col[1:10, ]),
+                            pliq_mose = unlist(pliq_sum_mose_all_col[1:10, ]),
+                            melt_mose = unlist(melt_sum_mose_all_col[1:10, ]),
+                            pliq_neck = unlist(pliq_sum_neck_all_col[1:10, ]),
+                            melt_neck = unlist(melt_sum_neck_all_col[1:10, ]),
+                            pliq_main = unlist(pliq_sum_main_all_col[1:10, ]),
+                            melt_main = unlist(melt_sum_main_all_col[1:10, ]))
 
 ylims <- range(melt_pliq_all, na.rm = T)
 
@@ -210,7 +214,7 @@ axis(1, at = c(1, 2, 3, 4), labels = c("High Rhine", "Moselle", "Neckar", "Main"
      mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.2)
 grid(nx = 0, ny = 6, col = "grey55", lwd = 0.6, lty = "dashed")  
 mtext("Snowmelt fraction", side = 3, line = 0.2, cex = 1.2)
-box()
+graphics::box()
 
 boxplot(melt_frac_all[, 1], ylim = ylims, col = "grey55", axes = F, xaxt = "n", add = TRUE, 
         at = 1, boxwex = 1.5, whisklwd = 2, staplelwd = 2, whisklty = 1, notch = T,
@@ -244,7 +248,7 @@ axis(2, mgp=c(3, 0.25, 0), tck = -0.01, cex.axis = 1.5)
 abline(v = x_axis_tic, lty = "dashed", lwd = 0.7, col = "grey55")
 abline(h = c(8000, 10000, 12000, 12000, 14000), lty = "dashed", lwd = 0.7, col = "grey55")
 mtext(expression(paste("Discharge ", "[m"^"3", "s"^"-1","]")), side = 2, line = 2.0, cex = 1.2)
-box(lwd = 0.8)
+graphics::box(lwd = 0.8)
 
 points(points(peak_doy_vec[1], peak_mag_vec[1], col = scales::alpha("darkred", 0.8), pch = 19)) # Jan 1995
 points(points(peak_doy_vec[3], peak_mag_vec[3], col = scales::alpha("darkred", 0.8), pch = 19)) # Dec 1993
@@ -257,9 +261,11 @@ peak_mag_vec <- unlist(peak_mag_all[1:10, 7:21])
 peak_doy_vec <- unlist(peak_doy_all[1:10, 7:21])
 warm_lev_vec <- unlist(warm_lev_all[1:10, 7:21])
 
-wl1_ind <- which(warm_lev_vec < 2.0 & (peak_doy_vec > 334 | peak_doy_vec < 91))
-wl2_ind <- which(warm_lev_vec > 2.0 & warm_lev_vec < 3.0 & (peak_doy_vec > 334 | peak_doy_vec < 91))
-wl3_ind <- which(warm_lev_vec > 3.0 & (peak_doy_vec > 334 | peak_doy_vec < 91))
+day_lim_1 <- 1
+day_lim_2 <- 365
+wl1_ind <- which(warm_lev_vec < 1.5 & (peak_doy_vec > day_lim_1 | peak_doy_vec < day_lim_2))
+wl2_ind <- which(warm_lev_vec > 1.5 & warm_lev_vec < 3.0 & (peak_doy_vec > day_lim_1 | peak_doy_vec < day_lim_2))
+wl3_ind <- which(warm_lev_vec > 3.0 & (peak_doy_vec > day_lim_1 | peak_doy_vec < day_lim_2))
 
 ylims <- range(peak_mag_vec, na.rm = T)
 
@@ -282,7 +288,6 @@ boxplot(peak_mag_vec[wl2_ind], ylim = ylims, col = "orange3", axes = F, xaxt = "
 boxplot(peak_mag_vec[wl3_ind], ylim = ylims, col = "darkred", axes = F, xaxt = "n", add = TRUE, 
         at = 3, boxwex = 1.5, whisklwd = 2, staplelwd = 2, whisklty = 1, notch = T,
         outpch = 19)
-
 
 
 

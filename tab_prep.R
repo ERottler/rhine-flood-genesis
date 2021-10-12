@@ -9,12 +9,12 @@ pacman::p_load(alptempr, meltimr, lubridate, plyr)
 
 #dates_from_files----
 
-tabs_dir = "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
+tabs_dir = "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
 
-img_dir_col <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/cologne/"
-img_dir_kau <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/kaub/"
-img_dir_wor <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/worms/"
-img_dir_spe <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/speyer/"
+img_dir_col <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/cologne/"
+img_dir_kau <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/kaub/"
+img_dir_wor <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/worms/"
+img_dir_spe <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/figs/speyer/"
 
 gcm_rcp_paths <- c("EOBS",
                    "GFDL-ESM2M/historical/",
@@ -181,7 +181,7 @@ write.csv(temp_yea_mea, paste0(tabs_dir, "temp_yea_mea.csv"), quote = F, row.nam
 
 rm(list = ls())
 
-tabs_dir = "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
+tabs_dir = "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/"
 
 temp_yea_mea <- read.table(paste0(tabs_dir,"temp_yea_mea.csv"), sep = ",", header = T)
 
@@ -347,4 +347,4 @@ date_peak_all_spe <- read.table(paste0(tabs_dir, "date_peak_all_spe.csv"), sep =
 
 #save----
 
-save.image(file = "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/synt_tables.RData")
+save.image(file = "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/www/exp_tabs/synt_tables.RData")
