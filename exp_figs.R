@@ -8,7 +8,7 @@
 #settings----
 pacman::p_load(scales, alptempr, vioplot)
 
-base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/"
+base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/"
 
 #load data tables for synthesis plots
 load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
@@ -33,12 +33,13 @@ min_histor <- apply(temp_yea_mea[3:7], 1, min_na)
 mea_histor <- apply(temp_yea_mea[3:7], 1, mea_na)
 
 
-png(paste0(base_dir, "exp_figs/temp_forc.png"), width = 8, height = 4.5,
+png(paste0(base_dir, "exp_figs/temp_forc.png"), width = 9, height = 5.5,
     units = "in", res = 300)
 
 par(mar = c(3.2, 4, 2.0, 1.0))
 par(family = "serif")
 lwd_mea <- 1.7
+par(bg = "transparent")
 
 plot(temp_yea_mea[, 2], type = "n", ylim = temp_lims, axes = F, ylab = "", xlab = "")
 
@@ -66,7 +67,7 @@ lines(temp_yea_mea[1:56, 2], col = "black", lwd = lwd_mea, lty = "dotted")
 axis(1, at = c(2, 51, 101, 150), labels = c("1951", "2000", "2050", "2099"), mgp=c(3, 0.70, 0), tck = -0.012, cex.axis = 1.7)
 axis(2, at = c(6, 8, 10, 12, 14), labels = c(6, 8, 10, 12, 14), mgp=c(3, 0.40, 0), tck = -0.012, cex.axis = 1.7)
 
-mtext("Annual average temperature", 
+mtext("b) Annual average temperatures", 
       side = 3, line = 0.3, cex = 1.7, adj = 0.0)
 mtext("Year", 
       side = 1, line = 2.1, cex = 1.7, adj = 0.5)
@@ -419,7 +420,7 @@ dev.off()
 
 
 
-#excess_disc----
+#disc_lpre_melt----
 
 #seasonal differences
 oct_mar_ind <- which(peak_doy_all_col > 273 | peak_doy_all_col < 91)
@@ -443,57 +444,6 @@ disc_exce_le2 <- data.frame(exce_base = unlist(disc_exce_base_all_col[1:10, ])[l
                             exce_neck = unlist(disc_exce_neck_all_col[1:10, ])[le2_sea_ind],
                             exce_main = unlist(disc_exce_main_all_col[1:10, ])[le2_sea_ind]) * 3600 * 24 / 1000000
 
-png(paste0(base_dir, "exp_figs/exces_disc.png"), width = 8, height = 4.5,
-    units = "in", res = 300)
-
-par(mar = c(3.2, 4, 2.0, 1.0))
-par(family = "serif")
-
-ylims <- range(c(disc_exce_le1, disc_exce_le2), na.rm = T)
-col_disc_le1 <- "lightblue3"
-col_disc_le2 <- "deepskyblue4"
-
-boxplot(disc_exce_le1, boxfill = NA, border = NA, axes = F, ylim = ylims, xlim = c(1, 13))
-axis(2, mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.5)
-axis(1, at = c(2.5, 5.5, 8.5, 11.5), labels = c("High Rhine", "Moselle", "Neckar", "Main"),
-     mgp=c(3, 0.95, 0), tck = -0.017, cex.axis = 1.7)
-abline(h = c(500, 1000, 1500, 2000, 2500, 3000), col = "grey55", lwd = 0.6, lty = "dashed")  
-mtext("Excess runoff during peak formation", side = 3, line = 0.2, cex = 1.7, adj = 0.0)
-mtext(expression(paste("Total discharge [", "10"^"6","m"^"3", "]")), side = 2, line = 2.1, cex = 1.7, adj = 0.5)
-graphics::box()
-
-legend("topright", c("Discharge (< 3°C)", "Discharge (> 3°C)"), 
-       pch = 19, col = c(col_disc_le1, col_disc_le2), 
-       bg = "white", box.col = "white", cex = 1.3)
-
-col_med <- "grey70"
-vioplot(disc_exce_le1[, 1], add = T, at = 2, col = col_disc_le1, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le2[, 1], add = T, at = 3, col = col_disc_le2, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le1[, 2], add = T, at = 5, col = col_disc_le1, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le2[, 2], add = T, at = 6, col = col_disc_le2, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le1[, 3], add = T, at = 8, col = col_disc_le1, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le2[, 3], add = T, at = 9, col = col_disc_le2, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le1[, 4], add = T, at = 11, col = col_disc_le1, colMed = col_med, cex = 0.8)
-vioplot(disc_exce_le2[, 4], add = T, at = 12, col = col_disc_le2, colMed = col_med, cex = 0.8)
-
-dev.off()
-
-
-
-#lpr_melt----
-
-#seasonal differences
-oct_mar_ind <- which(peak_doy_all_col > 273 | peak_doy_all_col < 91)
-apr_sep_ind <- which(peak_doy_all_col > 90  & peak_doy_all_col < 273)
-
-#warming level
-le1_ind <- which(warm_lev_all_col < 3.0)
-le2_ind <- which(warm_lev_all_col > 3.0)
-
-#only season oct - mar
-le1_sea_ind <- le1_ind[which(le1_ind %in% oct_mar_ind)]
-le2_sea_ind <- le2_ind[which(le2_ind %in% oct_mar_ind)]
-
 melt_pliq_le1 <- data.frame(pliq_base = unlist(pliq_sum_base_all_col[1:10, ])[le1_sea_ind],
                             melt_base = unlist(melt_sum_base_all_col[1:10, ])[le1_sea_ind],
                             pliq_mose = unlist(pliq_sum_mose_all_col[1:10, ])[le1_sea_ind],
@@ -512,31 +462,60 @@ melt_pliq_le2 <- data.frame(pliq_base = unlist(pliq_sum_base_all_col[1:10, ])[le
                             pliq_main = unlist(pliq_sum_main_all_col[1:10, ])[le2_sea_ind],
                             melt_main = unlist(melt_sum_main_all_col[1:10, ])[le2_sea_ind])
 
-png(paste0(base_dir, "exp_figs/lprec_melt.png"), width = 8, height = 4.5,
+png(paste0(base_dir, "exp_figs/disc_lprec_melt.png"), width = 16, height = 4.5,
     units = "in", res = 300)
 
-par(mar = c(3.2, 4, 2.0, 1.0))
+par(mfrow = c(1, 2))
+par(mar = c(3.0, 4, 2.0, 1.0))
 par(family = "serif")
 
+ylims <- range(c(disc_exce_le1, disc_exce_le2), na.rm = T)
+col_disc_le1 <- "grey60"
+col_disc_le2 <- "grey29"
+
+boxplot(disc_exce_le1, boxfill = NA, border = NA, axes = F, ylim = ylims, xlim = c(1, 13))
+axis(2, mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.5)
+axis(1, at = c(2.5, 5.5, 8.5, 11.5), labels = c("High Rhine", "Moselle", "Neckar", "Main"),
+     mgp=c(3, 0.95, 0), tck = -0.017, cex.axis = 1.9)
+abline(h = c(500, 1000, 1500, 2000, 2500, 3000), col = "grey55", lwd = 0.6, lty = "dashed")  
+mtext("a) Cumul. excess runoff during peak formation", side = 3, line = 0.3, cex = 1.9, adj = 0.0)
+mtext(expression(paste("Excess runoff [", "10"^"6","m"^"3", "]")), side = 2, line = 2.1, cex = 1.9, adj = 0.5)
+graphics::box()
+
+legend("topright", c("Excess runoff (< 3°C)", "Excess runoff (> 3°C)"), 
+       pch = 19, col = c(col_disc_le1, col_disc_le2), 
+       bg = "white", box.col = "white", cex = 1.4)
+
+col_med <- "grey70"
+vioplot(disc_exce_le1[, 1], add = T, at = 2, col = col_disc_le1, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le2[, 1], add = T, at = 3, col = col_disc_le2, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le1[, 2], add = T, at = 5, col = col_disc_le1, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le2[, 2], add = T, at = 6, col = col_disc_le2, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le1[, 3], add = T, at = 8, col = col_disc_le1, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le2[, 3], add = T, at = 9, col = col_disc_le2, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le1[, 4], add = T, at = 11, col = col_disc_le1, colMed = col_med, cex = 0.8)
+vioplot(disc_exce_le2[, 4], add = T, at = 12, col = col_disc_le2, colMed = col_med, cex = 0.8)
+
+#Liquid precipitation and snowmelt
 ylims <- c(min(melt_pliq_le1, melt_pliq_le2, na.rm = T), max(melt_pliq_le1, melt_pliq_le2, na.rm = T)+30)
 
-col_lpre_le1 <- "grey55"
-col_lpre_le2 <- "grey25"
-col_melt_le1 <- "red2"
-col_melt_le2 <- "red4"
+col_lpre_le1 <- "lightblue3"
+col_lpre_le2 <- "deepskyblue4"
+col_melt_le1 <- "darkgoldenrod1"
+col_melt_le2 <- "darkgoldenrod4"
 
-boxplot(melt_pliq_all, boxfill = NA, border = NA, axes = F, ylim = ylims, xlim = c(1, 21))
+boxplot(melt_pliq_le1, boxfill = NA, border = NA, axes = F, ylim = ylims, xlim = c(1, 21))
 axis(2, mgp=c(3, 0.55, 0), tck = -0.017, cex.axis = 1.5)
 axis(1, at = c(3.5, 8.5, 13.5, 18.5), labels = c("High Rhine", "Moselle", "Neckar", "Main"),
-     mgp=c(3, 0.95, 0), tck = -0.017, cex.axis = 1.7)
-mtext("Liquid precip. and snowmelt during peak formation", side = 3, line = 0.2, cex = 1.7, adj = 0.0)
-mtext(paste0("Liquid precip. / Snowmelt [mm]"), side = 2, line = 2.1, cex = 1.7, adj = 0.5)
+     mgp=c(3, 0.95, 0), tck = -0.017, cex.axis = 1.9)
+mtext("b) Liquid precip. and snowmelt during peak formation", side = 3, line = 0.3, cex = 1.9, adj = 0.0)
+mtext(paste0("Liquid prec. / Snowmelt [mm]"), side = 2, line = 2.1, cex = 1.9, adj = 0.5)
 abline(h = c(0, 25, 50, 75, 100, 125, 150, 175, 200, 225), col = "grey55", lwd = 0.6, lty = "dashed")  
 box()
 
-legend("topright", c("Precip. (< 3°C)", "Precip. (> 3°C)", "Melt (< 3°C)", "Melt (> 3°C)"), 
+legend("topright", c("Precip. (< 3°C)", "Precip. (> 3°C)", "Snowmelt (< 3°C)", "Snowmelt (> 3°C)"), 
        pch = 19, col = c(col_lpre_le1, col_lpre_le2, col_melt_le1, col_melt_le2), 
-       bg = "white", box.col = "white", cex = 1.3, ncol = 2)
+       bg = "white", box.col = "white", cex = 1.4, ncol = 2)
 
 col_med <- "grey70"
 vioplot(melt_pliq_le1[, 1], add = T, at = 2, col = col_lpre_le1, colMed = col_med, cex = 0.8)
