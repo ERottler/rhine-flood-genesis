@@ -12,12 +12,25 @@ library(shinydashboard)
 library(plotly)
 library(DT)
 
-navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected = "Summary & Overview", position = "fixed-top",
+navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"), 
+            selected = "Summary & Overview", position = "fixed-top",
            
-           tags$style(type="text/css", "body {padding-top: 70px;}"),
+           # tags$style(type="text/css", "body {padding-top: 70px;}"),
            
            tabPanel("Summary & Overview",
                    
+                    #Add UFZ logo
+                    tags$script(HTML("var header = $('.navbar > .container-fluid');
+                            header.append('<div style=\"float:right\"><a href=\"https://www.ufz.de/index.php?en=34211\", target=\"_blank\"> <img src=\"logo/ufz_logo.png\" alt=\"alt\" style=\"float:right;width:70px;height:40px;padding-top:3px;\"> </a></div>');
+                            console.log(header)")),
+                    
+                    #Add Uni Potsdam logo
+                    tags$script(HTML("var header = $('.navbar > .container-fluid');
+                            header.append('<div style=\"float:right\"><a href=\"https://www.uni-potsdam.de/de/umwelt/forschung/ag-hydrologie-und-klimatologie\", target=\"_blank\"> <img src=\"logo/up_logo.png\" alt=\"alt\" style=\"float:right;width:40px;height:45px;padding-top:3px;\"> </a></div>');
+                            console.log(header)")),
+                    
+                    tags$style(type="text/css", "body {padding-top: 70px;}"),
+                    
                     HTML("<br>"),
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%",
@@ -29,7 +42,7 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                     HTML("<br>"), 
                     
                     p(style="text-align: justify; font-size: 40px; width: 99%;",
-                      "Analysis of past, present and future flood formation in the Rhine River basin"),
+                      "Spatio-temporal analysis of historic and projected flood formation in the Rhine River basin"),
                     
                     HTML("<br>"), 
                     
@@ -249,7 +262,7 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/rottler-erwin", "Erwin Rottler",
                              style="color:#6699CC;", target="_blank"),
                       "(member of the working group Hydrology & Climatology, University of Potsdam) in the framework of investigations focusing on future changes Rhine River flood seasonality. 
-                      The analysis was supervised by",
+                      The analysis was supported by",
                       tags$a(href="https://www.uni-potsdam.de/de/umwelt/institut/alle-mitarbeiterinnen/bronstert-axel", "Axel Bronstert",
                              style="color:#6699CC;", target="_blank"), 
                       "(head of the working group Hydrology & Climatology, University of Potsdam) and",
@@ -258,6 +271,9 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                       "(senior scientist within the working group Hydrology & Climatology, University of Potsdam). 
                       We thank our colleagues from the Department of Computational Hydrosystems, Helmholtz Centre for Environmental Research (UFZ), particularly",
                       tags$a(href="https://www.ufz.de/index.php?en=38114", "Oldrich Rakovec,",
+                             style="color:#6699CC;", target="_blank"),
+                      "and",
+                      tags$a(href="https://www.ufz.de/index.php?en=38094", "Luis Samaniego,",
                              style="color:#6699CC;", target="_blank"),
                       
                       "for their support during model setup and data analysis."
@@ -290,9 +306,6 @@ navbarPage("Rhine River floods", id="nav", theme = shinytheme("slate"), selected
                      tags$a(href="https://atmosphere.copernicus.eu/", "Copernicus Atmosphere Monitoring Service",
                             style="color:#6699CC;", target="_blank"),
                      "on behalf of the European Commission. We acknowledge EDgE colleagues",
-                     tags$a(href="https://www.ufz.de/index.php?en=38094", "Luis Samaniego",
-                            style="color:#6699CC;", target="_blank"), 
-                     ",",
                      tags$a(href="https://www.ufz.de/index.php?en=38089", "Rohini Komar",
                             style="color:#6699CC;", target="_blank"),
                      "and",

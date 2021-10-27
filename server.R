@@ -6,8 +6,8 @@
 
 ###
 
-# base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
-base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+# base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
 # base_dir <- "/srv/shiny-server/rhine-flood-genesis/"
 
 #load data tables for synthesis plots
@@ -17,7 +17,7 @@ function(input, output, session) {
   
   query_modal <- modalDialog(
     title = "Welcome!",
-    "This Shiny dashboard enables the investigation of past, present and future Rhine River flood genesis. Switch between tabs to read a short summary, browse through overview plots and view the in-depth analysis of Rhine River floods!",
+    "This Shiny dashboard enables the investigation of historic and projected Rhine River flood genesis. Switch between tabs to read a short summary, browse through overview plots and view a detailed spatio-temporal analysis of Rhine River floods!",
     easyClose = F,
     footer = tagList(
       actionButton("start_window", "Start exploring!")
