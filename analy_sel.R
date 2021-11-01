@@ -9,8 +9,10 @@
 
 tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 
+if(F){#create empty tables
+  
 #Select gauge (define again in loop!!!)
-gauge_sel <- "Speyer" #Options: Cologne, Kaub, Worms or Speyer
+gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
 
 if(gauge_sel == "Cologne"){
   
@@ -325,6 +327,8 @@ if(gauge_sel == "Speyer"){
   
 }
 
+}
+
 #loop over GCM-RCP combinations
 for(f in 1:21){
 
@@ -453,6 +457,29 @@ if(gauge_sel == "Cologne"){
       "U:/rhine_genesis/R/figs/cologne/NorESM1-M/rcp8p5/"
     )
    
+   figs_export_paths_2 <- 
+     c("U:/rhine_genesis/R/figs_2/cologne/EOBS/",
+       "U:/rhine_genesis/R/figs_2/cologne/GFDL-ESM2M/historical/",
+       "U:/rhine_genesis/R/figs_2/cologne/HadGEM2-ES/historical/",
+       "U:/rhine_genesis/R/figs_2/cologne/IPSL-CM5A-LR/historical/",
+       "U:/rhine_genesis/R/figs_2/cologne/MIROC-ESM-CHEM/historical/",
+       "U:/rhine_genesis/R/figs_2/cologne/NorESM1-M/historical/",
+       "U:/rhine_genesis/R/figs_2/cologne/GFDL-ESM2M/rcp2p6/",
+       "U:/rhine_genesis/R/figs_2/cologne/HadGEM2-ES/rcp2p6/",
+       "U:/rhine_genesis/R/figs_2/cologne/IPSL-CM5A-LR/rcp2p6/",
+       "U:/rhine_genesis/R/figs_2/cologne/MIROC-ESM-CHEM/rcp2p6/",
+       "U:/rhine_genesis/R/figs_2/cologne/NorESM1-M/rcp2p6/",
+       "U:/rhine_genesis/R/figs_2/cologne/GFDL-ESM2M/rcp6p0/",
+       "U:/rhine_genesis/R/figs_2/cologne/HadGEM2-ES/rcp6p0/",
+       "U:/rhine_genesis/R/figs_2/cologne/IPSL-CM5A-LR/rcp6p0/",
+       "U:/rhine_genesis/R/figs_2/cologne/MIROC-ESM-CHEM/rcp6p0/",
+       "U:/rhine_genesis/R/figs_2/cologne/NorESM1-M/rcp6p0/",
+       "U:/rhine_genesis/R/figs_2/cologne/GFDL-ESM2M/rcp8p5/",
+       "U:/rhine_genesis/R/figs_2/cologne/HadGEM2-ES/rcp8p5/",
+       "U:/rhine_genesis/R/figs_2/cologne/IPSL-CM5A-LR/rcp8p5/",
+       "U:/rhine_genesis/R/figs_2/cologne/MIROC-ESM-CHEM/rcp8p5/",
+       "U:/rhine_genesis/R/figs_2/cologne/NorESM1-M/rcp8p5/"
+     )
 }
 
 if(gauge_sel == "Kaub"){
@@ -481,6 +508,29 @@ if(gauge_sel == "Kaub"){
       "U:/rhine_genesis/R/figs/kaub/NorESM1-M/rcp8p5/"
     )
   
+  figs_export_paths_2 <- 
+    c("U:/rhine_genesis/R/figs_2/kaub/EOBS/",
+      "U:/rhine_genesis/R/figs_2/kaub/GFDL-ESM2M/historical/",
+      "U:/rhine_genesis/R/figs_2/kaub/HadGEM2-ES/historical/",
+      "U:/rhine_genesis/R/figs_2/kaub/IPSL-CM5A-LR/historical/",
+      "U:/rhine_genesis/R/figs_2/kaub/MIROC-ESM-CHEM/historical/",
+      "U:/rhine_genesis/R/figs_2/kaub/NorESM1-M/historical/",
+      "U:/rhine_genesis/R/figs_2/kaub/GFDL-ESM2M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/kaub/HadGEM2-ES/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/kaub/IPSL-CM5A-LR/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/kaub/MIROC-ESM-CHEM/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/kaub/NorESM1-M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/kaub/GFDL-ESM2M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/kaub/HadGEM2-ES/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/kaub/IPSL-CM5A-LR/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/kaub/MIROC-ESM-CHEM/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/kaub/NorESM1-M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/kaub/GFDL-ESM2M/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/kaub/HadGEM2-ES/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/kaub/IPSL-CM5A-LR/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/kaub/MIROC-ESM-CHEM/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/kaub/NorESM1-M/rcp8p5/"
+    )
 }
 
 if(gauge_sel == "Worms"){
@@ -509,6 +559,30 @@ if(gauge_sel == "Worms"){
       "U:/rhine_genesis/R/figs/worms/NorESM1-M/rcp8p5/"
     )
   
+  figs_export_paths_2 <- 
+    c("U:/rhine_genesis/R/figs_2/worms/EOBS/",
+      "U:/rhine_genesis/R/figs_2/worms/GFDL-ESM2M/historical/",
+      "U:/rhine_genesis/R/figs_2/worms/HadGEM2-ES/historical/",
+      "U:/rhine_genesis/R/figs_2/worms/IPSL-CM5A-LR/historical/",
+      "U:/rhine_genesis/R/figs_2/worms/MIROC-ESM-CHEM/historical/",
+      "U:/rhine_genesis/R/figs_2/worms/NorESM1-M/historical/",
+      "U:/rhine_genesis/R/figs_2/worms/GFDL-ESM2M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/worms/HadGEM2-ES/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/worms/IPSL-CM5A-LR/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/worms/MIROC-ESM-CHEM/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/worms/NorESM1-M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/worms/GFDL-ESM2M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/worms/HadGEM2-ES/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/worms/IPSL-CM5A-LR/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/worms/MIROC-ESM-CHEM/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/worms/NorESM1-M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/worms/GFDL-ESM2M/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/worms/HadGEM2-ES/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/worms/IPSL-CM5A-LR/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/worms/MIROC-ESM-CHEM/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/worms/NorESM1-M/rcp8p5/"
+    )
+  
 }
 
 if(gauge_sel == "Speyer"){
@@ -535,6 +609,31 @@ if(gauge_sel == "Speyer"){
       "U:/rhine_genesis/R/figs/speyer/IPSL-CM5A-LR/rcp8p5/",
       "U:/rhine_genesis/R/figs/speyer/MIROC-ESM-CHEM/rcp8p5/",
       "U:/rhine_genesis/R/figs/speyer/NorESM1-M/rcp8p5/"
+    )
+  
+  
+  figs_export_paths_2 <- 
+    c("U:/rhine_genesis/R/figs_2/speyer/EOBS/",
+      "U:/rhine_genesis/R/figs_2/speyer/GFDL-ESM2M/historical/",
+      "U:/rhine_genesis/R/figs_2/speyer/HadGEM2-ES/historical/",
+      "U:/rhine_genesis/R/figs_2/speyer/IPSL-CM5A-LR/historical/",
+      "U:/rhine_genesis/R/figs_2/speyer/MIROC-ESM-CHEM/historical/",
+      "U:/rhine_genesis/R/figs_2/speyer/NorESM1-M/historical/",
+      "U:/rhine_genesis/R/figs_2/speyer/GFDL-ESM2M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/speyer/HadGEM2-ES/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/speyer/IPSL-CM5A-LR/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/speyer/MIROC-ESM-CHEM/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/speyer/NorESM1-M/rcp2p6/",
+      "U:/rhine_genesis/R/figs_2/speyer/GFDL-ESM2M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/speyer/HadGEM2-ES/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/speyer/IPSL-CM5A-LR/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/speyer/MIROC-ESM-CHEM/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/speyer/NorESM1-M/rcp6p0/",
+      "U:/rhine_genesis/R/figs_2/speyer/GFDL-ESM2M/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/speyer/HadGEM2-ES/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/speyer/IPSL-CM5A-LR/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/speyer/MIROC-ESM-CHEM/rcp8p5/",
+      "U:/rhine_genesis/R/figs_2/speyer/NorESM1-M/rcp8p5/"
     )
   
 }
@@ -1094,37 +1193,6 @@ for(p in 1:length(peaks_ind)){
     disc_sel <- disc_sel + c(disc_cube[ , , i])
     quan_exc[which(c(disc_cube[ , , i]) > c(disc_qua))] <- 1
     
-    #define colors for maps
-    cols_spat_pre <- foreach(t = 1:length(prec_sel), .combine = 'c') %dopar% {
-      
-      val2col(val_in = prec_sel[t],
-              dat_ref = range_pre,
-              cols_sel = 4)
-      
-    }
-    cols_spat_sno <- foreach(t = 1:length(snow_sel), .combine = 'c') %dopar% {
-      
-      val2col(val_in = snow_sel[t],
-              dat_ref = range_sno,
-              cols_sel = 0)
-      
-    }
-    cols_spat_qto <- foreach(t = 1:length(qtot_sel), .combine = 'c') %dopar% {
-      
-      val2col(val_in = qtot_sel[t],
-              dat_ref = range_qto,
-              cols_sel = 4)
-      
-    }
-    cols_spat_dis <- foreach(t = 1:length(disc_sel), .combine = 'c') %dopar% {
-      
-      val2col(val_in = disc_sel[t],
-              dat_ref = range_dis,
-              do_log = T,
-              cols_sel = 5)
-      
-    }
-    
     #cumulative snowmelt and liquid precip. for sub-basins
     melt_sum_base <- melt_sum_base + base_me_mea[i]
     pliq_sum_base <- pliq_sum_base + base_lp_mea[i]
@@ -1150,8 +1218,62 @@ for(p in 1:length(peaks_ind)){
     #get date
     date_exp <- format(date_sel[i], "%Y%m%d")
     
+    #cumulative excess discharge
+    disc_exc_base <- simu_base[i]-mea_na(simu_base_obs)
+    disc_exc_mose <- simu_mose[i]-mea_na(simu_mose_obs)
+    disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs)
+    disc_exc_main <- simu_main[i]-mea_na(simu_main_obs)
+    
+    if(disc_exc_base < 0){disc_exc_base <- 0}
+    if(disc_exc_mose < 0){disc_exc_mose <- 0}
+    if(disc_exc_neck < 0){disc_exc_neck <- 0}
+    if(disc_exc_main < 0){disc_exc_main <- 0}
+    
+    disc_base_cum <- disc_base_cum + disc_exc_base
+    disc_mose_cum <- disc_mose_cum + disc_exc_mose
+    disc_neck_cum <- disc_neck_cum + disc_exc_neck
+    disc_main_cum <- disc_main_cum + disc_exc_main
+    
+    disc_cum_base_rou <- round(disc_base_cum, digits = 0)
+    disc_cum_mose_rou <- round(disc_mose_cum, digits = 0)
+    disc_cum_main_rou <- round(disc_neck_cum, digits = 0)
+    disc_cum_neck_rou <- round(disc_main_cum, digits = 0)
+    
+    #export figs----
+    
     if(T){#export plot
     
+    #define colors for maps
+    cols_spat_pre <- foreach(t = 1:length(prec_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = prec_sel[t],
+                dat_ref = range_pre,
+                cols_sel = 4)
+        
+      }
+    cols_spat_sno <- foreach(t = 1:length(snow_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = snow_sel[t],
+                dat_ref = range_sno,
+                cols_sel = 0)
+        
+      }
+    cols_spat_qto <- foreach(t = 1:length(qtot_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = qtot_sel[t],
+                dat_ref = range_qto,
+                cols_sel = 4)
+        
+      }
+    cols_spat_dis <- foreach(t = 1:length(disc_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = disc_sel[t],
+                dat_ref = range_dis,
+                do_log = T,
+                cols_sel = 5)
+        
+      }
+      
     png(paste0(figs_export_paths[ind_forc], "flood_", p, "/rhine_", date_exp, ".png"), width = 16, height = 8,
         units = "in", res = 300)
     
@@ -1345,25 +1467,6 @@ for(p in 1:length(peaks_ind)){
     #Cumulative excess discharge
     ###
     
-    disc_exc_base <- simu_base[i]-mea_na(simu_base_obs)
-    disc_exc_mose <- simu_mose[i]-mea_na(simu_mose_obs)
-    disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs)
-    disc_exc_main <- simu_main[i]-mea_na(simu_main_obs)
-    if(disc_exc_base < 0){disc_exc_base <- 0}
-    if(disc_exc_mose < 0){disc_exc_mose <- 0}
-    if(disc_exc_neck < 0){disc_exc_neck <- 0}
-    if(disc_exc_main < 0){disc_exc_main <- 0}
-    
-    disc_base_cum <- disc_base_cum + disc_exc_base
-    disc_mose_cum <- disc_mose_cum + disc_exc_mose
-    disc_neck_cum <- disc_neck_cum + disc_exc_neck
-    disc_main_cum <- disc_main_cum + disc_exc_main
-    
-    disc_cum_base_rou <- round(disc_base_cum, digits = 0)
-    disc_cum_mose_rou <- round(disc_mose_cum, digits = 0)
-    disc_cum_main_rou <- round(disc_neck_cum, digits = 0)
-    disc_cum_neck_rou <- round(disc_main_cum, digits = 0)
-    
     #get x/y lims
     tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
                                sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
@@ -1416,8 +1519,8 @@ for(p in 1:length(peaks_ind)){
              col = c(col_snow, col_prec), box.col = "white", text.col = "white")
     
     box(col = "white", lwd = 0.7)
-    mtext("c) Cumulative excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
-    mtext(expression(paste("[m"^"3", "s"^"-1","]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
+    mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
+    mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
     
     cex_gauge <- 1.4
     cex_min <- 0.9
@@ -1472,27 +1575,27 @@ for(p in 1:length(peaks_ind)){
   
     pos_frac_num <- 1.65
     if(disc_base_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_base_cum, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+      text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "white", srt = 135, cex = cex_base)
     }else{
-      text(labels = round(disc_base_cum, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+      text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 135, cex = cex_base)
     }
     
     if(disc_mose_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_mose_cum, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+      text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
     }else{
-      text(labels = round(disc_mose_cum, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+      text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
     }
     
     if(disc_main_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_main_cum, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+      text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "white", srt = 315, cex = cex_main)
     }else{
-      text(labels = round(disc_main_cum, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+      text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 315, cex = cex_main)
     }
     
     if(disc_neck_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_neck_cum, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+      text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
     }else{
-      text(labels = round(disc_neck_cum, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+      text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
     }
     
     ###
@@ -1657,6 +1760,527 @@ for(p in 1:length(peaks_ind)){
     dev.off()
     
     }#if export plot
+    
+    if(T){#export plot manuscript
+      
+      #define colors for maps
+      cols_spat_pre <- foreach(t = 1:length(prec_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = prec_sel[t],
+                dat_ref = range_pre,
+                cols_sel = 6)
+        
+      }
+      cols_spat_sno <- foreach(t = 1:length(snow_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = snow_sel[t],
+                dat_ref = range_sno,
+                cols_sel = 7)
+        
+      }
+      cols_spat_qto <- foreach(t = 1:length(qtot_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = qtot_sel[t],
+                dat_ref = range_qto,
+                cols_sel = 6)
+        
+      }
+      cols_spat_dis <- foreach(t = 1:length(disc_sel), .combine = 'c') %dopar% {
+        
+        val2col(val_in = disc_sel[t],
+                dat_ref = range_dis,
+                do_log = T,
+                cols_sel = 5)
+        
+      }
+      
+      png(paste0(figs_export_paths_2[ind_forc], "flood_", p, "/rhine_", date_exp, ".png"), width = 16, height = 8,
+          units = "in", res = 300)
+      
+      par(family = "serif")
+      par(bg = 'white')
+      cex_pch <- 0.7
+      lwd_disc <- 1.7
+      cex_header <- 1.5
+      cex_unit <- 1.2
+      
+      layout(matrix(c(rep(13, 32),
+                      rep(9, 9), rep(10, 9), rep(11, 7), rep(12, 7),
+                      rep(1, 7), 2, rep(3, 7), 4, rep(5, 7), 6, rep(7, 7), 8),
+                    3, 32, byrow = T), widths=c(), heights=c(0.22, 1.1, 1))
+      
+      #Plot Precipitation
+      par(mar = c(0.0, 0.0, 2.0, 0.0))
+      plot(c(lon), c(lat), pch = 15, col = cols_spat_pre, cex = cex_pch,
+           axes = F, ylab = "", xlab = "")
+      mtext("e) Liquid precipitation", side = 3, line = 0.3, cex = cex_header, col = "black")
+      
+      par(mar = c(1.0, 0.0, 3.0, 2.9))
+      my_col <- colorRampPalette(c("grey90", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1,1,1)]))(200)
+      my_bre <- seq(range_pre[1], range_pre[2], length.out = length(my_col)+1)
+      alptempr::image_scale(as.matrix(prec_sel), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+      axis(4, mgp=c(3, 0.50, 0), tck = -0.25, cex.axis = 1.6, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.5)
+      mtext("[mm]", side = 3, line = 0.7, cex = cex_unit, col = "black")
+      box(col = "black", lwd = 0.5)
+      
+      #Plot Snowmelt and accumulation
+      par(mar = c(0.0, 0.0, 2.0, 0.0))
+      plot(c(lon), c(lat), pch = 15, col = cols_spat_sno, cex = cex_pch,
+           axes = F, ylab = "", xlab = "")
+      mtext("f) Snow cover changes", side = 3, line = 0.3, cex = cex_header, col = "black")
+      
+      par(mar = c(1.0, 0.0, 3.0, 2.9))
+      my_col <- c(colorRampPalette(c(viridis::viridis(9, direction = 1)[c(1,1,2,3,4)], "lightcyan3", "grey90"))(100),
+                  colorRampPalette(c("grey90", "lemonchiffon2", "lightgoldenrod2", "gold3", "goldenrod3", "orangered4", "darkred"))(100))
+      my_bre <- seq(-max(abs(range_sno)), max(abs(range_sno)), length.out = length(my_col)+1)
+      alptempr::image_scale(as.matrix(snow_sel), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+      axis(4, mgp=c(3, 0.50, 0), tck = -0.25, cex.axis = 1.6, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.5)
+      mtext("[mm]", side = 3, line = 0.7, cex = cex_unit, col = "black")
+      box(col = "black", lwd = 0.5)
+      
+      #Plot total discharge generated
+      par(mar = c(0.0, 0.0, 2.0, 0.0))
+      plot(c(lon), c(lat), pch = 15, col = cols_spat_qto, cex = cex_pch, 
+           axes = F, ylab = "", xlab = "")
+      mtext("g) Discharge generated", side = 3, line = 0.3, cex = cex_header, col = "black")
+      
+      par(mar = c(1.0, 0.2, 3.0, 2.9))
+      my_col <- colorRampPalette(c("grey90", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1,1,1)]))(200)
+      my_bre <- seq(range_qto[1], range_qto[2], length.out = length(my_col)+1)
+      alptempr::image_scale(as.matrix(qtot_sel), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+      axis(4, mgp=c(3, 0.50, 0), tck = -0.25, cex.axis = 1.6, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.5)
+      mtext("[mm]", side = 3, line = 0.7, cex = cex_unit, col = "black")
+      box(col = "black", lwd = 0.5)
+      
+      ###
+      #Discharge routed
+      ###
+      
+      par(mar = c(0.0, 0.0, 2.0, 0.0))
+      plot(c(lon), c(lat), pch = 15, col = cols_spat_dis, cex = cex_pch,
+           axes = F, ylab = "", xlab = "")
+      points(coords_sel_gaugs[c(2, 4, 6, 8), 2], coords_sel_gaugs[c(2, 4, 6, 8), 1], pch = 25, 
+             col = "white", bg = "red4", cex = 1.1)
+      points(c(coords_sel_gaugs[c(9), 2], 8.415706, 8.591144, 7.491285), 
+             c(coords_sel_gaugs[c(9), 1], 50.000229, 49.474691, 50.317333), pch = 25, 
+             col = "white", bg = "black", cex = 1.1)
+      text(rep(9.9, 4),
+           c(51.8, 51.5, 51.2, 50.8),
+           labels = c("Cologne", "Kaub", "Worms", "Speyer"), col = "red4", cex = 1.2)
+      text(rep(11.2, 4),
+           c(51.8, 51.5, 51.2, 50.8),
+           labels = c("Moselle", "Main", "Neckar", "High Rhine"), col = "black", cex = 1.2)
+      
+      mtext("h) Discharge routed", side = 3, line = 0.3, cex = cex_header, col = "black")
+      
+      par(mar = c(1.0, 0.0, 3.0, 2.9))
+      my_col <- c(colorRampPalette(c(rep(viridis::viridis(20, direction = -1)[1], 8),
+                                     viridis::viridis(20, direction = -1), 
+                                     rep(viridis::viridis(20, direction = -1)[20], 8)))(200))
+      my_bre <- seq(log(range_dis[1]), log(range_dis[2]), length.out = length(my_col)+1)
+      alptempr::image_scale(as.matrix(disc_sel), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+      axis(4, mgp=c(3, 0.50, 0), tck = -0.25, cex.axis = 1.6, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.5)
+      mtext(expression(paste("[ln(m"^"3", "s"^"-1",")]")), side = 3, line = 0.7, cex = cex_unit, col = "black")
+      box(col = "black", lwd = 0.5)
+      
+      ###
+      #Simulated discharge Rhine main channel
+      ###
+      
+      days_before <- 20
+      days_after <- 21
+      cex_disc_points <- 1.7
+      col_koel <- brewer.pal(n = 9, name = "Blues")[9]
+      col_kaub <- brewer.pal(n = 9, name = "Blues")[7]
+      col_worm <- brewer.pal(n = 9, name = "Blues")[5]
+      col_spey <- brewer.pal(n = 9, name = "Blues")[3]
+      
+      lwd_koel <- 1.6 ; lty_koel <- "solid" ; cex_point_koel <- 1.7
+      lwd_kaub <- 1.6 ; lty_kaub <- "solid" ; cex_point_kaub <- 1.7
+      lwd_worm <- 1.6 ; lty_worm <- "solid" ; cex_point_worm <- 1.7
+      lwd_spey <- 1.6 ; lty_spey <- "solid" ; cex_point_spey <- 1.7
+      
+      # if(gauge_sel == "Cologne"){
+      #   
+      #   lwd_koel <- 2.9
+      #   lty_koel <- "solid"
+      #   cex_point_koel <- 2.9
+      #   
+      # }
+      
+      ylims <- range(c(simu_spey_rel[(i-days_before):(i+days_after)], simu_worm_rel[(i-days_before):(i+days_after)], 
+                       simu_kaub_rel[(i-days_before):(i+days_after)], simu_koel_rel[(i-days_before):(i+days_after)]), na.rm = T)
+      xlabs <- format(date_sel[c((i-20), (i-10), i, (i+10), (i+20))], "%d.%m")
+      
+      par(mar = c(3.5, 4.5, 3.5, 0.5))
+      
+      plot(simu_spey_rel[(i-days_before):(i+days_after)], type = "n", axes = F, ylab = "", xlab = "", ylim = ylims)
+      # abline(v = c(11, 21), lty = "dashed", col = "grey92", lwd = 0.7)
+      # lines(simu_spey_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_spey)
+      # lines(simu_worm_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_worm)
+      # lines(simu_kaub_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_kaub)
+      # lines(simu_koel_rel[(i-days_before):(i+days_after)], col = "white", lwd = lwd_koel)
+      lines(simu_spey_rel[(i-days_before):(i+days_after)], col = alpha(col_spey, alpha = 1.0), lwd = lwd_spey, lty = lty_spey)
+      lines(simu_worm_rel[(i-days_before):(i+days_after)], col = alpha(col_worm, alpha = 1.0), lwd = lwd_worm, lty = lty_worm)
+      lines(simu_kaub_rel[(i-days_before):(i+days_after)], col = alpha(col_kaub, alpha = 1.0), lwd = lwd_kaub, lty = lty_kaub)
+      lines(simu_koel_rel[(i-days_before):(i+days_after)], col = alpha(col_koel, alpha = 1.0), lwd = lwd_koel, lty = lty_koel)
+      points(days_before+1, simu_spey_rel[i], pch = 21, bg = col_spey, cex = cex_point_spey, col = "black")
+      points(days_before+1, simu_worm_rel[i], pch = 21, bg = col_worm, cex = cex_point_worm, col = "black")
+      points(days_before+1, simu_kaub_rel[i], pch = 21, bg = col_kaub, cex = cex_point_kaub, col = "black")
+      points(days_before+1, simu_koel_rel[i], pch = 21, bg = col_koel, cex = cex_point_koel, col = "black")
+      # abline(v = 1:100, col = "grey55", lty = "dashed", lwd = 0.7)
+      axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.7, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.7)
+      axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.7, mgp=c(3, 0.30, 0), tck = -0.01, 
+           col.ticks = "black", col.axis = "black", col = "black", lwd = 0.7)
+      mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
+            cex = 1.5, col = "black")
+      mtext("a) Streamflow Rhine River", side = 3, line = 0.3, cex = cex_header, col = "black", adj = 0.0)
+      legend("topleft", c("Cologne", "Kaub", "Worms", "Speyer"), pch = 21, cex = 1.7, bty = "n",
+             pt.bg = c(col_koel, col_kaub, col_worm, col_spey),  box.col = "black", text.col = "black")
+      box(col = "black", lwd = 0.7)
+      
+      ###
+      #Simulated discharge tributaries
+      ###
+      
+      ylims <- range(c(simu_neck_rel[(i-days_before):(i+days_after)], simu_main_rel[(i-days_before):(i+days_after)], 
+                       simu_mose_rel[(i-days_before):(i+days_after)], simu_base_rel[(i-days_before):(i+days_after)]), na.rm = T)
+      
+      col_base <- viridis::viridis(20)[3]
+      col_neck <- viridis::viridis(20)[6]
+      col_mose <- viridis::viridis(20)[10]
+      col_main <- viridis::viridis(20)[17]
+      
+      par(mar = c(3.5, 5.5, 3.5, 0.5))
+      
+      plot(simu_neck_rel[(i-days_before):(i+days_after)], type = "n", axes = F, ylab = "", xlab = "", 
+           ylim = ylims)
+      # abline(v = c(11, 21), lty = "dashed", col = "grey92", lwd = 0.7)
+      lines(simu_base_rel[(i-days_before):(i+days_after)], col = alpha(col_base, alpha = 1.0), lwd = lwd_disc, lty = "solid")
+      lines(simu_neck_rel[(i-days_before):(i+days_after)], col = alpha(col_neck, alpha = 1.0), lwd = lwd_disc, lty = "solid")
+      lines(simu_main_rel[(i-days_before):(i+days_after)], col = alpha(col_main, alpha = 1.0), lwd = lwd_disc, lty = "solid")
+      lines(simu_mose_rel[(i-days_before):(i+days_after)], col = alpha(col_mose, alpha = 1.0), lwd = lwd_disc, lty = "solid")
+      points(days_before+1, simu_base_rel[i], pch = 21, bg = col_base, cex = cex_disc_points, col = "black")
+      points(days_before+1, simu_neck_rel[i], pch = 21, bg = col_neck, cex = cex_disc_points, col = "black")
+      points(days_before+1, simu_main_rel[i], pch = 21, bg = col_main, cex = cex_disc_points, col = "black")
+      points(days_before+1, simu_mose_rel[i], pch = 21, bg = col_mose, cex = cex_disc_points, col = "black")
+      # abline(v = 1:100, col = "grey55", lty = "dashed", lwd = 0.7)
+      axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.7, col.ticks = "black", 
+           col.axis = "black", col = "black", lwd = 0.7)
+      axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.7, mgp=c(3, 0.30, 0), tck = -0.01, 
+           col.ticks = "black", col.axis = "black", col = "black", lwd = 0.7)
+      mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
+            cex = 1.5, col = "black")
+      mtext("b) Streamflow sub-basins", side = 3, line = 0.3, cex = cex_header, col = "black", adj = 0.0)
+      legend("topleft", c("Main", "Moselle", "Neckar", "High Rhine"), pch = 21, cex = 1.7, bty = "n",
+             pt.bg = c(col_main, col_mose, col_neck, col_base), box.col = "black", text.col = "black")
+      box(col = "black", lwd = 0.7)
+      
+      ###
+      #Cumulative excess discharge
+      ###
+      
+      #get x/y lims
+      tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                                 sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                                 sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                                 sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+      col_snow <- "grey80"
+      col_prec <- "deepskyblue4"
+      
+      par(mar = c(3.5, 2.5, 3.5, 0.5))
+      
+      ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                           sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                           sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                           sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
+                 max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+                          sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                          sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+                          sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+      )
+      xlims <- ylims
+      
+      plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+      abline(v = 0, col = "black", lwd = 0.5)
+      abline(h = 0, col = "black", lwd = 0.5)
+      if(disc_base_cum > tri_gap){
+        polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
+        polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+      }
+      
+      if(disc_mose_cum > tri_gap){
+        polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
+        polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
+      }
+      
+      if(disc_main_cum > tri_gap){
+        polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
+        polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
+      }
+      
+      if(disc_neck_cum > tri_gap){
+        polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
+        polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
+      }
+      
+      legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
+                                 min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
+      legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
+      
+      legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 22, cex = 1.5, bty = "n",
+             pt.bg = c(col_snow, col_prec), box.col = "black", text.col = "black")
+      
+      box(col = "black", lwd = 0.7)
+      
+      mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = cex_header, col = "black", adj = 0.0)
+      mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "black", adj = 1.0)
+      
+      cex_gauge <- 1.4
+      cex_min <- 0.9
+      
+      if(disc_base_cum > 0){
+        cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      }else{cex_base <- cex_min}
+      
+      if(disc_mose_cum > 0){
+        cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      }else{cex_mose <- cex_min}
+      
+      if(disc_main_cum > 0){
+        cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      }else{cex_main <- cex_min}
+      
+      if(disc_neck_cum > 0){
+        cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      }else{cex_neck <- cex_min}
+      
+      
+      if(cex_base < cex_min){cex_base <- cex_min}
+      if(cex_mose < cex_min){cex_mose <- cex_min}
+      if(cex_main < cex_min){cex_main <- cex_min}
+      if(cex_neck < cex_min){cex_neck <- cex_min}
+      
+      pos_frac_lab <- 1.35
+      if(disc_base_cum > 0.5*max_na(ylims)){
+        text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
+      }else{
+        text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
+      }
+      
+      if(disc_mose_cum > 0.5*max_na(ylims)){
+        text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
+      }else{
+        text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
+      }
+      
+      if(disc_main_cum > 0.5*max_na(ylims)){
+        text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
+      }else{
+        text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
+      }
+      
+      if(disc_neck_cum > 0.5*max_na(ylims)){
+        text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
+      }else{
+        text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
+      }
+      
+      
+      pos_frac_num <- 1.65
+      if(disc_base_cum > 0.5*max_na(ylims)){
+        text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "black", srt = 135, cex = cex_base)
+      }else{
+        text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 135, cex = cex_base)
+      }
+      
+      if(disc_mose_cum > 0.5*max_na(ylims)){
+        text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
+      }else{
+        text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
+      }
+      
+      if(disc_main_cum > 0.5*max_na(ylims)){
+        text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "black", srt = 315, cex = cex_main)
+      }else{
+        text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 315, cex = cex_main)
+      }
+      
+      if(disc_neck_cum > 0.5*max_na(ylims)){
+        text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
+      }else{
+        text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
+      }
+      
+      ###
+      #Flood extent
+      ###
+      
+      col_ye <- "steelblue4"
+      col_no <- "grey80"
+      cols_spat_flo <- rep(col_no, length(quan_exc))
+      cols_spat_flo[which(quan_exc > 0)] <- col_ye
+      cols_spat_flo[which(is.na(disc_cube[ , , i]))] <- NA
+      # na_length <- length(which(is.na(disc_cube[ , , i])))
+      # flood_frac <- round((length(which(quan_exc > 0)) / (length(quan_exc) - na_length) * 100), 2)
+      
+      par(mar = c(2.0, 1.0, 3.5, 0.0))
+      plot(c(lon), c(lat), pch = 15, col = cols_spat_flo, cex = cex_pch,
+           axes = F, ylab = "", xlab = "")
+      plot(river_netw, col = scales::alpha("white", alpha = 0.5), add = T, lwd = 0.7)
+      
+      mtext(paste0("d) Flood extent"), side = 3, line = 0.3, cex = cex_header, col = "black")
+      
+      points(coords_sel_gaugs[c(2, 4, 6, 8), 2], coords_sel_gaugs[c(2, 4, 6, 8), 1], pch = 25, 
+             col = "white", bg = "black", cex = 1.3)
+      
+      text(rep(10.5, 4),
+           c(51.8, 51.5, 51.17, 50.8),
+           labels = c(paste0("Cologne: ", round(flood_frac_col, 0), " %"), 
+                      paste0("Kaub: ",    round(flood_frac_kau, 0), " %"),
+                      paste0("Worms: ",   round(flood_frac_wor, 0), " %"), 
+                      paste0("Speyer: ",  round(flood_frac_spe, 0), " %")),
+           col = "black", cex = 1.4)
+      legend("bottomright", c("> 99%", "< 99%"), pch = 22, cex = 1.4, bty = "n",
+             pt.bg = c("steelblue4", "grey80"), box.col = "black", text.col = "black")
+      
+      
+      ###
+      #Header of plot
+      ###
+      
+      col_header <- "black"
+      col_back <- "grey65"
+      seg_pos <- 9
+      par(mar = c(0, 0, 0, 0))
+      plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "")
+      # mtext("RHINE FLOOD GENESIS", side = 3, adj = 0.03, line = -3.3, col = "white", cex = 2.5)
+      mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.3, adj = 0.97, col = col_back, cex = 2.5)
+      segments(x0 = 0, y0 = seg_pos, x1 = 100, y1 = seg_pos, lwd = 3, col = col_back)
+      dates_at <- c(2, 11, 20, 29, 38, 47, 56, 65, 74, 83, 100)
+      dates_line <- 4.5
+      
+      text(paste0("Streamflow peak at ", gauge_sel), x = 0, y = 82, adj = 0.00, col = "black", cex = 2.2)
+      
+      mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_back, cex = 1.2)
+      mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_back, cex = 1.2)
+      
+      segments(x0 = 0, y0 = seg_pos, x1 = dates_at[counter], y1 = seg_pos, lwd = 3, col = col_header)
+      
+      if(counter == 1){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 2){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+      }
+      if(counter == 3){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+      }
+      if(counter == 4){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 5){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 6){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 7){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 8){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 9){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 10){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_header, cex = 1.2)
+        
+      }
+      if(counter == 11){
+        mtext(paste0(format(date_sel[peak_ind-10],"%d.%m")), at = dates_at[1],  side = 3, line = -dates_line, adj = 0.05, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-9], "%d.%m")), at = dates_at[2],  side = 3, line = -dates_line, adj = 0.15, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-8], "%d.%m")), at = dates_at[3],  side = 3, line = -dates_line, adj = 0.25, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-7], "%d.%m")), at = dates_at[4],  side = 3, line = -dates_line, adj = 0.35, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-6], "%d.%m")), at = dates_at[5],  side = 3, line = -dates_line, adj = 0.45, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-5], "%d.%m")), at = dates_at[6],  side = 3, line = -dates_line, adj = 0.55, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-4], "%d.%m")), at = dates_at[7],  side = 3, line = -dates_line, adj = 0.65, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-3], "%d.%m")), at = dates_at[8],  side = 3, line = -dates_line, adj = 0.75, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-2], "%d.%m")), at = dates_at[9],  side = 3, line = -dates_line, adj = 0.85, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind-1], "%d.%m")), at = dates_at[10], side = 3, line = -dates_line, adj = 0.95, col = col_header, cex = 1.2)
+        mtext(paste0(format(date_sel[peak_ind], "%d.%m.%Y")), side = 3, line = -4.3, adj = 0.97, col = col_header, cex = 2.5)
+        
+      }
+      
+      dev.off()
+      
+    }#if export plot manuscript
     
     #save maximum flood extend
     if(flood_frac_max_all < flood_frac_all){flood_frac_max_all <- flood_frac_all}
