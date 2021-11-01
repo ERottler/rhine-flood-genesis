@@ -129,6 +129,49 @@ val2col <- function(val_in, dat_ref, do_log = F, cols_sel = 1,
     
   }
   
+  #grey-blue
+  if(cols_sel == 6){
+    
+    col_ind <- round((val_in-min_na(dat_ref)) / (max_na(dat_ref)-min_na(dat_ref)) * 200)  
+    
+    if(col_ind > 200){
+      col_ind <- 200
+    }
+    
+    if(col_ind <= 0){#for minimum and very small values
+      
+      col_ind <- 1
+      
+    }
+    
+    my_col <- scales::alpha(colorRampPalette(c("grey90", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1,1,1)]))(200), alpha = 1.0)
+    
+  }
+  
+  #blue-grey-red                  
+  if(cols_sel == 7){
+    
+    col_ind <- round((abs(val_in) / max_na(abs(dat_ref))) * 100)
+    
+    if(col_ind > 100){
+      col_ind <- 100
+    }
+    
+    if(col_ind <= 0){#for minimum and very small values
+      
+      col_ind <- 1
+      
+    }
+    
+    
+    if(val_in < 0){
+      my_col  <- scales::alpha(colorRampPalette(c("grey90", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100), alpha = 0.8)
+    }else{
+      my_col  <- scales::alpha(colorRampPalette(c("grey90", "lemonchiffon2", "lightgoldenrod2", "gold3", "goldenrod3", "orangered4", "darkred"))(100), alpha = 0.8)
+    }
+    
+  }
+  
   if(is.na(col_ind)){
     set2NA_2 <- T
     col_ind <- 1 #set to one to keep script running; later set to NA color
