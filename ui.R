@@ -72,7 +72,7 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"),
                              style="color:#6699CC;", target="_blank"),  
                       "which provide an overview on streamflow peak characterstics. Figure content can be adjusted by clicking on the legend elements and zoom in/out options used to investigate regions of the plot in detail.
                       Detailed information on the plot content show up when the mouse moves over the plot. 
-                      To view the detailed analysis of the peak flow genesis, switch to tab 'Peak genesis' and select your peak of interest."),
+                      To view the spatio-temporal analysis of the peak flow formation, switch to tab 'Peak genesis' and select your peak of interest."),
                     
                     HTML("<br><br>"),
                     
@@ -85,12 +85,12 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"),
                     
                     HTML("<br><br><br><br><br><br><br><br><br><br>"), 
                     
-                    h3("Streamflow peak timing and mangitude"),
+                    h3("Streamflow peak timing and magnitude"),
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%", 
                       "Timing and magnitude are two key characteristics of a streamflow peak. 
                       Moving upstream the Rhine River from Cologne via Kaub and Worms to Speyer, more and more streamflow peaks are recorded outside winter.
-                      It seems that the potential for streamflow extremes differs depending on the GCM data used."),
+                      Furhtemore, it seems that the potential for streamflow extremes differs depending on the GCM data used."),
                     
                     selectInput("gauge_plotly_doy_mag", "",
                                 choices = c("Cologne",
@@ -105,9 +105,9 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"),
                     h3("Streamflow peak magnitude and flood extent"),
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%", 
-                      "In large river basins, dangerously high water level only are possible if a sufficient part of the basin is generating runoff.
-                      This seems also valid for the Rhine River basin at the selected gauges: The magnitude of streamflow peaks correlates with the extent of the flood.
-                      In the framework of this study, flood extent is estimated as the fraction of upstream grid cells that generated runoff above their long-term 99 % quantile (determined based on simulations for the time frame 1951-2000 using EOBS-based meteorological forcing data) at least on one day during the ten day during the peak genesis."),
+                      "In large river basins, very high water level only are possible if a sufficient part of the basin is generating runoff.
+                      This seems also valid for the Rhine River basin at the selected gauges. Results indicate that the magnitude of streamflow peaks correlates with the extent of the flood.
+                      In the framework of this study, the flood extent is estimated as the fraction of upstream grid cells that generated runoff above their long-term 99 % quantile (determined based on simulations for the time frame 1951-2000 using EOBS-based meteorological forcing data) at least on one day during a ten day peak formation period."),
                     
                     selectInput("gauge_plotly_mag_fra", "",
                                 choices = c("Cologne",
@@ -201,19 +201,19 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"),
                                   tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Simulated Rhine River runoff at the four locations Speyer (before the confluence of the Neckar River), Worms (after the confluence of the Neckar River and before the confluence of the Main River), Kaub (after the confluence of the Main River and before the confluence of the Moselle River) and Cologne (after the confluence with all major tributaries). Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2000 using EOBS-based meteorological forcing."),
            
                                   tags$h3("Panel b"),
-                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Simulated runoff for the major sub-basins of the High Rhine, Neckar, Main and Moselle River. The High Rhine catchment is until the city/gauge of Basel. The simulated runoff for the tributaries Neckar, Main and Moselle is taken just before their confluence with the Rhine River and does not reflect an actual excisting river gauge. Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2000 using EOBS-based meteorological forcing."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Simulated runoff of the High Rhine, Neckar, Main and Moselle River. The High Rhine catchment is until the city/gauge of Basel. The simulated runoff of the tributaries Neckar, Main and Moselle is taken just before their confluence with the Rhine River and does not reflect an actual excisting river gauge. Discharge is displayed as the fraction of the long-term mean simulated for the time frame 1951-2000 using EOBS-based meteorological forcing."),
 
                                   tags$h3("Panel c"),
-                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative excess runoff, i.e. runoff above the long-term mean simulated for the time frame 1951-2000 using EOBS-based meteorological forcing data. The importance of rainfall and snowmmelt is estimated based on the amount liquid rainfall and snowmelt in the sub-basins during peak genesis."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative excess runoff, i.e. runoff above the long-term mean simulated for the time frame 1951-2000 using EOBS-based meteorological forcing data. The importance of rainfall and snowmmelt is estimated based on the amount liquid rainfall and snowmelt in the sub-basins during peak formation"),
 
                                   tags$h3("Panel d"),
-                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Flood extent estimated based on the fraction of upstream grid cells that generated runoff above their long-term 99 % quantile (estimated based on simulations for the time frame 1951-2000 using EOBS-based meteorological forcing data) at least on one day during the ten day during the peak genesis. The flood fraction is calculated and displayed for areas upstream of gauges Cologne, Kaub, Worms and Speyer."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Flood extent estimated based on the fraction of upstream grid cells that generated runoff above their long-term 99 % quantile (estimated based on simulations for the time frame 1951-2000 using EOBS-based meteorological forcing data) at least on one day during the ten day peak genesis. The flood fraction is calculated and displayed for areas upstream of gauges Cologne, Kaub, Worms and Speyer."),
 
                                   tags$h3("Panel e"),
                                   tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative liquid precipitation up to ten days before the selected streamflow peak. Liquid and solid precipitation are differentiated based on the temperature threshold determined during model calibration."),
 
                                   tags$h3("Panel f"),
-                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative snow cover changes (snow accumulation and snowmelt) per cell up to ten days before the selected streamflow peak at Cologne."),
+                                  tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative snow cover changes (snow accumulation and snowmelt) per cell up to ten days before the selected streamflow peak."),
 
                                   tags$h3("Panel g"),
                                   tags$p(style="text-align: justify; font-size: 16px; width: 95%", "Cumulative discharge generated per cell up to ten days before the selected streamflow peak."),
@@ -270,7 +270,7 @@ navbarPage("Rhine flood stories", id="nav", theme = shinytheme("slate"),
                     
                     p(style="text-align: justify; font-size: 16px; width: 99%",
                       "We acknowledge the datasets generated in the",
-                      tags$a(href="http://edge.climate.copernicus.eu/", "EDgE",
+                      tags$a(href="https://climate.copernicus.eu/decision-making-water-sector-europe", "EDgE",
                              style="color:#6699CC;", target="_blank"),
                      "proof-of-concept project performed under a contract for the",
                       tags$a(href="https://climate.copernicus.eu/", "Copernicus Climate Change Service.",

@@ -16,8 +16,8 @@ load(paste0(base_dir, "www/exp_tabs/synt_tables.RData"))
 function(input, output, session) {
   
   query_modal <- modalDialog(
-    title = "Welcome to our dashbord on Rhine River floods!",
-    "This Shiny dashboard enables the investigation of historic and projected Rhine River flood genesis. Switch between tabs to read a short summary, browse through overview plots and view a detailed spatio-temporal analysis of Rhine River floods!",
+    title = "Welcome to the Rhine River!",
+    "This Shiny dashboard enables the investigation of historic and projected Rhine River flood formation. Switch between tabs to read a short summary, browse through overview plots and view a detailed spatio-temporal analysis of Rhine River floods!",
     easyClose = F,
     footer = tagList(
       actionButton("start_window", "Start exploring!")
