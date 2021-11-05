@@ -8,10 +8,13 @@
 #settings----
 pacman::p_load(scales, alptempr, vioplot)
 
-base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/"
+base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/"
 
 #load data tables for synthesis plots
 load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
+
+#get plotting functions
+source("funcs.R")
 
 #temp_forc----
 
@@ -83,7 +86,7 @@ graphics::box()
 dev.off()
 
 
-#magn_frac----
+#magn_frac_all----
 
 peak_mag_unl_col <- unlist(peak_mag_all_col)
 frac_flo_unl_col <- unlist(flood_frac_max_all_col)
@@ -105,60 +108,6 @@ rcp <- c(rep("observed", 10),
 )
 
 lims_frac <- range(c(frac_flo_unl_col, frac_flo_unl_kau, frac_flo_unl_wor, frac_flo_unl_spe), na.rm = T)
-
-f_plot_mag_frac <- function(peak_mag, peak_fra, header, v_abline, ylims = lims_frac){
-  
-  col_his <- alpha("deepskyblue4", 0.6)
-  col_2p6 <- alpha("grey25", 0.6)
-  col_6p0 <- alpha("orange3", 0.6)
-  col_8p5 <- alpha("darkred", 0.6)
-  
-  cex_point <- 3.2
-  
-  par(family = "serif")
-  
-  plot(peak_mag, peak_fra, ylim = ylims, ylab = "", xlab = "",
-       axes = F, type = "n")
-  
-  abline(h = c(20, 40, 60, 80, 100), col = "grey75", lwd = 0.7, lty = "dashed")
-  abline(v = v_abline, col = "grey75", lwd = 0.7, lty = "dashed")
-  
-  points(peak_mag[which(gcm == "GFDL-ESM2M")], peak_fra[which(gcm == "GFDL-ESM2M")],
-         pch = 21, cex = cex_point,
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_mag[which(gcm == "HadGEM2-ES")], peak_fra[which(gcm == "HadGEM2-ES")],
-         pch = 22, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_mag[which(gcm == "IPSL-CM5A-LR")], peak_fra[which(gcm == "IPSL-CM5A-LR")],
-         pch = 23, cex = cex_point,
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_mag[which(gcm == "MIROC-ESM-CHEM")], peak_fra[which(gcm == "MIROC-ESM-CHEM")],
-         pch = 24, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_mag[which(gcm == "NorESM1-M")], peak_fra[which(gcm == "NorESM1-M")],
-         pch = 25, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_mag[which(gcm == "EOBS")], peak_fra[which(gcm == "EOBS")],
-         pch = 8, col = alpha("black", 0.7), cex = cex_point)
-  
-  axis(1, mgp=c(3, 0.85, 0), tck = -0.012, cex.axis = 1.9)
-  axis(2, at = c(20, 40, 60, 80, 100), labels = c(20, 40, 60, 80, ""),  mgp=c(3, 0.45, 0), tck = -0.012, cex.axis = 1.9)
-  
-  mtext(header, 
-        side = 3, line = 0.4, cex = 1.7, adj = 0.0)
-  mtext(expression(paste("Discharge [m"^"3", "s"^"-1","]")), 
-        side = 1, line = 3.8, cex = 1.7, adj = 0.5)
-  mtext("Flood extent [%]", 
-        side = 2, line = 2.6, cex = 1.7, adj = 0.5)
-  
-  graphics::box()
-  
-}
 
 png(paste0(base_dir, "exp_figs/magn_frac.png"), width = 16, height = 9,
     units = "in", res = 300)
@@ -192,7 +141,7 @@ dev.off()
 
 
 
-#magn_time----
+#magn_time_all----
 
 peak_mag_unl_col <- unlist(peak_mag_all_col)
 peak_doy_unl_col <- unlist(peak_doy_all_col)
@@ -212,66 +161,6 @@ gcm <- c(rep("EOBS", 10),
 rcp <- c(rep("observed", 10),
          rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
 )
-
-f_plot_mag_doy <- function(peak_mag, peak_doy, header, h_abline, ylims = lims_frac){
-  
-  col_his <- alpha("deepskyblue4", 0.6)
-  col_2p6 <- alpha("grey25", 0.6)
-  col_6p0 <- alpha("orange3", 0.6)
-  col_8p5 <- alpha("darkred", 0.6)
-  
-  cex_point <- 3.2
-  
-  par(mar = c(5, 5, 2.3, 1.5))
-  par(family = "serif")
-  
-  x_axis_lab <- c(16,46,74,105,135,166,196,227,258,288,319,349)
-  x_axis_tic <- c(16,46,74,105,135,166,196,227,258,288,319,349,380)-15
-  
-  plot(peak_doy, peak_mag, ylab = "", xlab = "",
-       axes = F, type = "n")
-  
-  abline(v = x_axis_tic, lwd = 0.7, col = "grey75", lty = "dashed")
-  abline(h = h_abline, lwd = 0.7, col = "grey75", lty = "dashed")
-  
-  points(peak_doy[which(gcm == "GFDL-ESM2M")], peak_mag[which(gcm == "GFDL-ESM2M")],
-         pch = 21, cex = cex_point,
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_doy[which(gcm == "HadGEM2-ES")], peak_mag[which(gcm == "HadGEM2-ES")],
-         pch = 22, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_doy[which(gcm == "IPSL-CM5A-LR")], peak_mag[which(gcm == "IPSL-CM5A-LR")],
-         pch = 23, cex = cex_point,
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_doy[which(gcm == "MIROC-ESM-CHEM")], peak_mag[which(gcm == "MIROC-ESM-CHEM")],
-         pch = 24, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_doy[which(gcm == "NorESM1-M")], peak_mag[which(gcm == "NorESM1-M")],
-         pch = 25, cex = cex_point, 
-         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
-         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
-  points(peak_doy[which(gcm == "EOBS")], peak_mag[which(gcm == "EOBS")],
-         pch = 8, col = alpha("black", 0.7), cex = cex_point)
-  
-  axis(1, at = x_axis_tic, c("","","","","","","","","","","","",""), tick = TRUE,
-       col = "black", col.axis = "black", tck = -0.04)#plot ticks
-  axis(1, at = x_axis_lab, c("J","F","M","A","M","J","J","A","S","O", "N", "D"), tick = FALSE,
-       col="black", col.axis="black", mgp=c(3, 0.95, 0), cex.axis = 1.9)#plot labels
-  
-  axis(2, mgp=c(3, 0.45, 0), tck = -0.012, cex.axis = 1.9)
-  
-  mtext(header, 
-        side = 3, line = 0.3, cex = 1.7, adj = 0.0)
-  mtext(expression(paste("Discharge [m"^"3", "s"^"-1","]")), 
-        side = 2, line = 2.4, cex = 1.7, adj = 0.5)
-  
-  graphics::box()
-  
-}
 
 png(paste0(base_dir, "exp_figs/magn_time.png"), width = 16, height = 9,
     units = "in", res = 300)
@@ -305,7 +194,7 @@ dev.off()
 
 
 
-#snow_time----
+#snow_time_all----
 
 peak_mag_unl_col <- unlist(peak_mag_all_col)
 peak_sno_unl_col <- unlist(melt_sum_base_all_col)
@@ -537,6 +426,60 @@ vioplot(melt_pliq_le1[, 7], add = T, at = 17, col = col_lpre_le1, colMed = col_m
 vioplot(melt_pliq_le2[, 7], add = T, at = 18, col = col_lpre_le2, colMed = col_med, cex = 0.8)
 vioplot(melt_pliq_le1[, 8], add = T, at = 19, col = col_melt_le1, colMed = col_med, cex = 0.8)
 vioplot(melt_pliq_le2[, 8], add = T, at = 20, col = col_melt_le2, colMed = col_med, cex = 0.8)
+
+dev.off()
+
+
+#frac_magn_time_sel----
+
+peak_mag_unl_col <- unlist(peak_mag_all_col)
+peak_mag_unl_spe <- unlist(peak_mag_all_spe)
+
+frac_flo_unl_col <- unlist(flood_frac_max_all_col)
+frac_flo_unl_spe <- unlist(flood_frac_max_all_spe)
+
+peak_doy_unl_col <- unlist(peak_doy_all_col)
+peak_doy_unl_spe <- unlist(peak_doy_all_spe)
+
+gcm <- c(rep("EOBS", 10),
+         rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
+)
+rcp <- c(rep("observed", 10),
+         rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
+)
+
+lims_frac <- range(c(frac_flo_unl_col, frac_flo_unl_spe), na.rm = T)
+lims_magn <- range(c(peak_mag_unl_col, peak_mag_unl_spe), na.rm = T)
+
+
+png(paste0(base_dir, "exp_figs/exte_magn_time.png"), width = 16, height = 9,
+    units = "in", res = 300)
+
+layout(matrix(c(1, 2, 
+                3, 4, 
+                5, 5),
+              3, 2, byrow = T), widths=c(), heights=c(1.0, 1.0, 0.2))
+
+par(mar = c(5, 5, 2.5, 2.0))
+
+f_plot_mag_doy(peak_mag_unl_col, peak_doy_unl_col, "a) Cologne: Timing vs. Magnitude", h_abline = seq(6000, 14000, by = 2000))
+
+f_plot_mag_doy(peak_mag_unl_spe, peak_doy_unl_spe, "d) Speyer: Timing vs. Magnitude", h_abline = seq(4000, 8000, by = 1000))
+
+f_plot_mag_frac(peak_mag_unl_col, frac_flo_unl_col, "c) Cologne: Magnitude vs. Flood extent", v_abline = seq(6000, 14000, by = 2000), ylims = lims_frac)
+
+f_plot_mag_frac(peak_mag_unl_spe, frac_flo_unl_spe, "d) Speyer: Magnitude vs. Flood extent",  v_abline = seq(4000, 8000,  by = 1000), ylims = lims_frac)
+
+
+par(mar = c(0.2, 5.0, 0.1, 2.0))
+
+plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "")
+legend(50, 52, c("Hist." ,"RCP 2.6", "RCP 6.0", "RCP 8.5", 
+                 "EOBS" ,"GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR",
+                 "MIROC-ESM-CHEM", "NorESM1-M"),
+       pch = c(rep(NA, 4), 8, 21:25), lty = c(rep("solid", 4), rep(NA, 6)), 
+       col = c("deepskyblue4", "grey25", "orange3", "red4", rep("black", 6)), 
+       ncol = 5, bg = "white", box.col = "black", cex = 1.9, xjust = 0.5, yjust = 0.5, lwd = 2.9)
 
 dev.off()
 
