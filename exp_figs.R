@@ -8,7 +8,7 @@
 #settings----
 pacman::p_load(scales, alptempr, vioplot)
 
-base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/"
+base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/"
 
 #load data tables for synthesis plots
 load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
@@ -22,18 +22,18 @@ temp_lims <- range(c(temp_yea_mea[, -1]), na.rm = T)
 temp_cols <- c("black", rep("deepskyblue4", 5), rep("grey25", 5), rep("orange3", 5), rep("red4", 5))
 temp_styl <- c(rep("solid", 21))
 
-max_rcp8p5 <- apply(temp_yea_mea[18:22], 1, max_na)
-min_rcp8p5 <- apply(temp_yea_mea[18:22], 1, min_na)
-mea_rcp8p5 <- apply(temp_yea_mea[18:22], 1, mea_na)
-max_rcp6p0 <- apply(temp_yea_mea[13:17], 1, max_na)
-min_rcp6p0 <- apply(temp_yea_mea[13:17], 1, min_na)
-mea_rcp6p0 <- apply(temp_yea_mea[13:17], 1, mea_na)
-max_rcp2p6 <- apply(temp_yea_mea[8:12], 1, max_na)
-min_rcp2p6 <- apply(temp_yea_mea[8:12], 1, min_na)
-mea_rcp2p6 <- apply(temp_yea_mea[8:12], 1, mea_na)
-max_histor <- apply(temp_yea_mea[3:7], 1, max_na)
-min_histor <- apply(temp_yea_mea[3:7], 1, min_na)
-mea_histor <- apply(temp_yea_mea[3:7], 1, mea_na)
+max_rcp8p5 <- apply(temp_yea_mea[, 18:22], 1, max_na)
+min_rcp8p5 <- apply(temp_yea_mea[, 18:22], 1, min_na)
+mea_rcp8p5 <- apply(temp_yea_mea[, 18:22], 1, mea_na)
+max_rcp6p0 <- apply(temp_yea_mea[, 13:17], 1, max_na)
+min_rcp6p0 <- apply(temp_yea_mea[, 13:17], 1, min_na)
+mea_rcp6p0 <- apply(temp_yea_mea[, 13:17], 1, mea_na)
+max_rcp2p6 <- apply(temp_yea_mea[, 8:12], 1, max_na)
+min_rcp2p6 <- apply(temp_yea_mea[, 8:12], 1, min_na)
+mea_rcp2p6 <- apply(temp_yea_mea[, 8:12], 1, mea_na)
+max_histor <- apply(temp_yea_mea[, 3:7], 1, max_na)
+min_histor <- apply(temp_yea_mea[, 3:7], 1, min_na)
+mea_histor <- apply(temp_yea_mea[, 3:7], 1, mea_na)
 
 
 png(paste0(base_dir, "exp_figs/temp_forc.png"), width = 9, height = 5.5,

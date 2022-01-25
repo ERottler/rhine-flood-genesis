@@ -6,9 +6,9 @@
 
 ###
 
-base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
-# base_dir <- "/home/rottler/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
-# base_dir <- "/srv/shiny-server/rhine-flood-genesis/"
+# base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+# base_dir <- "/home/erwin/MEGA/pdoc_up/rhine_genesis/R/rhine-flood-genesis/"
+base_dir <- "/srv/shiny-server/rhine-flood-genesis/"
 
 #load data tables for synthesis plots
 load(paste0(base_dir, "www/exp_tabs/synt_tables.RData"))
