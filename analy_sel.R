@@ -330,7 +330,7 @@ if(gauge_sel == "Speyer"){
 }
 
 #loop over GCM-RCP combinations
-for(f in 1:21){
+for(f in 16:21){
 
 print(paste0("Forcing: ", f))
   
@@ -364,7 +364,7 @@ crswgs84 <- sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 epsg3035 <- sp::CRS("+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 
                     +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
 
-source("funcs.R")
+source("U:/rhine_genesis/R/rhine-flood-genesis/funcs.R")
 
 #select model forcing
 ind_forc <- f
@@ -1413,7 +1413,7 @@ for(p in 1:length(peaks_ind)){
     # abline(v = 1:100, col = "grey55", lty = "dashed", lwd = 0.7)
     axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
          col.axis = "white", col = "white", lwd = 0.7)
-    axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.30, 0), tck = -0.01, 
+    axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
     mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
@@ -1454,7 +1454,7 @@ for(p in 1:length(peaks_ind)){
     # abline(v = 1:100, col = "grey55", lty = "dashed", lwd = 0.7)
     axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
          col.axis = "white", col = "white", lwd = 0.7)
-    axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.30, 0), tck = -0.01, 
+    axis(1, at = c(1, 11, 21, 31, 41), labels = xlabs, cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
          col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
     mtext(expression(paste("Q", " / ", "Q"[mean])), side = 2, line = 2, 
           cex = 1.3, col = "white")
@@ -1467,136 +1467,181 @@ for(p in 1:length(peaks_ind)){
     #Cumulative excess discharge
     ###
     
-    #get x/y lims
-    tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                               sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                               sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                               sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
     col_snow <- "grey65"
     col_prec <- "deepskyblue4"
     
-    par(mar = c(3.5, 2.5, 3.5, 0.5))
+    par(mar = c(3.5, 3.5, 3.5, 0.1))
     
-    ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                         sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                         sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                         sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
-               max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                        sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                        sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                        sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+    ylims <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]),
+                           sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                           sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]),
+                           sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
                )
-    xlims <- ylims
+    xlims <- c(0.55, 4.45)
     
-    plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
-    abline(v = 0, col = "white", lwd = 0.5)
-    abline(h = 0, col = "white", lwd = 0.5)
-    if(disc_base_cum > tri_gap){
-      polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
-      polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+    plot(1:10, 1:10, type = "n", axes = F, ylim = ylims * 1.12, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+    #High Rhine
+    rect(xleft = 0.7, xright = 1.3, ybottom = 0,  ytop = disc_base_cum, col = col_snow)
+    rect(xleft = 0.7, xright = 1.3, ybottom = 0,  ytop = disc_base_cum*pliq_frac_base, col = col_prec)
+    #Moselle
+    rect(xleft = 1.7, xright = 2.3, ybottom = 0,  ytop = disc_mose_cum, col = col_snow)
+    rect(xleft = 1.7, xright = 2.3, ybottom = 0,  ytop = disc_mose_cum*pliq_frac_mose, col = col_prec)
+    #Main
+    rect(xleft = 2.7, xright = 3.3, ybottom = 0,  ytop = disc_main_cum, col = col_snow)
+    rect(xleft = 2.7, xright = 3.3, ybottom = 0,  ytop = disc_main_cum*pliq_frac_main, col = col_prec)
+    #Neckar
+    rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum, col = col_snow)
+    rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum*pliq_frac_neck, col = col_prec)
+
+    axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
+         col.axis = "white", col = "white", lwd = 0.7)
+    axis(1, at = c(1, 3), labels = c("High Rhine", "Main"),
+         cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
+         col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
+    axis(1, at = c(2, 4), labels = c("Moselle", "Neckar"),
+         cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
+         col.ticks = "white", col.axis = "white", col = "white", lwd = 0.7)
+    
+    if(disc_neck_cum == max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+      legend_pos <- "topleft"
+    }else{
+      legend_pos <- "topright"
     }
-    
-    if(disc_mose_cum > tri_gap){
-      polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
-      polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
-    }
-    
-    if(disc_main_cum > tri_gap){
-      polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
-      polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
-    }
-    
-    if(disc_neck_cum > tri_gap){
-      polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
-      polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
-    }
-    
-    legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
-                               min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
-    legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
-    
-    legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+      
+    legend(legend_pos, c("snow", "rain"), pch = 19, cex = 1.5, bty = "n", ncol = 1,
              col = c(col_snow, col_prec), box.col = "white", text.col = "white")
-    
+
     box(col = "white", lwd = 0.7)
     mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
     mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
+
     
-    cex_gauge <- 1.4
-    cex_min <- 0.9
-    
-    if(disc_base_cum > 0){
-      cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    }else{cex_base <- cex_min}
-    
-    if(disc_mose_cum > 0){
-      cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    }else{cex_mose <- cex_min}
-    
-    if(disc_main_cum > 0){
-      cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    }else{cex_main <- cex_min}
-    
-    if(disc_neck_cum > 0){
-      cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-    }else{cex_neck <- cex_min}
-    
-    
-    if(cex_base < cex_min){cex_base <- cex_min}
-    if(cex_mose < cex_min){cex_mose <- cex_min}
-    if(cex_main < cex_min){cex_main <- cex_min}
-    if(cex_neck < cex_min){cex_neck <- cex_min}
-    
-    pos_frac_lab <- 1.35
-    if(disc_base_cum > 0.5*max_na(ylims)){
-      text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
-    }else{
-      text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
-    }
-    
-    if(disc_mose_cum > 0.5*max_na(ylims)){
-      text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
-    }else{
-      text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
-    }
-    
-    if(disc_main_cum > 0.5*max_na(ylims)){
-      text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
-    }else{
-      text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
-    }
-    
-    if(disc_neck_cum > 0.5*max_na(ylims)){
-      text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
-    }else{
-      text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
-    }
-    
-  
-    pos_frac_num <- 1.65
-    if(disc_base_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "white", srt = 135, cex = cex_base)
-    }else{
-      text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 135, cex = cex_base)
-    }
-    
-    if(disc_mose_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
-    }else{
-      text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
-    }
-    
-    if(disc_main_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "white", srt = 315, cex = cex_main)
-    }else{
-      text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 315, cex = cex_main)
-    }
-    
-    if(disc_neck_cum > 0.5*max_na(ylims)){
-      text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
-    }else{
-      text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
-    }
+    # #get x/y lims
+    # tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+    #                            sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+    #                            sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+    #                            sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+    # 
+    # ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+    #                      sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+    #                      sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+    #                      sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
+    #            max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+    #                     sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+    #                     sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+    #                     sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+    #            )
+    # xlims <- ylims
+    # 
+    # plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+    # abline(v = 0, col = "white", lwd = 0.5)
+    # abline(h = 0, col = "white", lwd = 0.5)
+    # if(disc_base_cum > tri_gap){
+    #   polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
+    #   polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+    # }
+    # 
+    # if(disc_mose_cum > tri_gap){
+    #   polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
+    #   polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
+    # }
+    # 
+    # if(disc_main_cum > tri_gap){
+    #   polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
+    #   polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
+    # }
+    # 
+    # if(disc_neck_cum > tri_gap){
+    #   polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
+    #   polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
+    # }
+    # 
+    # legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
+    #                            min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
+    # legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
+    # 
+    # legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 19, cex = 1.5, bty = "n",
+    #          col = c(col_snow, col_prec), box.col = "white", text.col = "white")
+    # 
+    # box(col = "white", lwd = 0.7)
+    # mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = 1.2, col = "white", adj = 0.0)
+    # mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "white", adj = 1.0)
+    # 
+    # cex_gauge <- 1.4
+    # cex_min <- 0.9
+    # 
+    # if(disc_base_cum > 0){
+    #   cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    # }else{cex_base <- cex_min}
+    # 
+    # if(disc_mose_cum > 0){
+    #   cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    # }else{cex_mose <- cex_min}
+    # 
+    # if(disc_main_cum > 0){
+    #   cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    # }else{cex_main <- cex_min}
+    # 
+    # if(disc_neck_cum > 0){
+    #   cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+    # }else{cex_neck <- cex_min}
+    # 
+    # 
+    # if(cex_base < cex_min){cex_base <- cex_min}
+    # if(cex_mose < cex_min){cex_mose <- cex_min}
+    # if(cex_main < cex_min){cex_main <- cex_min}
+    # if(cex_neck < cex_min){cex_neck <- cex_min}
+    # 
+    # pos_frac_lab <- 1.35
+    # if(disc_base_cum > 0.5*max_na(ylims)){
+    #   text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
+    # }else{
+    #   text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 135, cex = cex_base)
+    # }
+    # 
+    # if(disc_mose_cum > 0.5*max_na(ylims)){
+    #   text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
+    # }else{
+    #   text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 45, cex = cex_mose)
+    # }
+    # 
+    # if(disc_main_cum > 0.5*max_na(ylims)){
+    #   text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
+    # }else{
+    #   text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 315, cex = cex_main)
+    # }
+    # 
+    # if(disc_neck_cum > 0.5*max_na(ylims)){
+    #   text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    # }else{
+    #   text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "white", srt = 225, cex = cex_neck)
+    # }
+    # 
+    # 
+    # pos_frac_num <- 1.65
+    # if(disc_base_cum > 0.5*max_na(ylims)){
+    #   text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+    # }else{
+    #   text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 135, cex = cex_base)
+    # }
+    # 
+    # if(disc_mose_cum > 0.5*max_na(ylims)){
+    #   text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+    # }else{
+    #   text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 45, cex = cex_mose)
+    # }
+    # 
+    # if(disc_main_cum > 0.5*max_na(ylims)){
+    #   text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+    # }else{
+    #   text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 315, cex = cex_main)
+    # }
+    # 
+    # if(disc_neck_cum > 0.5*max_na(ylims)){
+    #   text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+    # }else{
+    #   text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "white", srt = 225, cex = cex_neck)
+    # }
     
     ###
     #Flood extent
@@ -1985,137 +2030,186 @@ for(p in 1:length(peaks_ind)){
       #Cumulative excess discharge
       ###
       
-      #get x/y lims
-      tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                                 sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                                 sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                                 sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
       col_snow <- "grey80"
       col_prec <- "deepskyblue4"
       
-      par(mar = c(3.5, 2.5, 3.5, 0.5))
+      par(mar = c(3.5, 3.5, 3.5, 0.1))
       
-      ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                           sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                           sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                           sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
-                 max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
-                          sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
-                          sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
-                          sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+      ylims <- c(0, max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]),
+                             sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+                             sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]),
+                             sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
       )
-      xlims <- ylims
+      xlims <- c(0.55, 4.45)
       
-      plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
-      abline(v = 0, col = "black", lwd = 0.5)
-      abline(h = 0, col = "black", lwd = 0.5)
-      if(disc_base_cum > tri_gap){
-        polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
-        polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+      plot(1:10, 1:10, type = "n", axes = F, ylim = ylims * 1.12, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+      #High Rhine
+      rect(xleft = 0.7, xright = 1.3, ybottom = 0,  ytop = disc_base_cum, col = col_snow)
+      rect(xleft = 0.7, xright = 1.3, ybottom = 0,  ytop = disc_base_cum*pliq_frac_base, col = col_prec)
+      #Moselle
+      rect(xleft = 1.7, xright = 2.3, ybottom = 0,  ytop = disc_mose_cum, col = col_snow)
+      rect(xleft = 1.7, xright = 2.3, ybottom = 0,  ytop = disc_mose_cum*pliq_frac_mose, col = col_prec)
+      #Main
+      rect(xleft = 2.7, xright = 3.3, ybottom = 0,  ytop = disc_main_cum, col = col_snow)
+      rect(xleft = 2.7, xright = 3.3, ybottom = 0,  ytop = disc_main_cum*pliq_frac_main, col = col_prec)
+      #Neckar
+      rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum, col = col_snow)
+      rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum*pliq_frac_neck, col = col_prec)
+      
+      axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
+           col.axis = "black", col = "black", lwd = 0.7)
+      axis(1, at = c(1, 3), labels = c("High Rhine", "Main"),
+           cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
+           col.ticks = "black", col.axis = "black", col = "black", lwd = 0.7)
+      axis(1, at = c(2, 4), labels = c("Moselle", "Neckar"),
+           cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
+           col.ticks = "black", col.axis = "black", col = "black", lwd = 0.7)
+      
+      if(disc_neck_cum == max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))){
+        legend_pos <- "topleft"
+      }else{
+        legend_pos <- "topright"
       }
       
-      if(disc_mose_cum > tri_gap){
-        polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
-        polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
-      }
-      
-      if(disc_main_cum > tri_gap){
-        polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
-        polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
-      }
-      
-      if(disc_neck_cum > tri_gap){
-        polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
-        polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
-      }
-      
-      legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
-                                 min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
-      legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
-      
-      legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 22, cex = 1.5, bty = "n",
-             pt.bg = c(col_snow, col_prec), box.col = "black", text.col = "black")
+      legend(legend_pos, c("snow", "rain"), pch = 19, cex = 1.5, bty = "n", ncol = 1,
+             col = c(col_snow, col_prec), box.col = "black", text.col = "black")
       
       box(col = "black", lwd = 0.7)
-      
       mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = cex_header, col = "black", adj = 0.0)
-      mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "black", adj = 1.0)
+      mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, 
+            cex = 1.2, col = "black", adj = 1.0)
       
-      cex_gauge <- 1.4
-      cex_min <- 0.9
-      
-      if(disc_base_cum > 0){
-        cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-      }else{cex_base <- cex_min}
-      
-      if(disc_mose_cum > 0){
-        cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-      }else{cex_mose <- cex_min}
-      
-      if(disc_main_cum > 0){
-        cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-      }else{cex_main <- cex_min}
-      
-      if(disc_neck_cum > 0){
-        cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
-      }else{cex_neck <- cex_min}
-      
-      
-      if(cex_base < cex_min){cex_base <- cex_min}
-      if(cex_mose < cex_min){cex_mose <- cex_min}
-      if(cex_main < cex_min){cex_main <- cex_min}
-      if(cex_neck < cex_min){cex_neck <- cex_min}
-      
-      pos_frac_lab <- 1.35
-      if(disc_base_cum > 0.5*max_na(ylims)){
-        text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
-      }else{
-        text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
-      }
-      
-      if(disc_mose_cum > 0.5*max_na(ylims)){
-        text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
-      }else{
-        text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
-      }
-      
-      if(disc_main_cum > 0.5*max_na(ylims)){
-        text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
-      }else{
-        text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
-      }
-      
-      if(disc_neck_cum > 0.5*max_na(ylims)){
-        text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
-      }else{
-        text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
-      }
-      
-      
-      pos_frac_num <- 1.65
-      if(disc_base_cum > 0.5*max_na(ylims)){
-        text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "black", srt = 135, cex = cex_base)
-      }else{
-        text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 135, cex = cex_base)
-      }
-      
-      if(disc_mose_cum > 0.5*max_na(ylims)){
-        text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
-      }else{
-        text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
-      }
-      
-      if(disc_main_cum > 0.5*max_na(ylims)){
-        text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "black", srt = 315, cex = cex_main)
-      }else{
-        text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 315, cex = cex_main)
-      }
-      
-      if(disc_neck_cum > 0.5*max_na(ylims)){
-        text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
-      }else{
-        text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
-      }
+      # #get x/y lims
+      # tri_gap <- 0.03 * max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+      #                            sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+      #                            sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+      #                            sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+      # col_snow <- "grey80"
+      # col_prec <- "deepskyblue4"
+      # 
+      # par(mar = c(3.5, 2.5, 3.5, 0.5))
+      # 
+      # ylims <- c(-max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+      #                      sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+      #                      sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+      #                      sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)]))), 
+      #            max_na(c(sum_na((simu_base[ind_sel]-mea_na(simu_base_obs))[which(simu_base[ind_sel]-mea_na(simu_base_obs) > 0)]), 
+      #                     sum_na((simu_mose[ind_sel]-mea_na(simu_mose_obs))[which(simu_mose[ind_sel]-mea_na(simu_mose_obs) > 0)]),
+      #                     sum_na((simu_main[ind_sel]-mea_na(simu_main_obs))[which(simu_main[ind_sel]-mea_na(simu_main_obs) > 0)]), 
+      #                     sum_na((simu_neck[ind_sel]-mea_na(simu_neck_obs))[which(simu_neck[ind_sel]-mea_na(simu_neck_obs) > 0)])))
+      # )
+      # xlims <- ylims
+      # 
+      # plot(1:10, 1:10, type = "n", axes = F, ylim = ylims, xlim = xlims, ylab = "", xlab = "", yaxs = "i", xaxs = "i")
+      # abline(v = 0, col = "black", lwd = 0.5)
+      # abline(h = 0, col = "black", lwd = 0.5)
+      # if(disc_base_cum > tri_gap){
+      #   polygon(x = c(-tri_gap, -disc_base_cum, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum), col = col_snow)
+      #   polygon(x = c(-tri_gap, -disc_base_cum*pliq_frac_base, -tri_gap), y = c(-tri_gap, -tri_gap, -disc_base_cum*pliq_frac_base), col = col_prec)
+      # }
+      # 
+      # if(disc_mose_cum > tri_gap){
+      #   polygon(x = c(-tri_gap, -disc_mose_cum, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum), col = col_snow)
+      #   polygon(x = c(-tri_gap, -disc_mose_cum*pliq_frac_mose, -tri_gap), y = c(+tri_gap, +tri_gap, +disc_mose_cum*pliq_frac_mose), col = col_prec)
+      # }
+      # 
+      # if(disc_main_cum > tri_gap){
+      #   polygon(x = c(+tri_gap, +disc_main_cum, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum), col = col_snow)
+      #   polygon(x = c(+tri_gap, +disc_main_cum*pliq_frac_main, +tri_gap), y = c(+tri_gap, +tri_gap, +disc_main_cum*pliq_frac_main), col = col_prec)
+      # }
+      # 
+      # if(disc_neck_cum > tri_gap){
+      #   polygon(x = c(+tri_gap, +disc_neck_cum, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum), col = col_snow)
+      #   polygon(x = c(+tri_gap, +disc_neck_cum*pliq_frac_neck, +tri_gap), y = c(-tri_gap, -tri_gap, -disc_neck_cum*pliq_frac_neck), col = col_prec)
+      # }
+      # 
+      # legend_posi_ind <- which(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum) ==
+      #                            min_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum)))[1]
+      # legend_posis <- c("bottomleft", "topleft", "topright", "bottomright")
+      # 
+      # legend(legend_posis[legend_posi_ind], c("snow", "rain"), pch = 22, cex = 1.5, bty = "n",
+      #        pt.bg = c(col_snow, col_prec), box.col = "black", text.col = "black")
+      # 
+      # box(col = "black", lwd = 0.7)
+      # 
+      # mtext("c) Cum. excess runoff", side = 3, line = 0.2, cex = cex_header, col = "black", adj = 0.0)
+      # mtext(expression(paste("[", "10"^"6","m"^"3", "]")), side = 3, line = 0.2, cex = 1.2, col = "black", adj = 1.0)
+      # 
+      # cex_gauge <- 1.4
+      # cex_min <- 0.9
+      # 
+      # if(disc_base_cum > 0){
+      #   cex_base <- cex_gauge * disc_base_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      # }else{cex_base <- cex_min}
+      # 
+      # if(disc_mose_cum > 0){
+      #   cex_mose <- cex_gauge * disc_mose_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      # }else{cex_mose <- cex_min}
+      # 
+      # if(disc_main_cum > 0){
+      #   cex_main <- cex_gauge * disc_main_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      # }else{cex_main <- cex_min}
+      # 
+      # if(disc_neck_cum > 0){
+      #   cex_neck <- cex_gauge * disc_neck_cum / max_na(c(disc_base_cum, disc_mose_cum, disc_main_cum, disc_neck_cum))
+      # }else{cex_neck <- cex_min}
+      # 
+      # 
+      # if(cex_base < cex_min){cex_base <- cex_min}
+      # if(cex_mose < cex_min){cex_mose <- cex_min}
+      # if(cex_main < cex_min){cex_main <- cex_min}
+      # if(cex_neck < cex_min){cex_neck <- cex_min}
+      # 
+      # pos_frac_lab <- 1.35
+      # if(disc_base_cum > 0.5*max_na(ylims)){
+      #   text(labels = "High Rhine", x = -disc_base_cum/pos_frac_lab, y = -disc_base_cum/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
+      # }else{
+      #   text(labels = "High Rhine", x = -(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 135, cex = cex_base)
+      # }
+      # 
+      # if(disc_mose_cum > 0.5*max_na(ylims)){
+      #   text(labels = "Moselle", x = -disc_mose_cum/pos_frac_lab, y = +disc_mose_cum/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
+      # }else{
+      #   text(labels = "Moselle", x = -(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 45, cex = cex_mose)
+      # }
+      # 
+      # if(disc_main_cum > 0.5*max_na(ylims)){
+      #   text(labels = "Main", x = +disc_main_cum/pos_frac_lab, y = +disc_main_cum/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
+      # }else{
+      #   text(labels = "Main", x = +(0.5*max_na(ylims))/pos_frac_lab, y = +(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 315, cex = cex_main)
+      # }
+      # 
+      # if(disc_neck_cum > 0.5*max_na(ylims)){
+      #   text(labels = "Neckar", x = +disc_neck_cum/pos_frac_lab, y = -disc_neck_cum/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
+      # }else{
+      #   text(labels = "Neckar", x = +(0.5*max_na(ylims))/pos_frac_lab, y = -(0.5*max_na(ylims))/pos_frac_lab, col = "black", srt = 225, cex = cex_neck)
+      # }
+      # 
+      # 
+      # pos_frac_num <- 1.65
+      # if(disc_base_cum > 0.5*max_na(ylims)){
+      #   text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_base_cum/pos_frac_num, y = -disc_base_cum/pos_frac_num, col = "black", srt = 135, cex = cex_base)
+      # }else{
+      #   text(labels = round(disc_base_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 135, cex = cex_base)
+      # }
+      # 
+      # if(disc_mose_cum > 0.5*max_na(ylims)){
+      #   text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -disc_mose_cum/pos_frac_num, y = +disc_mose_cum/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
+      # }else{
+      #   text(labels = round(disc_mose_cum * 3600 * 24 / 1000000, digits = 0), x = -(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 45, cex = cex_mose)
+      # }
+      # 
+      # if(disc_main_cum > 0.5*max_na(ylims)){
+      #   text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_main_cum/pos_frac_num, y = +disc_main_cum/pos_frac_num, col = "black", srt = 315, cex = cex_main)
+      # }else{
+      #   text(labels = round(disc_main_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = +(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 315, cex = cex_main)
+      # }
+      # 
+      # if(disc_neck_cum > 0.5*max_na(ylims)){
+      #   text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +disc_neck_cum/pos_frac_num, y = -disc_neck_cum/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
+      # }else{
+      #   text(labels = round(disc_neck_cum * 3600 * 24 / 1000000, digits = 0), x = +(0.5*max_na(ylims))/pos_frac_num, y = -(0.5*max_na(ylims))/pos_frac_num, col = "black", srt = 225, cex = cex_neck)
+      # }
       
       ###
       #Flood extent
