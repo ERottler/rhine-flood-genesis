@@ -1,7 +1,8 @@
 ###
 
-#Streamflow peaks Rhine River basin - Flood extent
-#Erwin Rottler
+#Flood formation in Rhine River basin
+#Maps average formation depending on warming level
+#Erwin Rottler, Universtiy of Potsam
 
 ###
 
@@ -111,6 +112,7 @@ oct_mar_ind <- which(pea_doy > 273 | pea_doy < 91)
 apr_sep_ind <- which(pea_doy > 90  & pea_doy < 273)
 
 qto_oct_mar <- apply(peaks_qto_all[, oct_mar_ind], 1, sum_na) / length(oct_mar_ind)
+qto_oct_mar <- apply(peaks_qto_all[, oct_mar_ind], 1, sum_na) / length(oct_mar_ind)
 qto_apr_sep <- apply(peaks_qto_all[, apr_sep_ind], 1, sum_na) / length(apr_sep_ind)
 lpr_oct_mar <- apply(peaks_lpr_all[, oct_mar_ind], 1, sum_na) / length(oct_mar_ind)
 lpr_apr_sep <- apply(peaks_lpr_all[, apr_sep_ind], 1, sum_na) / length(apr_sep_ind)
@@ -136,6 +138,10 @@ le2_ind <- which(pea_war > 3.0)
 le1_sea_ind <- le1_ind[which(le1_ind %in% oct_mar_ind)]
 le2_sea_ind <- le2_ind[which(le2_ind %in% oct_mar_ind)]
 
+# #entire year
+# le1_sea_ind <- le1_ind
+# le2_sea_ind <- le2_ind
+
 qto_sea_le1 <- apply(peaks_qto_all[, le1_sea_ind], 1, sum_na) / length(le1_sea_ind)
 qto_sea_le2 <- apply(peaks_qto_all[, le2_sea_ind], 1, sum_na) / length(le2_sea_ind)
 lpr_sea_le1 <- apply(peaks_lpr_all[, le1_sea_ind], 1, sum_na) / length(le1_sea_ind)
@@ -159,6 +165,7 @@ ref_lpr_sum <- range(c(lpr_oct_mar, lpr_apr_sep, lpr_sea_le1, lpr_sea_le2))
 ref_sno_sum <- range(c(sno_oct_mar, sno_apr_sep, sno_sea_le1, sno_sea_le2))
 
 ref_dif_sum <- range(c(qto_lev_dif, lpr_lev_dif, sno_lev_dif), na.rm = T)
+
 
 #qto
 cols_qto_oct_mar <- foreach(t = 1:length(qto_oct_mar), .combine = 'c') %dopar% {
@@ -351,21 +358,16 @@ cols_sno_lev_dif[which(is.na(disc_cube_obs[ , , 100]))] <- NA
 
 #visu----
 
-png(paste0(bas_dir,"floods_maps.png"), width = 16, height = 12,
+png(paste0(bas_dir,"exp_figs/floods_maps.png"), width = 16, height = 16,
     units = "in", res = 300)
 
-# layout(matrix(c(rep(19, 25),
-#                 20, rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
-#                 20, rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12,
-#                 20, rep(13, 7), 14, rep(15, 7), 16, rep(17, 7), 18),
-#               4, 25, byrow = T), widths=c(0.2, 1, 1, 1), heights=c(0.15, 1, 1, 1))
-# layout.show(n=20)
 layout(matrix(c(rep(1, 7), 2, rep(3, 7), 4,  rep(5, 7), 6,
                 rep(7, 7), 8, rep(9, 7), 10, rep(11, 7), 12,
-                rep(13, 7), 14, rep(15, 7), 16, rep(17, 7), 18),
-              3, 24, byrow = T), widths=c(), heights=c())
+                rep(13, 7), 14, rep(15, 7), 16, rep(17, 7), 18,
+                rep(19, 7), 20, rep(21, 7), 22, rep(23, 7), 24),
+              4, 24, byrow = T), widths=c(), heights=c())
 
-par(family = "serif")
+# par(family = "serif")
 cex_pch <- 0.90
 cex_gau <- 2.2
 pch_gau <- 18
@@ -373,15 +375,15 @@ col_river <- scales::alpha("black", alpha = 0.6)
 mar_1 <- c(0.9, 2.9, 4.0, 0.5)
 mar_2 <- c(2.2, 0.3, 5.5, 3.0)
 
-#Total Runoff generated: Oct-Mar below 2 ?C warming
+
+#Total Runoff generated: OCT-MAR
 par(mar = mar_1)
-plot(c(lon), c(lat), pch = 15, col = cols_qto_le1, cex = cex_pch,
+plot(c(lon), c(lat), pch = 15, col = cols_qto_oct_mar, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("a) Discharge generated (< 3째C)", side = 3, line = 0.8, cex = 1.7)
-
+mtext(expression(paste("a) ", "Q"[gen], " (Oct-Mar)")), side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
@@ -391,34 +393,35 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Total Runoff generated: Oct-Mar difference warming levels
+
+#Total Runoff generated: difference season (OCT-MAR and APR-SEP)
 par(mar = mar_1)
-plot(c(lon), c(lat), pch = 15, col = cols_qto_lev_dif, cex = cex_pch,
+plot(c(lon), c(lat), pch = 15, col = cols_qto_sea_dif, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
 mtext("b) Difference (c-a)", side = 3, line = 0.8, cex = 1.7)
 
-
 par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
 cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
 my_col <- colorRampPalette(c(cols_min, cols_max))(200)
-my_bre <- seq(-max_na(abs(ref_dif_sum)), max_na(abs(ref_dif_sum)), length.out = length(my_col)+1)
+my_bre <- seq(-max_na(abs(range(qto_sea_dif))), max_na(abs(range(qto_sea_dif))), length.out = length(my_col)+1)
 alptempr::image_scale(as.matrix(ref_dif_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
 axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Runoff: Oct-Mar above 2 ?C warming
+
+#Total Runoff generated: APR-SEP
 par(mar = mar_1)
-plot(c(lon), c(lat), pch = 15, col = cols_qto_le2, cex = cex_pch,
+plot(c(lon), c(lat), pch = 15, col = cols_qto_apr_sep, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("c) Discharge generated (> 3째C)", side = 3, line = 0.8, cex = 1.7)
+mtext(expression(paste("c) ", "Q"[gen], " (Apr-Sep)")), side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
@@ -429,26 +432,27 @@ mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
 
-#Liquid Precipitation: Oct-Mar below 2 ?C warming
+#Total Runoff generated: OCT-MAR below 2캜 warming
 par(mar = mar_1)
-plot(c(lon), c(lat), pch = 15, col = cols_lpr_le1, cex = cex_pch,
+plot(c(lon), c(lat), pch = 15, col = cols_qto_le1, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("d) Liquid prec. (< 3째C)", side = 3, line = 0.8, cex = 1.7)
+mtext(expression(paste("d) ", "Q"[gen], " (Oct-Mar; < 3캜)")), side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
-my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
-alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
 axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Liquid Precipitation: Oct-Mar difference warming levels
+
+#Total Runoff generated: OCT-MAR difference warming levels
 par(mar = mar_1)
-plot(c(lon), c(lat), pch = 15, col = cols_lpr_lev_dif, cex = cex_pch,
+plot(c(lon), c(lat), pch = 15, col = cols_qto_lev_dif, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
@@ -465,14 +469,69 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Liquid Precipitation: Oct-Mar above 2 ?C warming
+
+#Runoff: OCT-MAR above 2 캜 warming
+par(mar = mar_1)
+plot(c(lon), c(lat), pch = 15, col = cols_qto_le2, cex = cex_pch,
+     axes = F, ylab = "", xlab = "")
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
+points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
+text(6.3, 50.8, labels = "Cologne", cex = 1.7)
+mtext(expression(paste("f) ", "Q"[gen], " (Oct-Mar; > 3캜)")), side = 3, line = 0.8, cex = 1.7)
+
+par(mar = mar_2)
+my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
+my_bre <- seq(min_na(ref_qto_sum), max_na(abs(ref_qto_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_qto_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
+mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
+box()
+
+
+#Liquid Precipitation: OCT-MAR below 2 캜 warming
+par(mar = mar_1)
+plot(c(lon), c(lat), pch = 15, col = cols_lpr_le1, cex = cex_pch,
+     axes = F, ylab = "", xlab = "")
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
+points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
+text(6.3, 50.8, labels = "Cologne", cex = 1.7)
+mtext(expression(paste("g) ", "P"[liq], " (Oct-Mar; < 3캜)")), side = 3, line = 0.8, cex = 1.7)
+
+par(mar = mar_2)
+my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
+my_bre <- seq(min_na(ref_lpr_sum), max_na(abs(ref_lpr_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_lpr_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
+mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
+box()
+
+#Liquid Precipitation: OCT-MAR difference warming levels
+par(mar = mar_1)
+plot(c(lon), c(lat), pch = 15, col = cols_lpr_lev_dif, cex = cex_pch,
+     axes = F, ylab = "", xlab = "")
+plot(river_netw, col = col_river, add = T, lwd = 0.7)
+points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
+text(6.3, 50.8, labels = "Cologne", cex = 1.7)
+mtext("h) Difference (i-g)", side = 3, line = 0.8, cex = 1.7)
+
+par(mar = mar_2)
+cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
+cols_max <- colorRampPalette(c("grey80", "lightcyan3", viridis::viridis(9, direction = 1)[c(4,3,2,1,1)]))(100)
+my_col <- colorRampPalette(c(cols_min, cols_max))(200)
+my_bre <- seq(-max_na(abs(ref_dif_sum)), max_na(abs(ref_dif_sum)), length.out = length(my_col)+1)
+alptempr::image_scale(as.matrix(ref_dif_sum), col = my_col, breaks = my_bre, horiz=F, ylab="", xlab="", yaxt="n", axes=F)
+axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
+mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
+box()
+
+#Liquid Precipitation: OCT-MAR above 2 캜 warming
 par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_lpr_le2, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("f) Liquid prec. (> 3째C)", side = 3, line = 0.8, cex = 1.7)
+mtext(expression(paste("i) ", "P"[liq], " (Oct-Mar; > 3캜)")), side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 my_col <- c(colorRampPalette(c(viridis::viridis(20, direction = -1)))(200))
@@ -483,14 +542,14 @@ mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
 
-#Snow cover changes: Oct-Mar below 2 ?C warming
+#Snow cover changes: Oct-Mar below 2 캜 warming
 par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_le1, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("g) Snow cover changes (< 3째C)", side = 3, line = 0.8, cex = 1.7)
+mtext("j) SCC (Oct-Mar; < 3캜)", side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
@@ -502,6 +561,7 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
+
 #Snow cover changes: Oct-Mar difference warming levels
 par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_lev_dif, cex = cex_pch,
@@ -509,7 +569,7 @@ plot(c(lon), c(lat), pch = 15, col = cols_sno_lev_dif, cex = cex_pch,
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("h) Difference (i-g)", side = 3, line = 0.8, cex = 1.7)
+mtext("k) Difference (l-j)", side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
@@ -521,14 +581,15 @@ axis(4, mgp=c(3, 0.50, 0), tck = -0.1, cex.axis = 1.6)
 mtext("[mm]", side = 3, line = 0.8, cex = 1.3)
 box()
 
-#Snow cover changes: Oct-Mar above 2 ?C warming
+
+#Snow cover changes: Oct-Mar above 2 캜 warming
 par(mar = mar_1)
 plot(c(lon), c(lat), pch = 15, col = cols_sno_le2, cex = cex_pch,
      axes = F, ylab = "", xlab = "")
 plot(river_netw, col = col_river, add = T, lwd = 0.7)
 points(6.963293, 50.936961, col = "black", bg = "black", pch = pch_gau, cex = cex_gau)
 text(6.3, 50.8, labels = "Cologne", cex = 1.7)
-mtext("i) Snow cover changes (> 3째C)", side = 3, line = 0.8, cex = 1.7)
+mtext("l) SCC (Oct-Mar; > 3캜)", side = 3, line = 0.8, cex = 1.7)
 
 par(mar = mar_2)
 cols_min <- colorRampPalette(c("darkred", "darkorange4", "goldenrod3", "gold3", "lightgoldenrod2", "lemonchiffon2", "grey80"))(100)
@@ -555,6 +616,9 @@ box()
 # mtext("1. Discharge generated", side = 2, line = -2.5, adj = 0.95, cex = 2.0)
 
 dev.off()
+
+
+
 
 
 #overview_map----
@@ -602,7 +666,7 @@ basin_neck <- sp::spTransform(basin_neck_raw, CRS = raster::crs(dem, asText = T)
 river_netw <- sp::spTransform(river_netw_raw, CRS = raster::crs(dem, asText = T))
 
 #gauges
-#Lobith, COlone, Kaub, Worms, Speyer, Basel, Main, Neckar, Moselle
+#Lobith, Colone, Kaub, Worms, Speyer, Basel, Main, Neckar, Moselle
 lon_gauges <- c( 6.11,  6.963293,  7.764967,  8.376019,  8.448717,  7.6167,  8.415706, 8.591144, 7.491285)
 lat_gauges <- c(51.84, 50.936961, 50.085444,  49.64112, 49.323807, 47.5594, 50.000229, 49.474691, 50.317333)
 
@@ -635,10 +699,10 @@ raster::plot(basin_mose, col = col_tribu, border = T, add = T)
 raster::plot(basin_main, col = col_tribu, border = T, add = T)
 
 raster::plot(river_netw, col = "darkblue", add = T)
-s
-#Lobith, COlone, Kaub, Worms, Speyer, Basel, Main, Neckar, Moselle
-raster::plot(gauges, pch = 25,  col = "black", add = T, 
-       bg = c("grey50", rep("black", 4), rep("steelblue4", 4)), cex = 1.1)
+
+#Lobith, Colone, Kaub, Worms, Speyer, Basel
+raster::plot(gauges[1:6], pch = 25,  col = "black", add = T, 
+       bg = c("grey50", rep("black", 5)), cex = 1.1)
 
 prettymapr::addscalebar(plotunit = "m", widthhint = 0.25, htin = 0.15, pos = "topright",
                         padin = c(0.15, 0.15))

@@ -8,13 +8,15 @@
 #settings----
 pacman::p_load(scales, alptempr, vioplot)
 
-base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/"
+# base_dir <- "/home/erwin/Nextcloud/pdoc_up/rhine_genesis/R/"
+base_dir <- "U:/rhine_genesis/R/"
 
 #load data tables for synthesis plots
-load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
+# load(paste0(base_dir, "rhine-flood-genesis/www/exp_tabs/synt_tables.RData"))
+load(paste0(base_dir, "synt_tables.RData"))
 
 #get plotting functions
-source("funcs.R")
+source("U:/rhine_genesis/R/rhine-flood-genesis/funcs.R")
 
 #temp_forc----
 
@@ -40,9 +42,9 @@ png(paste0(base_dir, "exp_figs/temp_forc.png"), width = 9, height = 5.5,
     units = "in", res = 300)
 
 par(mar = c(3.2, 4, 2.0, 1.0))
-par(family = "serif")
+# par(family = "serif")
 lwd_mea <- 1.7
-par(bg = "transparent")
+par(bg = "white")
 
 plot(temp_yea_mea[, 2], type = "n", ylim = temp_lims, axes = F, ylab = "", xlab = "")
 
@@ -74,10 +76,10 @@ mtext("b) Annual average temperatures",
       side = 3, line = 0.3, cex = 1.7, adj = 0.0)
 mtext("Year", 
       side = 1, line = 2.1, cex = 1.7, adj = 0.5)
-mtext("Temperature [Â°C]", 
+mtext("Temperature [°C]", 
       side = 2, line = 2.4, cex = 1.7, adj = 0.5)
 
-legend("topleft", c("EOBS", "Hist." ,"RCP 2.6", "RCP 6.0", "RCP 8.5"), 
+legend("topleft", c("E-OBS", "Hist." ,"RCP 2.6", "RCP 6.0", "RCP 8.5"), 
        lty = c("dotted", rep("solid", 4)), col = c("black", "deepskyblue4", "grey25", "orange3", "red4"), 
        bg = "white", box.col = "white", cex = 1.3, lwd = 1.9)
 
@@ -101,13 +103,12 @@ peak_mag_unl_spe <- unlist(peak_mag_all_spe)
 frac_flo_unl_spe <- unlist(flood_frac_max_all_spe)
 
 gcm <- c(rep("EOBS", 10),
-         rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4)
-)
+         rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4))
 rcp <- c(rep("observed", 10),
-         rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50)
-)
+         rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50))
 
 lims_frac <- range(c(frac_flo_unl_col, frac_flo_unl_kau, frac_flo_unl_wor, frac_flo_unl_spe), na.rm = T)
+
 
 png(paste0(base_dir, "exp_figs/magn_frac.png"), width = 16, height = 9,
     units = "in", res = 300)
@@ -119,23 +120,85 @@ layout(matrix(c(1, 2,
 
 par(mar = c(5, 5, 2.5, 2.0))
 
-f_plot_mag_frac(peak_mag_unl_col, frac_flo_unl_col, "a) Cologne", v_abline = seq(6000, 14000, by = 2000))
+f_plot_mag_frac(peak_mag_unl_col, frac_flo_unl_col, "a) Cologne",
+                v_abline = seq(6000, 14000, by = 2000), ylims = lims_frac)
 
-f_plot_mag_frac(peak_mag_unl_kau, frac_flo_unl_kau, "b) Kaub",    v_abline = seq(5000, 10000, by = 1000))
+f_plot_mag_frac(peak_mag_unl_kau, frac_flo_unl_kau, "b) Kaub", 
+                v_abline = seq(5000, 10000, by = 1000), ylims = lims_frac)
 
-f_plot_mag_frac(peak_mag_unl_wor, frac_flo_unl_wor, "c) Worms",   v_abline = seq(4000, 9000,  by = 1000))
+f_plot_mag_frac(peak_mag_unl_wor, frac_flo_unl_wor, "c) Worms",  
+                v_abline = seq(4000, 9000,  by = 1000), ylims = lims_frac)
 
-f_plot_mag_frac(peak_mag_unl_spe, frac_flo_unl_spe, "d) Speyer",  v_abline = seq(4000, 8000,  by = 1000))
+f_plot_mag_frac(peak_mag_unl_spe, frac_flo_unl_spe, "d) Speyer",  
+                v_abline = seq(4000, 8000,  by = 1000), ylims = lims_frac)
 
 par(mar = c(0.2, 5.0, 0.1, 2.0))
 
 plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "")
 legend(50, 52, c("Hist." ,"RCP 2.6", "RCP 6.0", "RCP 8.5", 
-                 "EOBS" ,"GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR",
+                 "E-OBS" ,"GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR",
                  "MIROC-ESM-CHEM", "NorESM1-M"),
        pch = c(rep(NA, 4), 8, 21:25), lty = c(rep("solid", 4), rep(NA, 6)), 
-       col = c("deepskyblue4", "grey25", "orange3", "red4", rep("black", 6)), 
-       ncol = 5, bg = "white", box.col = "black", cex = 1.9, xjust = 0.5, yjust = 0.5, lwd = 1.9)
+       col = c(viridis(n=20)[20], viridis(n=20)[13], viridis(n=20)[7], viridis(n=20)[1], rep("black", 6)), 
+       ncol = 5, bg = "white", box.col = "black", cex = 1.9, xjust = 0.5, yjust = 0.5, lwd = 3.5)
+
+dev.off()
+
+
+
+#magn_sfra_all----
+
+peak_mag_unl_col <- unlist(peak_mag_all_col)
+sfra_pre_unl_col <- 1- unlist(pliq_frac_base_all_col)
+
+peak_mag_unl_kau <- unlist(peak_mag_all_kau)
+sfra_pre_unl_kau <- 1- unlist(pliq_frac_base_all_kau)
+
+peak_mag_unl_wor <- unlist(peak_mag_all_wor)
+sfra_pre_unl_wor <- 1- unlist(pliq_frac_base_all_wor)
+
+peak_mag_unl_spe <- unlist(peak_mag_all_spe)
+sfra_pre_unl_spe <- 1- unlist(pliq_frac_base_all_spe)
+
+gcm <- c(rep("E-OBS", 10),
+         rep( c(rep("GFDL-ESM2M", 10), rep("HadGEM2-ES", 10), rep("IPSL-CM5A-LR", 10), rep("MIROC-ESM-CHEM", 10), rep("NorESM1-M", 10)), 4))
+rcp <- c(rep("observed", 10),
+         rep("historic", 50), rep("RCP 2.6", 50), rep("RCP 6.0", 50), rep("RCP 8.5", 50))
+
+lims_frac <- range(c(sfra_pre_unl_col, sfra_pre_unl_kau, sfra_pre_unl_wor, sfra_pre_unl_spe), na.rm = T) * 100
+
+
+png(paste0(base_dir, "exp_figs/magn_sfra.png"), width = 16, height = 9,
+    units = "in", res = 300)
+
+layout(matrix(c(1, 2, 
+                3, 4, 
+                5, 5),
+              3, 2, byrow = T), widths=c(), heights=c(1.0, 1.0, 0.25))
+
+par(mar = c(5, 5, 2.5, 2.0))
+
+f_plot_mag_sfra(peak_mag_unl_col, sfra_pre_unl_col*100, "a) Cologne",
+                v_abline = seq(6000, 14000, by = 2000), ylims = lims_frac)
+
+f_plot_mag_sfra(peak_mag_unl_kau, sfra_pre_unl_kau*100, "b) Kaub", 
+                v_abline = seq(5000, 10000, by = 1000), ylims = lims_frac)
+
+f_plot_mag_sfra(peak_mag_unl_wor, sfra_pre_unl_wor*100, "c) Worms",  
+                v_abline = seq(4000, 9000,  by = 1000), ylims = lims_frac)
+
+f_plot_mag_sfra(peak_mag_unl_spe, sfra_pre_unl_spe*100, "d) Speyer",  
+                v_abline = seq(4000, 8000,  by = 1000), ylims = lims_frac)
+
+par(mar = c(0.2, 5.0, 0.1, 2.0))
+
+plot(1:100, 1:100, type = "n", axes = F, ylab = "", xlab = "")
+legend(50, 52, c("Hist." ,"RCP 2.6", "RCP 6.0", "RCP 8.5", 
+                 "E-OBS" ,"GFDL-ESM2M", "HadGEM2-ES", "IPSL-CM5A-LR",
+                 "MIROC-ESM-CHEM", "NorESM1-M"),
+       pch = c(rep(NA, 4), 8, 21:25), lty = c(rep("solid", 4), rep(NA, 6)), 
+       col = c("deepskyblue4", "grey25", "orange3", "red4", rep("black", 6)),
+       ncol = 5, bg = "white", box.col = "black", cex = 1.9, xjust = 0.5, yjust = 0.5, lwd = 2.5)
 
 dev.off()
 

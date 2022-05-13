@@ -241,17 +241,20 @@ get_cube_index_row <- function(val_in, coor_in = lon2D, col_or_row = "row"){
   return(index_out)
 }
 
-#Plot magnitudes and flood extent
+#Plot magnitudes and Q99 extent
 f_plot_mag_frac <- function(peak_mag, peak_fra, header, v_abline, ylims){
   
-  col_his <- alpha("deepskyblue4", 0.6)
-  col_2p6 <- alpha("grey25", 0.6)
-  col_6p0 <- alpha("orange3", 0.6)
-  col_8p5 <- alpha("darkred", 0.6)
-  
+  # col_his <- alpha("deepskyblue4", 0.6)
+  # col_2p6 <- alpha("grey25", 0.6)
+  # col_6p0 <- alpha("orange3", 0.6)
+  # col_8p5 <- alpha("darkred", 0.6)
+  col_his <- alpha(viridis(n=20)[20], 0.7)
+  col_2p6 <- alpha(viridis(n=20)[13], 0.7)
+  col_6p0 <- alpha(viridis(n=20)[7], 0.7)
+  col_8p5 <- alpha(viridis(n=20)[1], 0.7)
   cex_point <- 3.5
   
-  par(family = "serif")
+  # par(family = "serif")
   
   plot(peak_mag, peak_fra, ylim = ylims, ylab = "", xlab = "",
        axes = F, type = "n")
@@ -289,7 +292,62 @@ f_plot_mag_frac <- function(peak_mag, peak_fra, header, v_abline, ylims){
         side = 3, line = 0.4, cex = 1.7, adj = 0.0)
   mtext(expression(paste("Discharge [m"^"3", "s"^"-1","]")), 
         side = 1, line = 3.8, cex = 1.7, adj = 0.5)
-  mtext("Flood extent [%]", 
+  mtext("Q99 extent [%]", 
+        side = 2, line = 2.6, cex = 1.7, adj = 0.5)
+  
+  graphics::box()
+  
+}
+
+#Plot magnitudes and solid fraction precipitation
+f_plot_mag_sfra <- function(peak_mag, fra_pre, header, v_abline, ylims){
+  
+  col_his <- alpha("deepskyblue4", 0.6)
+  col_2p6 <- alpha("grey25", 0.6)
+  col_6p0 <- alpha("orange3", 0.6)
+  col_8p5 <- alpha("darkred", 0.6)
+  
+  cex_point <- 3.5
+  
+  # par(family = "serif")
+  
+  plot(peak_mag, fra_pre, ylim = ylims, ylab = "", xlab = "",
+       axes = F, type = "n")
+  
+  abline(h = c(20, 40, 60, 80, 100), col = "grey75", lwd = 0.7, lty = "dashed")
+  abline(v = v_abline, col = "grey75", lwd = 0.7, lty = "dashed")
+  
+  points(peak_mag[which(gcm == "GFDL-ESM2M")], fra_pre[which(gcm == "GFDL-ESM2M")],
+         pch = 21, cex = cex_point,
+         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
+         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
+  points(peak_mag[which(gcm == "HadGEM2-ES")], fra_pre[which(gcm == "HadGEM2-ES")],
+         pch = 22, cex = cex_point, 
+         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
+         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
+  points(peak_mag[which(gcm == "IPSL-CM5A-LR")], fra_pre[which(gcm == "IPSL-CM5A-LR")],
+         pch = 23, cex = cex_point,
+         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
+         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
+  points(peak_mag[which(gcm == "MIROC-ESM-CHEM")], fra_pre[which(gcm == "MIROC-ESM-CHEM")],
+         pch = 24, cex = cex_point, 
+         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
+         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
+  points(peak_mag[which(gcm == "NorESM1-M")], fra_pre[which(gcm == "NorESM1-M")],
+         pch = 25, cex = cex_point, 
+         bg = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)),
+         col = c(rep(col_his, 10), rep(col_2p6, 10), rep(col_6p0, 10), rep(col_8p5, 10)))
+  points(peak_mag[which(gcm == "EOBS")], fra_pre[which(gcm == "EOBS")],
+         pch = 8, col = alpha("black", 0.7), cex = cex_point)
+  
+  axis(1, mgp=c(3, 0.85, 0), tck = -0.012, cex.axis = 1.9)
+  axis(2, at = c(20, 40, 60, 80, 100), labels = c(20, 40, 60, 80, ""),  mgp=c(3, 0.45, 0), tck = -0.012, cex.axis = 1.9)
+  
+  mtext(header, 
+        side = 3, line = 0.4, cex = 1.7, adj = 0.0)
+  mtext(expression(paste("Discharge [m"^"3", "s"^"-1","]")), 
+        side = 1, line = 3.8, cex = 1.7, adj = 0.5)
+  mtext("Snowfall High Rhine [%]", 
         side = 2, line = 2.6, cex = 1.7, adj = 0.5)
   
   graphics::box()

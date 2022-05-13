@@ -12,7 +12,7 @@ tabs_dir = "U:/rhine_genesis/R/exp_tabs/"
 if(F){#create empty tables
   
 #Select gauge (define again in loop!!!)
-gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
+gauge_sel <- "Kaub" #Options: Cologne, Kaub, Worms or Speyer
 
 if(gauge_sel == "Cologne"){
   
@@ -350,7 +350,7 @@ for(f in 1:21){
 print(paste0("Forcing: ", f))
   
 #Select gauge
-gauge_sel <- "Cologne" #Options: Cologne, Kaub, Worms or Speyer
+gauge_sel <- "Kaub" #Options: Cologne, Kaub, Worms or Speyer
   
 #set_up----
 
@@ -1256,10 +1256,10 @@ for(p in 1:length(peaks_ind)){
     days_ind <- which(format(seq(as.Date("1951-01-02"), as.Date("2000-12-31"), by = "day"), '%d-%m') == 
                         format(date_sel[i], '%d-%m'))
     
-    disc_exc_base <- simu_base[i]-mea_na(simu_base_obs[days_ind])
-    disc_exc_mose <- simu_mose[i]-mea_na(simu_mose_obs[days_ind])
-    disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs[days_ind])
-    disc_exc_main <- simu_main[i]-mea_na(simu_main_obs[days_ind])
+    disc_exc_base <- simu_base[i]-med_na(simu_base_obs[days_ind])
+    disc_exc_mose <- simu_mose[i]-med_na(simu_mose_obs[days_ind])
+    disc_exc_neck <- simu_neck[i]-med_na(simu_neck_obs[days_ind])
+    disc_exc_main <- simu_main[i]-med_na(simu_main_obs[days_ind])
     
     if(disc_exc_base < 0){disc_exc_base <- 0}
     if(disc_exc_mose < 0){disc_exc_mose <- 0}
@@ -1327,10 +1327,10 @@ for(p in 1:length(peaks_ind)){
     days_ind <- which(format(seq(as.Date("1951-01-02"), as.Date("2000-12-31"), by = "day"), '%d-%m') == 
                         format(date_sel[i], '%d-%m'))
     
-    disc_exc_base <- simu_base[i]-mea_na(simu_base_obs[days_ind])
-    disc_exc_mose <- simu_mose[i]-mea_na(simu_mose_obs[days_ind])
-    disc_exc_neck <- simu_neck[i]-mea_na(simu_neck_obs[days_ind])
-    disc_exc_main <- simu_main[i]-mea_na(simu_main_obs[days_ind])
+    disc_exc_base <- simu_base[i]-med_na(simu_base_obs[days_ind])
+    disc_exc_mose <- simu_mose[i]-med_na(simu_mose_obs[days_ind])
+    disc_exc_neck <- simu_neck[i]-med_na(simu_neck_obs[days_ind])
+    disc_exc_main <- simu_main[i]-med_na(simu_main_obs[days_ind])
     
     if(disc_exc_base < 0){disc_exc_base <- 0}
     if(disc_exc_mose < 0){disc_exc_mose <- 0}
@@ -1882,7 +1882,7 @@ for(p in 1:length(peaks_ind)){
       png(paste0(figs_export_paths_2[ind_forc], "flood_", p, "/rhine_", date_exp, ".png"), width = 16, height = 8,
           units = "in", res = 300)
       
-      par(family = "serif")
+      # par(family = "serif")
       par(bg = 'white')
       cex_pch <- 0.7
       lwd_disc <- 1.7
@@ -2133,7 +2133,7 @@ for(p in 1:length(peaks_ind)){
       rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum*m3s_hm3, col = col_snow)
       rect(xleft = 3.7, xright = 4.3, ybottom = 0,  ytop = disc_neck_cum*m3s_hm3*pliq_frac_neck, col = col_prec)
       
-      axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "white", 
+      axis(2, mgp=c(3, 0.30, 0), tck = -0.01, cex.axis = 1.5, col.ticks = "black", 
            col.axis = "black", col = "black", lwd = 0.7)
       axis(1, at = c(1, 3), labels = c("High Rhine", "Main"),
            cex.axis = 1.5, mgp=c(3, 0.40, 0), tck = -0.01, 
